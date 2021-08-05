@@ -1,20 +1,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using Treasury.Data;
 
 namespace Treasury
@@ -45,13 +39,13 @@ namespace Treasury
             StringBuilder builder = new StringBuilder();
 
             string server = Environment.GetEnvironmentVariable("TREASURY_SERVER");
-            builder.Append("server=").Append(server);
+            builder.Append("server=").Append(server).Append(';');
 
             string user = Environment.GetEnvironmentVariable("TREASURY_USER");
-            builder.Append("uid=").Append(user);
+            builder.Append("uid=").Append(user).Append(';');
 
             string password = Environment.GetEnvironmentVariable("TREASURY_PASSWORD");
-            builder.Append("pwd=").Append(password);
+            builder.Append("pwd=").Append(password).Append(';');
 
             string database = Environment.GetEnvironmentVariable("TREASURY_DATABASE");
             builder.Append("database=").Append(database);

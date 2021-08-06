@@ -13,7 +13,7 @@ namespace Treasury.Models
         [Column("Fiscal Year")]
         public string FiscalYear { get; set; }
         [Column("SLF Amount")]
-        public double SlfAmount { get; set; }
+        public decimal SlfAmount { get; set; }
         [Column("Fall Student Amount")]
         public int? FallStudentAmt { get; set; }
         public DateTime Timestamp { get; set; }

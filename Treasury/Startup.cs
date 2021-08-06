@@ -35,6 +35,7 @@ namespace Treasury
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
                 c.EnableAnnotations();
+              
             });
 
             services.AddRouting(options => options.LowercaseUrls = true);

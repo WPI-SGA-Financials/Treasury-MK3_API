@@ -23,7 +23,7 @@ namespace Treasury.Controllers
         /// Gets all organizations from the database
         /// </summary>
         /// <returns>List of Organizations</returns>
-        [SwaggerOperation(Tags = new[] { "Organization Data" })]
+        [SwaggerOperation(Tags = new[] { "Organizations Data" })]
         [HttpGet]
         public IEnumerable<Organization> Get()
         {
@@ -35,7 +35,7 @@ namespace Treasury.Controllers
         /// </summary>
         /// <param name="name">Name of Club</param>
         /// <returns>Basic details for the club</returns>
-        [SwaggerOperation(Tags = new[] { "Organization Data" })]
+        [SwaggerOperation(Tags = new[] { "Organizations Data" })]
         [HttpGet("{name}")]
         public Organization Get(string name)
         {

@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Treasury.Data;
 using Treasury.Models;
 
@@ -25,6 +23,7 @@ namespace Treasury.Controllers
         /// Gets all organizations from the database
         /// </summary>
         /// <returns>List of Organizations</returns>
+        [SwaggerOperation(Tags = new[] { "Organization Data" })]
         [HttpGet]
         public IEnumerable<Organization> Get()
         {
@@ -36,6 +35,7 @@ namespace Treasury.Controllers
         /// </summary>
         /// <param name="name">Name of Club</param>
         /// <returns>Basic details for the club</returns>
+        [SwaggerOperation(Tags = new[] { "Organization Data" })]
         [HttpGet("{name}")]
         public Organization Get(string name)
         {

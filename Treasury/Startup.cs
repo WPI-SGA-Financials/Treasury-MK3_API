@@ -34,7 +34,10 @@ namespace Treasury
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
+                c.EnableAnnotations();
             });
+
+            services.AddRouting(options => options.LowercaseUrls = true);
 
             StringBuilder builder = new StringBuilder();
 

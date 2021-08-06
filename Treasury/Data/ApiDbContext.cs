@@ -15,5 +15,6 @@ namespace Treasury.Data
         }
 
         public DbSet<Organization> Organizations { get; set; }
+        public DbSet<StudentLifeFee> StudentLifeFees { get; set; }
     }
 }

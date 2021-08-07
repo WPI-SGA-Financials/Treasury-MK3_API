@@ -35,7 +35,7 @@ namespace Treasury
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
                 c.EnableAnnotations();
-              
+                c.OrderActionsBy((apiDesc) => $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.RelativePath}");
             });
 
             services.AddRouting(options => options.LowercaseUrls = true);
@@ -52,7 +52,7 @@ namespace Treasury
             builder.Append("pwd=").Append(password).Append(';');
 
             string database = Environment.GetEnvironmentVariable("TREASURY_DATABASE");
-            builder.Append("database=").Append(database);
+            builder.Append("database=").Append(database);//.Append(";SslMode=none");
 
             services.AddDbContext<ApiDbContext>(option => option.UseMySQL(builder.ToString()));
         }

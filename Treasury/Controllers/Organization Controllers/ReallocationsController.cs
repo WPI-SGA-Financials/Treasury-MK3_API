@@ -5,49 +5,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Treasury.Data;
-using Treasury.Models;
+using Treasury.Models.Financial_Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Treasury.Controllers.Organization_Controllers
 {
-    [Produces("application/json")]
     [ApiController]
-    public class BudgetController : ControllerBase
+    [Produces("application/json")]
+    public class ReallocationsController : ControllerBase
     {
         private ApiDbContext _dbContext;
 
-        public BudgetController(ApiDbContext dbContext)
+        public ReallocationsController(ApiDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         /// <summary>
-        /// Gets the budgets for a given organization
+        /// Gets the Reallocation Requests for the requested organization
         /// </summary>
         /// <param name="name">Club Name</param>
-        /// <returns>List of Budgets</returns>
+        /// <returns>List of Reallocation Requests</returns>
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Organization Data" })]
-        [Route("api/organization/{name}/budget")]
-        public IEnumerable<Budget> Get(string name)
+        [Route("api/organization/{name}/realloc")]
+        public IEnumerable<Reallocation> Get(string name)
         {
-            return _dbContext.OrgBudgets.Where(b => b.NameOfClub.Equals(name));
+            return _dbContext.OrgReallocations.Where(b => b.NameOfClub.Equals(name));
         }
 
         /// <summary>
-        /// Gets the budget for an organization in a given fiscal year
+        /// Gets the Reallocation Requests for the requested organization and fiscal year
         /// </summary>
         /// <param name="name">Club Name</param>
         /// <param name="fy">Fiscal Year</param>
-        /// <returns>Budget for that Year</returns>
+        /// <returns>List of Reallocation Requests</returns>
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Organization Data" })]
-        [Route("api/organization/{name}/budget/{fy}")]
-        public IEnumerable<Budget> Get(string name, int fy)
+        [Route("api/organization/{name}/realloc/{fy}")]
+        public IEnumerable<Reallocation> Get(string name, int fy)
         {
-            return _dbContext.OrgBudgets.Where(b => b.NameOfClub.Equals(name) && b.FiscalYear.Contains("" + fy));
+            return _dbContext.OrgReallocations.Where(b => b.NameOfClub.Equals(name) && b.FiscalYear.Contains("" + fy));
         }
-
     }
 }

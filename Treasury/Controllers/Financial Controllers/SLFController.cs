@@ -35,15 +35,15 @@ namespace Treasury.Controllers
         }
 
         /// <summary>
-        /// Gets a particular fiscal year by database ID
+        /// Gets a particular fiscal year
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="fy">Fiscal Year</param>
         /// <returns>Student Life Fee data for the year</returns>
         [SwaggerOperation(Tags = new [] {"Financial Data"})]
-        [HttpGet("{id}")]
-        public StudentLifeFee Get(int id)
+        [HttpGet("{fy}")]
+        public StudentLifeFee Get(int fy)
         {
-            return _dbContext.StudentLifeFees.Find(id);
+            return _dbContext.StudentLifeFees.Where((slf) => slf.FiscalYear.Contains("" + fy)).First();
         }
     }
 }

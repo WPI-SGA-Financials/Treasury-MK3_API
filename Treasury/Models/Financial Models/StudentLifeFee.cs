@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Treasury.Models
 {
-    [Table("student life fee")]
+    [Table("Student Life Fee")]
     public class StudentLifeFee
     {
         public int ID { get; set; }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Treasury.Models
 {
-    [Table("budget by fy")]
+    [Table("Budget By FY")]
     [Keyless]
     public class Budget
     {

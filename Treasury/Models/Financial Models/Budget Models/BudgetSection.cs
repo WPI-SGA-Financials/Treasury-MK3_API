@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Treasury.Models.Financial_Models.Budget_Models
 {
-    [Table("budget by section")]
+    [Table("Budget By Section")]
     [Keyless]
     public class BudgetSection
     {

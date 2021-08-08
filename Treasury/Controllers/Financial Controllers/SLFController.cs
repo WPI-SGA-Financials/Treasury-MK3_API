@@ -12,7 +12,7 @@ using Treasury.Models;
 namespace Treasury.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/financials/[controller]")]
     [ApiController]
     public class SLFController : ControllerBase
     {
@@ -35,7 +35,7 @@ namespace Treasury.Controllers
         }
 
         /// <summary>
-        /// Gets a particular fiscal year
+        /// Gets Student Life Fee data for the given fiscal year
         /// </summary>
         /// <param name="fy">Fiscal Year</param>
         /// <returns>Student Life Fee data for the year</returns>

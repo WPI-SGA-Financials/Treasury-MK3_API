@@ -9,7 +9,7 @@ using Treasury.Models.Financial_Models.Budget_Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Treasury.Controllers.Organization_Controllers.BudgetData
+namespace Treasury.Controllers.Financial_Controllers.Budget_Controllers
 {
     [ApiController]
     [Produces("application/json")]
@@ -23,31 +23,28 @@ namespace Treasury.Controllers.Organization_Controllers.BudgetData
         }
 
         /// <summary>
-        /// Get all budgets by sections for a given organization
+        /// Get all Budgets by Sections
         /// </summary>
-        /// <param name="name">Club Name</param>
         /// <returns>List of Budget Sections</returns>
         [HttpGet]
-        [SwaggerOperation(Tags = new[] { "Organization Data" })]
-        [Route("api/organization/{name}/budgetsection")]
-        public IEnumerable<BudgetSection> Get(string name)
+        [SwaggerOperation(Tags = new[] { "Financial Data" })]
+        [Route("api/financials/budgetsection")]
+        public IEnumerable<BudgetSection> Get()
         {
-            return _dbContext.OrgBudgetSections.Where(b => b.NameOfClub.Equals(name));
+            return _dbContext.OrgBudgetSections;
         }
 
         /// <summary>
-        /// Get all budgets by sections for a given organization and fiscal year
+        /// Get all Budgets by Sections for the given fiscal year
         /// </summary>
-        /// <param name="name">Club Name</param>
         /// <param name="fy">Fiscal Year</param>
         /// <returns>List of Budget Sections</returns>
         [HttpGet]
-        [SwaggerOperation(Tags = new[] { "Organization Data" })]
-        [Route("api/organization/{name}/budgetsection/{fy}")]
-        public IEnumerable<BudgetSection> Get(string name, int fy)
+        [SwaggerOperation(Tags = new[] { "Financial Data" })]
+        [Route("api/financials/budgetsection/{fy}")]
+        public IEnumerable<BudgetSection> Get(int fy)
         {
-            return _dbContext.OrgBudgetSections.Where(b => b.NameOfClub.Equals(name) && b.FiscalYear.Contains(""+fy));
+            return _dbContext.OrgBudgetSections.Where(b => b.FiscalYear.Contains("" + fy));
         }
-
     }
 }

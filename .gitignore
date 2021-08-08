@@ -364,3 +364,8 @@ FodyWeavers.xsd
 
 # Exclude .env file
 .env
+
+# Docker
+docker-compose.debug.yml
+
+.vscode

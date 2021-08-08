@@ -1,0 +1,18 @@
+# Please refer https://aka.ms/HTTPSinContainer on how to setup an https developer certificate for your ASP .NET Core service.
+
+version: '3.4'
+
+services:
+  treasury:
+    image: treasury
+    build:
+      context: .
+      dockerfile: Treasury/Dockerfile
+    ports:
+      - 80:80
+    environment: 
+      - ASPNETCORE_URLS=http://+
+      - TREASURY_SERVER
+      - TREASURY_USER
+      - TREASURY_PASSWORD
+      - TREASURY_DATABASE

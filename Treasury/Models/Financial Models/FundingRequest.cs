@@ -13,6 +13,12 @@ namespace Treasury.Models.Financial_Models
 
         [Column("Hearing Date")]
         public DateTime HearingDate { get; set; }
+        
+        [Column("Dot Number")] 
+        public string DotNumber { get; set; }
+        
+        [Column("Description")] 
+        public string Description { get; set; }
 
         [Column("Fiscal Year")]
         public string FiscalYear { get; set; }

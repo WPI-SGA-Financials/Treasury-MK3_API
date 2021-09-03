@@ -9,9 +9,11 @@ using System.Threading.Tasks;
 namespace Treasury.Models
 {
     [Table("Budget By FY")]
-    [Keyless]
     public class Budget
     {
+        [Column("Budget ID")] 
+        public int ID { get; set; }
+        
         [Column("Name of Club")]
         public string NameOfClub { get; set; }
 

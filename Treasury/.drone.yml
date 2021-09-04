@@ -23,6 +23,7 @@ steps:
   - name: publish
     image: plugins/docker
     settings:
+      dockerfile: Treasury/Dockerfile
       tags: [ "${DRONE_COMMIT_SHA:0:7}","latest" ]
       username:
         from_secret: docker_username

@@ -6,7 +6,15 @@ trigger:
   branch:
     - master
 
+clone:
+  disable: true
+
 steps:
+  - name: clone
+    image: drone/git
+    commands:
+      - git clone http://192.168.1.101:3000/kcbimonte/Treasury-MK3_API.git .
+
   - name: build
     image: mcr.microsoft.com/dotnet/sdk:5.0
     commands: 

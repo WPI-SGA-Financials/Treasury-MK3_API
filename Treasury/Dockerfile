@@ -1,26 +1,13 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0-focal AS base
+FROM mcr.microsoft.com/dotnet/sdk:5.0 as build-env
 WORKDIR /app
-EXPOSE 44377
 
-ENV ASPNETCORE_URLS=http://+:44377
+COPY ["Treasury.csproj", "./"]
+RUN dotnet restore
 
-# Creates a non-root user with an explicit UID and adds permission to access the /app folder
-# For more info, please refer to https://aka.ms/vscode-docker-dotnet-configure-containers
-RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
-USER appuser
+COPY . ./
+RUN dotnet publish -c Release -o out
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build
-WORKDIR /src
-COPY ["Treasury/Treasury.csproj", "Treasury/"]
-RUN dotnet restore "Treasury/Treasury.csproj"
-COPY . .
-WORKDIR "/src/Treasury"
-RUN dotnet build "Treasury.csproj" -c Release -o /app/build
-
-FROM build AS publish
-RUN dotnet publish "Treasury.csproj" -c Release -o /app/publish
-
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build-env /app/out .
 ENTRYPOINT ["dotnet", "Treasury.dll"]

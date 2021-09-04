@@ -1,0 +1,23 @@
+﻿kind: pipeline
+type: kubernetes
+name: default
+
+trigger:
+  branch:
+    - master
+
+steps:
+  - name: build
+    image: mcr.microsoft.com/dotnet/sdk:5.0
+    commands: 
+      - sh build.sh
+
+  - name: publish
+    image: plugins/docker
+    settings:
+      tags: [ "${DRONE_COMMIT_SHA:0:7}","latest" ]
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      repo: kbimonte/treasury-api

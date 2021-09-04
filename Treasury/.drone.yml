@@ -1,5 +1,5 @@
 ﻿kind: pipeline
-type: kubernetes
+type: docker
 name: default
 
 trigger:

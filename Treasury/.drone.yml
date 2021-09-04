@@ -18,7 +18,7 @@ steps:
   - name: build
     image: mcr.microsoft.com/dotnet/sdk:5.0
     commands: 
-      - sh build.sh
+      - dotnet build
 
   - name: publish
     image: plugins/docker

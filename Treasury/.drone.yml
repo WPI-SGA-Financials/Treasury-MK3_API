@@ -29,4 +29,5 @@ steps:
       password:
         from_secret: docker_password
       repo: kbimonte/treasury-api
-      context: ./Treasury/
+      context: Treasury/
+      dockerfile: Treasury/Dockerfile

@@ -12,6 +12,9 @@ namespace Treasury.Models.Financial_Models.Budget_Models
             NumOfItems = budget.NumOfItems;
             AmountRequested = budget.AmountRequested;
             AmountProposed = budget.AmountProposed;
+            Appealed = budget.Appealed;
+            RequestedAppeal = budget.RequestedAppeal;
+            ApprovedAppeal = budget.ApprovedAppeal;
             AmountApproved = budget.AmountApproved;
             AmountSpent = budget.AmountSpent;
         }
@@ -27,6 +30,10 @@ namespace Treasury.Models.Financial_Models.Budget_Models
         public decimal AmountRequested { get; set; }
         
         public decimal AmountProposed { get; set; }
+        
+        public bool Appealed { get; set; }
+       
+        public decimal RequestedAppeal { get; set; } 
         
         public decimal ApprovedAppeal { get; set; }
         

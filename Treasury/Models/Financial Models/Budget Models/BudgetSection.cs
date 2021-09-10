@@ -30,6 +30,12 @@ namespace Treasury.Models.Financial_Models.Budget_Models
 
         [Column("Amount Proposed")]
         public decimal AmountProposed { get; set; }
+        
+        [Column("Appealed")] 
+        public bool Appealed { get; set; }
+        
+        [Column("Requested Appeal")] 
+        public decimal RequestedAppeal { get; set; } 
 
         [Column("Approved Appeal")]
         public decimal ApprovedAppeal { get; set; }

@@ -11,6 +11,8 @@ namespace Treasury.Models.Financial_Models.Budget_Models
     [Keyless]
     public class BudgetSection
     {
+        [Column("Budget ID")]
+        public int BudgetID { get; set; }
         [Column("Name of Club")]
         public string NameOfClub { get; set; }
 
@@ -28,14 +30,17 @@ namespace Treasury.Models.Financial_Models.Budget_Models
 
         [Column("Amount Proposed")]
         public decimal AmountProposed { get; set; }
+        
+        [Column("Appealed")] 
+        public bool Appealed { get; set; }
+        
+        [Column("Requested Appeal")] 
+        public decimal RequestedAppeal { get; set; } 
 
         [Column("Approved Appeal")]
         public decimal ApprovedAppeal { get; set; }
 
-        /*[Column("Amount Approved")]
-        public decimal AmountApproved { get; set; }*/
-
-        [Column("Amount Spent")]
-        public decimal AmountSpent { get; set; }
+        [Column("Amount Approved")]
+        public decimal AmountApproved { get; set; }
     }
 }

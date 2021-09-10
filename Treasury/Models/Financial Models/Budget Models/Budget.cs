@@ -9,9 +9,11 @@ using System.Threading.Tasks;
 namespace Treasury.Models
 {
     [Table("Budget By FY")]
-    [Keyless]
     public class Budget
     {
+        [Column("Budget ID")] 
+        public int ID { get; set; }
+        
         [Column("Name of Club")]
         public string NameOfClub { get; set; }
 
@@ -26,14 +28,17 @@ namespace Treasury.Models
 
         [Column("Amount Proposed")]
         public decimal AmountProposed { get; set; }
+        
+        [Column("Appealed")] 
+        public bool Appealed { get; set; }
+        
+        [Column("Requested Appeal")] 
+        public decimal RequestedAppeal { get; set; } 
 
         [Column("Approved Appeal")]
         public decimal ApprovedAppeal { get; set; }
 
         [Column("Amount Approved")]
         public decimal AmountApproved { get; set; }
-
-        [Column("Amount Spent")]
-        public decimal AmountSpent { get; set; }
     }
 }

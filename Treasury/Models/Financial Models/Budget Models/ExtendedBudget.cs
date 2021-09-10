@@ -16,7 +16,6 @@ namespace Treasury.Models.Financial_Models.Budget_Models
             RequestedAppeal = budget.RequestedAppeal;
             ApprovedAppeal = budget.ApprovedAppeal;
             AmountApproved = budget.AmountApproved;
-            AmountSpent = budget.AmountSpent;
         }
         
         public int ID { get; set; }
@@ -38,9 +37,7 @@ namespace Treasury.Models.Financial_Models.Budget_Models
         public decimal ApprovedAppeal { get; set; }
         
         public decimal AmountApproved { get; set; }
-        
-        public decimal AmountSpent { get; set; }
-        
+
         public List<BudgetSection> BudgetSections { get; set; }
 
         public static ExtendedBudget createFromBudget(Budget budget)

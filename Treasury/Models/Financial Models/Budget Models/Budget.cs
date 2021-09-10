@@ -40,8 +40,5 @@ namespace Treasury.Models
 
         [Column("Amount Approved")]
         public decimal AmountApproved { get; set; }
-
-        [Column("Amount Spent")]
-        public decimal AmountSpent { get; set; }
     }
 }

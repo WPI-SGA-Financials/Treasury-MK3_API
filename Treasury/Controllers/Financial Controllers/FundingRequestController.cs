@@ -28,7 +28,7 @@ namespace Treasury.Controllers.Financial_Controllers
         /// <returns>List of Funding Requests</returns>
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Financial Data" })]
-        [Route("api/financials/fr")]
+        [Route("api/financials/frs")]
         public IEnumerable<FundingRequest> Get(string name)
         {
             return _dbContext.OrgFundingRequests;
@@ -41,7 +41,7 @@ namespace Treasury.Controllers.Financial_Controllers
         /// <returns>List of Funding Requests</returns>
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Financial Data" })]
-        [Route("api/financials/fr/{fy}")]
+        [Route("api/financials/frs/{fy}")]
         public IEnumerable<FundingRequest> Get(string name, int fy)
         {
             return _dbContext.OrgFundingRequests.Where(b => b.FiscalYear.Contains("" + fy));

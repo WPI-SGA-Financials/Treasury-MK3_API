@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Treasury.Data;
 using Treasury.Models.Financial_Models;
+using Treasury.Models.Financial_Models.Funding_Request_Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -29,7 +30,7 @@ namespace Treasury.Controllers.Financial_Controllers
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Financial Data" })]
         [Route("api/financials/frs")]
-        public IEnumerable<FundingRequest> Get(string name)
+        public IEnumerable<FundingRequest> Get()
         {
             return _dbContext.OrgFundingRequests;
         }
@@ -42,9 +43,25 @@ namespace Treasury.Controllers.Financial_Controllers
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Financial Data" })]
         [Route("api/financials/frs/{fy}")]
-        public IEnumerable<FundingRequest> Get(string name, int fy)
+        public IEnumerable<FundingRequest> Get(int fy)
         {
             return _dbContext.OrgFundingRequests.Where(b => b.FiscalYear.Contains("" + fy));
+        }
+
+        /// <summary>
+        /// Gets a specific funding request
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [SwaggerOperation(Tags = new[] {"Financial Data"})]
+        [Route("api/financials/fr/{id}")]
+        public ExtendedFundingRequest GetExtended(int id)
+        {
+            FundingRequest fr = _dbContext.OrgFundingRequests.Find(id);
+            
+            // TODO: Come back to when meetings table is created
+            return ExtendedFundingRequest.createFromFR(fr);
         }
     }
 }

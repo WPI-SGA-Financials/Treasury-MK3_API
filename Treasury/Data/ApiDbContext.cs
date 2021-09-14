@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Treasury.Models;
 using Treasury.Models.Financial_Models;
 using Treasury.Models.Financial_Models.Budget_Models;
+using Treasury.Models.Financial_Models.Funding_Request_Models;
 
 namespace Treasury.Data
 {

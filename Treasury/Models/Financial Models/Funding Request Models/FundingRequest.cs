@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Treasury.Models.Financial_Models
+namespace Treasury.Models.Financial_Models.Funding_Request_Models
 {
     [Table("Complete Funding Request")]
-    [Keyless]
     public class FundingRequest
     {
+        [Column("ID")] 
+        public int ID { get; set; }
+        
         [Column("Name of Club")]
         public string NameOfClub { get; set; }
 

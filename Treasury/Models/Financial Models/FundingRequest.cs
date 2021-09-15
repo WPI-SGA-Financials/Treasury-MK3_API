@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Treasury.Models.Financial_Models.Funding_Request_Models
+namespace Treasury.Models.Financial_Models
 {
     [Table("Complete Funding Request")]
     public class FundingRequest
@@ -14,6 +14,9 @@ namespace Treasury.Models.Financial_Models.Funding_Request_Models
 
         [Column("Hearing Date")]
         public DateTime HearingDate { get; set; }
+        
+        [Column("Date of Event")]
+        public DateTime? EventDate { get; set; }
         
         [Column("Dot Number")] 
         public string DotNumber { get; set; }
@@ -31,5 +34,21 @@ namespace Treasury.Models.Financial_Models.Funding_Request_Models
 
         [Column("Approved")]
         public decimal AmountApproved { get; set; }
+        
+        [Column("Appealed")] 
+        public string Appealed { get; set; }
+        
+        [Column("Appeal Amount")] 
+        public decimal? RequestedAppeal { get; set; }
+        
+        [Column("Appeal Decision")] 
+        public string? AppealDecision { get; set; }
+        
+        [Column("Approved Appeal")] 
+        public decimal? ApprovedAppeal { get; set; }
+        
+        [Column("Appeal Minutes")] 
+        public string? AppealMinutes { get; set; }
+        
     }
 }

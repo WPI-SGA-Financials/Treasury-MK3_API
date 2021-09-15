@@ -28,8 +28,8 @@ namespace Treasury.Controllers.Financial_Controllers
         /// <returns>List of Funding Requests</returns>
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Financial Data" })]
-        [Route("api/financials/fr")]
-        public IEnumerable<FundingRequest> Get(string name)
+        [Route("api/financials/frs")]
+        public IEnumerable<FundingRequest> Get()
         {
             return _dbContext.OrgFundingRequests;
         }
@@ -41,10 +41,27 @@ namespace Treasury.Controllers.Financial_Controllers
         /// <returns>List of Funding Requests</returns>
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Financial Data" })]
-        [Route("api/financials/fr/{fy}")]
-        public IEnumerable<FundingRequest> Get(string name, int fy)
+        [Route("api/financials/frs/{fy}")]
+        public IEnumerable<FundingRequest> Get(int fy)
         {
             return _dbContext.OrgFundingRequests.Where(b => b.FiscalYear.Contains("" + fy));
+        }
+
+        /// <summary>
+        /// Gets a specific funding request
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [SwaggerOperation(Tags = new[] {"Financial Data"})]
+        [Route("api/financials/fr/{id}")]
+        public FundingRequest GetExtended(int id)
+        {
+            FundingRequest fr = _dbContext.OrgFundingRequests.Find(id);
+            
+            // TODO: Come back to when meetings table is created
+            return fr;
+            // return ExtendedFundingRequest.createFromFR(fr);
         }
     }
 }

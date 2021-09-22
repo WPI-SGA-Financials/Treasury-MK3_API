@@ -28,7 +28,7 @@ namespace Treasury.Controllers.Financial_Controllers
         /// <returns>List of Reallocation Requests</returns>
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Financial Data" })]
-        [Route("api/financials/realloc")]
+        [Route("api/financials/reallocs")]
         public IEnumerable<Reallocation> Get()
         {
             return _dbContext.OrgReallocations;
@@ -41,10 +41,24 @@ namespace Treasury.Controllers.Financial_Controllers
         /// <returns>List of Reallocation Requests</returns>
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Financial Data" })]
-        [Route("api/financials/realloc/{fy}")]
+        [Route("api/financials/reallocs/{fy}")]
         public IEnumerable<Reallocation> Get(int fy)
         {
             return _dbContext.OrgReallocations.Where(b => b.FiscalYear.Contains("" + fy));
+        }
+
+        /// <summary>
+        /// Gets the Reallocation Request by ID
+        /// </summary>
+        /// <param name="id">Reallocation ID</param>
+        /// <returns></returns>
+        [HttpGet]
+        [SwaggerOperation(Tags= new [] {"Financial Data"})]
+        [Route("api/financials/realloc/{id}")]
+        public Reallocation GetByID(int id)
+        {
+            // TODO: Come back to when meetings table is created
+            return _dbContext.OrgReallocations.Find(id);
         }
     }
 }

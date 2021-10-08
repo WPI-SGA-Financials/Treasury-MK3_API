@@ -21,6 +21,8 @@ namespace Treasury.Application.Accessor
         {
             List<FundingRequestDto> frs = _dbContext.FundingRequests
                 .Where(fr=> fr.NameOfClub.Contains(organization))
+                .OrderByDescending(fr => fr.FundingDate)
+                .ThenByDescending(fr => fr.DotNumber)
                 .Select(fr => FundingRequestDto.CreateDtoFromFr(fr))
                 .ToList();
 
@@ -32,6 +34,8 @@ namespace Treasury.Application.Accessor
             List<FundingRequestDto> frs = _dbContext.FundingRequests
                 .Where(fr=> fr.NameOfClub.Contains(organization))
                 .Where(fr => fr.FiscalYear.Contains(""+fy))
+                .OrderByDescending(fr => fr.FundingDate)
+                .ThenByDescending(fr => fr.DotNumber)
                 .Select(fr => FundingRequestDto.CreateDtoFromFr(fr))
                 .ToList();
 
@@ -42,6 +46,8 @@ namespace Treasury.Application.Accessor
         public List<FundingRequestDto> GetFundingRequests()
         {
             List<FundingRequestDto> frs = _dbContext.FundingRequests
+                .OrderByDescending(fr => fr.FundingDate)
+                .ThenByDescending(fr => fr.DotNumber)
                 .Select(fr => FundingRequestDto.CreateDtoFromFr(fr))
                 .ToList();
 
@@ -52,6 +58,8 @@ namespace Treasury.Application.Accessor
         {
             List<FundingRequestDto> frs = _dbContext.FundingRequests
                 .Where(fr => fr.FiscalYear.Contains(""+fy))
+                .OrderByDescending(fr => fr.FundingDate)
+                .ThenByDescending(fr => fr.DotNumber)
                 .Select(fr => FundingRequestDto.CreateDtoFromFr(fr))
                 .ToList();
 

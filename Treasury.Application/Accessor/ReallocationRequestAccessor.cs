@@ -20,6 +20,8 @@ namespace Treasury.Application.Accessor
         {
             List<ReallocationRequestDto> reallocs = _dbContext.Reallocations
                 .Where(realloc=> realloc.NameOfClub.Contains(organization))
+                .OrderByDescending(realloc => realloc.HearingDate)
+                .ThenByDescending(realloc => realloc.DotNumber)
                 .Select(realloc => ReallocationRequestDto.CreateDtoFromRealloc(realloc))
                 .ToList();
 
@@ -31,6 +33,8 @@ namespace Treasury.Application.Accessor
             List<ReallocationRequestDto> reallocs = _dbContext.Reallocations
                 .Where(realloc=> realloc.NameOfClub.Contains(organization))
                 .Where(realloc => realloc.FiscalYear.Contains(""+fy))
+                .OrderByDescending(realloc => realloc.HearingDate)
+                .ThenByDescending(realloc => realloc.DotNumber)
                 .Select(realloc => ReallocationRequestDto.CreateDtoFromRealloc(realloc))
                 .ToList();
 
@@ -41,6 +45,8 @@ namespace Treasury.Application.Accessor
         public List<ReallocationRequestDto> GetReallocationRequests()
         {
             List<ReallocationRequestDto> reallocs = _dbContext.Reallocations
+                .OrderByDescending(realloc => realloc.HearingDate)
+                .ThenByDescending(realloc => realloc.DotNumber)
                 .Select(realloc => ReallocationRequestDto.CreateDtoFromRealloc(realloc))
                 .ToList();
 
@@ -51,6 +57,8 @@ namespace Treasury.Application.Accessor
         {
             List<ReallocationRequestDto> reallocs = _dbContext.Reallocations
                 .Where(realloc => realloc.FiscalYear.Contains(""+fy))
+                .OrderByDescending(realloc => realloc.HearingDate)
+                .ThenByDescending(realloc => realloc.DotNumber)
                 .Select(realloc => ReallocationRequestDto.CreateDtoFromRealloc(realloc))
                 .ToList();
 

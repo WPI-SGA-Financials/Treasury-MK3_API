@@ -2,10 +2,10 @@
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using Treasury.Application.Accessor;
+using Treasury.Application.Contexts;
 using Treasury.Application.DTOs;
-using Treasury.Domain;
 
-namespace Treasury.Controllers
+namespace Treasury.WebAPI.Controllers
 {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
     

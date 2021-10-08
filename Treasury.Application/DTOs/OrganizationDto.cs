@@ -1,5 +1,5 @@
 ﻿using System;
-using Treasury.Domain.Model;
+using Treasury.Domain.Models.Tables;
 
 namespace Treasury.Application.DTOs
 {

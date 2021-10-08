@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Treasury.Application.Contexts;
 using Treasury.Application.DTOs;
-using Treasury.Domain;
-using Treasury.Domain.Model;
+using Treasury.Domain.Models.Tables;
 
 namespace Treasury.Application.Accessor
 {
@@ -18,7 +16,7 @@ namespace Treasury.Application.Accessor
             _dbContext = dbContext;
         }
         
-        
+        // Organizations Data
         public List<OrganizationDto> GetOrganizations()
         {
             return _dbContext.Organizations.Select(org => OrganizationDto.CreateDtoFromOrg(org)).ToList();
@@ -31,6 +29,7 @@ namespace Treasury.Application.Accessor
                  .Select(org => OrganizationDto.CreateDtoFromOrg(org)).ToList();
         }
 
+        // Organization Data
         public OrganizationDetailDto GetOrganization(string name)
         {
             Organization org = _dbContext.Organizations

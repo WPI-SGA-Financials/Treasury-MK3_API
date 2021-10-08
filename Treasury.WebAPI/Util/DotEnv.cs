@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Treasury.Util
+namespace Treasury.WebAPI.Util
 {
     // Author: https://dusted.codes/dotenv-in-dotnet
     public class DotEnv

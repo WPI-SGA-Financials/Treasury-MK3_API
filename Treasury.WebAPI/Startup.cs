@@ -9,9 +9,10 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using Treasury.Application;
 using Treasury.Domain;
 
-namespace Treasury
+namespace Treasury.WebAPI
 {
     public class Startup
     {
@@ -47,26 +48,12 @@ namespace Treasury
             });
 
             services.AddRouting(options => options.LowercaseUrls = true);
-
-            StringBuilder builder = new StringBuilder();
-
-            string server = Environment.GetEnvironmentVariable("TREASURY_SERVER");
-            builder.Append("server=").Append(server).Append(';');
-
-            string user = Environment.GetEnvironmentVariable("TREASURY_USER");
-            builder.Append("uid=").Append(user).Append(';');
-
-            string password = Environment.GetEnvironmentVariable("TREASURY_PASSWORD");
-            builder.Append("pwd=").Append(password).Append(';');
-
-            string database = Environment.GetEnvironmentVariable("TREASURY_DATABASE");
-            builder.Append("database=").Append(database);
-
-            services.AddDbContext<sgadbContext>(option => option.UseMySQL(builder.ToString()));
+            
+            services.AddDatabase();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, sgadbContext dbContext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -75,8 +62,6 @@ namespace Treasury
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Treasury v1"));
-
-            dbContext.Database.EnsureCreated();
 
             app.UseHttpsRedirection();
 

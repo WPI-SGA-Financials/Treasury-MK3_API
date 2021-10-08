@@ -1,15 +1,9 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Treasury.Util;
+using Treasury.WebAPI.Util;
 
-namespace Treasury
+namespace Treasury.WebAPI
 {
     public class Program
     {

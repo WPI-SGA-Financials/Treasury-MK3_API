@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 #nullable disable
 
@@ -17,6 +18,7 @@ namespace Treasury.Domain.Models.Tables
         public decimal AmountSpent { get; set; }
         public DateTime Timestamp { get; set; }
 
+        [JsonIgnore]
         public virtual Budget BIdNavigation { get; set; }
     }
 }

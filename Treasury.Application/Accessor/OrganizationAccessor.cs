@@ -35,7 +35,7 @@ namespace Treasury.Application.Accessor
             Organization org = _dbContext.Organizations
                 .Include(org => org.ClubClassification)
                 .Include(org => org.TechsyncName)
-                .FirstOrDefault(org => org.NameOfClub == name);
+                .FirstOrDefault(org => org.NameOfClub.Equals(name));
 
             return OrganizationDetailDto.CreateDtoFromOrg(org);
         }

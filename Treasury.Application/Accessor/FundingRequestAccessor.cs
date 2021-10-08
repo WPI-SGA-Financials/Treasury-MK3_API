@@ -20,7 +20,7 @@ namespace Treasury.Application.Accessor
         public List<FundingRequestDto> GetFundingRequestsByOrganization(string organization)
         {
             List<FundingRequestDto> frs = _dbContext.FundingRequests
-                .Where(fr=> fr.NameOfClub.Contains(organization))
+                .Where(fr=> fr.NameOfClub.Equals(organization))
                 .OrderByDescending(fr => fr.FundingDate)
                 .ThenByDescending(fr => fr.DotNumber)
                 .Select(fr => FundingRequestDto.CreateDtoFromFr(fr))
@@ -32,7 +32,7 @@ namespace Treasury.Application.Accessor
         public List<FundingRequestDto> GetFundingRequestsByOrganizationFy(string organization, int fy)
         {
             List<FundingRequestDto> frs = _dbContext.FundingRequests
-                .Where(fr=> fr.NameOfClub.Contains(organization))
+                .Where(fr=> fr.NameOfClub.Equals(organization))
                 .Where(fr => fr.FiscalYear.Contains(""+fy))
                 .OrderByDescending(fr => fr.FundingDate)
                 .ThenByDescending(fr => fr.DotNumber)
@@ -70,7 +70,7 @@ namespace Treasury.Application.Accessor
         {
             FundingRequest fr = _dbContext.FundingRequests
                 .Include(fr => fr.Frappeal)
-                .FirstOrDefault(fr => fr.Id == id);
+                .FirstOrDefault(fr => fr.Id.Equals(id));
             
             return FundingRequestDetailedDto.CreateDtoFromFr(fr);
         }

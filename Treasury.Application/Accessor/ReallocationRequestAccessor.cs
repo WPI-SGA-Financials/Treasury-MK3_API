@@ -19,7 +19,7 @@ namespace Treasury.Application.Accessor
         public List<ReallocationRequestDto> GetReallocationRequestsByOrganization(string organization)
         {
             List<ReallocationRequestDto> reallocs = _dbContext.Reallocations
-                .Where(realloc=> realloc.NameOfClub.Contains(organization))
+                .Where(realloc=> realloc.NameOfClub.Equals(organization))
                 .OrderByDescending(realloc => realloc.HearingDate)
                 .ThenByDescending(realloc => realloc.DotNumber)
                 .Select(realloc => ReallocationRequestDto.CreateDtoFromRealloc(realloc))
@@ -31,7 +31,7 @@ namespace Treasury.Application.Accessor
         public List<ReallocationRequestDto> GetReallocationRequestsByOrganizationFy(string organization, int fy)
         {
             List<ReallocationRequestDto> reallocs = _dbContext.Reallocations
-                .Where(realloc=> realloc.NameOfClub.Contains(organization))
+                .Where(realloc=> realloc.NameOfClub.Equals(organization))
                 .Where(realloc => realloc.FiscalYear.Contains(""+fy))
                 .OrderByDescending(realloc => realloc.HearingDate)
                 .ThenByDescending(realloc => realloc.DotNumber)
@@ -68,7 +68,7 @@ namespace Treasury.Application.Accessor
         public ReallocationRequestDetailedDto GetReallocationRequestById(int id)
         {
             Reallocation realloc = _dbContext.Reallocations
-                .FirstOrDefault(realloc => realloc.Id == id);
+                .FirstOrDefault(realloc => realloc.Id.Equals(id));
             
             return ReallocationRequestDetailedDto.CreateDtoFromRealloc(realloc);
         }

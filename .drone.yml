@@ -19,7 +19,6 @@ steps:
   - name: build
     image: mcr.microsoft.com/dotnet/sdk:5.0
     commands: 
-      - cd Treasury.WebAPI
       - dotnet build
 
   - name: publish

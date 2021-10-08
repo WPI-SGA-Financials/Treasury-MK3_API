@@ -5,6 +5,7 @@ name: default
 trigger:
   branch:
     - master
+    - restructuring
 
 clone:
   disable: true

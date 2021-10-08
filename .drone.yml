@@ -15,11 +15,12 @@ steps:
     image: drone/git
     commands:
       - git clone http://192.168.1.101:3000/kcbimonte/Treasury-MK3_API.git .
+      - git checkout $DRONE_COMMIT
 
   - name: build
     image: mcr.microsoft.com/dotnet/sdk:5.0
     commands: 
-      - ls Treasury/
+      - ls
       - dotnet build
 
   - name: publish
@@ -31,5 +32,5 @@ steps:
       password:
         from_secret: docker_password
       repo: kbimonte/treasury-api
-      context: Treasury/WebAPI/
-      dockerfile: Treasury/WebAPI/Dockerfile
+      context: Treasury.WebAPI/
+      dockerfile: Treasury.WebAPI/Dockerfile

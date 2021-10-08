@@ -5,7 +5,7 @@ namespace Treasury.Application.DTOs
 {
     public class FundingRequestDto
     {
-        public static FundingRequestDto CreateDtoFromOrg(FundingRequest fr)
+        public static FundingRequestDto CreateDtoFromFr(FundingRequest fr)
         {
             FundingRequestDto dto = new FundingRequestDto
             {
@@ -34,7 +34,7 @@ namespace Treasury.Application.DTOs
 
     public class FundingRequestDetailedDto : FundingRequestDto
     {
-        public static FundingRequestDetailedDto CreateDtoFromOrg(FundingRequest fr)
+        public static FundingRequestDetailedDto CreateDtoFromFr(FundingRequest fr)
         {
             FundingRequestDetailedDto dto = new FundingRequestDetailedDto()
             {

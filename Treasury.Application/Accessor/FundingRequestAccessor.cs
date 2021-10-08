@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Treasury.Application.Contexts;
 using Treasury.Application.DTOs;
@@ -23,7 +21,7 @@ namespace Treasury.Application.Accessor
         {
             List<FundingRequestDto> frs = _dbContext.FundingRequests
                 .Where(fr=> fr.NameOfClub.Contains(organization))
-                .Select(fr => FundingRequestDto.CreateDtoFromOrg(fr))
+                .Select(fr => FundingRequestDto.CreateDtoFromFr(fr))
                 .ToList();
 
             return frs;
@@ -34,7 +32,7 @@ namespace Treasury.Application.Accessor
             List<FundingRequestDto> frs = _dbContext.FundingRequests
                 .Where(fr=> fr.NameOfClub.Contains(organization))
                 .Where(fr => fr.FiscalYear.Contains(""+fy))
-                .Select(fr => FundingRequestDto.CreateDtoFromOrg(fr))
+                .Select(fr => FundingRequestDto.CreateDtoFromFr(fr))
                 .ToList();
 
             return frs;
@@ -44,7 +42,7 @@ namespace Treasury.Application.Accessor
         public List<FundingRequestDto> GetFundingRequests()
         {
             List<FundingRequestDto> frs = _dbContext.FundingRequests
-                .Select(fr => FundingRequestDto.CreateDtoFromOrg(fr))
+                .Select(fr => FundingRequestDto.CreateDtoFromFr(fr))
                 .ToList();
 
             return frs;
@@ -54,7 +52,7 @@ namespace Treasury.Application.Accessor
         {
             List<FundingRequestDto> frs = _dbContext.FundingRequests
                 .Where(fr => fr.FiscalYear.Contains(""+fy))
-                .Select(fr => FundingRequestDto.CreateDtoFromOrg(fr))
+                .Select(fr => FundingRequestDto.CreateDtoFromFr(fr))
                 .ToList();
 
             return frs;
@@ -66,7 +64,7 @@ namespace Treasury.Application.Accessor
                 .Include(fr => fr.Frappeal)
                 .FirstOrDefault(fr => fr.Id == id);
             
-            return FundingRequestDetailedDto.CreateDtoFromOrg(fr);
+            return FundingRequestDetailedDto.CreateDtoFromFr(fr);
         }
     }
 }

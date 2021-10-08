@@ -19,7 +19,7 @@ steps:
   - name: build
     image: mcr.microsoft.com/dotnet/sdk:5.0
     commands: 
-      - ls
+      - ls Treasury/
       - dotnet build
 
   - name: publish
@@ -31,5 +31,5 @@ steps:
       password:
         from_secret: docker_password
       repo: kbimonte/treasury-api
-      context: Treasury.WebAPI/
-      dockerfile: Treasury.WebAPI/Dockerfile
+      context: Treasury/WebAPI/
+      dockerfile: Treasury/WebAPI/Dockerfile

@@ -22,7 +22,7 @@ namespace Treasury.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Gets all organizations from the database
+        /// Gets all organizations
         /// </summary>
         /// <returns>List of Organizations</returns>
         [SwaggerOperation(Tags = new[] { "Organizations Data" })]

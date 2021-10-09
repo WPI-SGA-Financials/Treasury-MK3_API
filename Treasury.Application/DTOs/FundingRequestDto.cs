@@ -14,6 +14,7 @@ namespace Treasury.Application.DTOs
                 HearingDate = fr.FundingDate,
                 FiscalYear = fr.FiscalYear,
                 DotNumber = fr.DotNumber,
+                Description = fr.Description,
                 AmountRequested = fr.AmountRequested,
                 Decision = fr.Decision,
                 AmountApproved = fr.AmountApproved
@@ -27,6 +28,7 @@ namespace Treasury.Application.DTOs
         public DateTime HearingDate { get; set; }
         public string FiscalYear { get; set; }
         public string DotNumber { get; set; }
+        public string Description { get; set; }
         public decimal AmountRequested { get; set; }
         public string Decision { get; set; }
         public decimal AmountApproved { get; set; }
@@ -54,7 +56,6 @@ namespace Treasury.Application.DTOs
             return dto;
         }
         
-        public string Description { get; set; }
         public DateTime? DateOfEvent { get; set; }
         public Frappeal Frappeal { get; set; }
     }

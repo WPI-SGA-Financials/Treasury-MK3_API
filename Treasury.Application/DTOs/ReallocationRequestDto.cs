@@ -14,6 +14,7 @@ namespace Treasury.Application.DTOs
                 HearingDate = realloc.HearingDate,
                 FiscalYear = realloc.FiscalYear,
                 DotNumber = realloc.DotNumber,
+                Description = realloc.Description,
                 AllocationAmount = realloc.AllocationAmount,
                 Decision = realloc.Decision,
                 AmountApproved = realloc.AmountApproved
@@ -27,6 +28,7 @@ namespace Treasury.Application.DTOs
         public DateTime HearingDate { get; set; }
         public string FiscalYear { get; set; }
         public string DotNumber { get; set; }
+        public string Description { get; set; }
         public decimal AllocationAmount { get; set; }
         public string Decision { get; set; }
         public decimal AmountApproved { get; set; }
@@ -54,8 +56,7 @@ namespace Treasury.Application.DTOs
 
             return dto;
         }
-
-        public string Description { get; set; }
+        
         public string AllocatedFrom { get; set; }
         public string AllocatedTo { get; set; }
         public DateTime Timestamp { get; set; }

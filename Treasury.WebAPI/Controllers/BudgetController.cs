@@ -64,7 +64,7 @@ namespace Treasury.WebAPI.Controllers
         /// <returns>List of Budgets</returns>
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Organization Data" })]
-        [Route("organization/{name}/budget")]
+        [Route("organization/{name}/budgets")]
         public List<BudgetDto> Get(string name)
         {
             return new BudgetAccessor(_dbContext).GetBudgetByOrganization(name);
@@ -78,7 +78,7 @@ namespace Treasury.WebAPI.Controllers
         /// <returns>Budget for that Year</returns>
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Organization Data" })]
-        [Route("organization/{name}/budget/{fy:int}")]
+        [Route("organization/{name}/budgets/{fy:int}")]
         public List<BudgetDto> Get(string name, int fy)
         {
             return new BudgetAccessor(_dbContext).GetBudgetByOrganizationFy(name, fy);

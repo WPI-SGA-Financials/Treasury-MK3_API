@@ -17,11 +17,7 @@ namespace Treasury.Application.DTOs
                 Appealed = section.BudgetLineItems.Any(item => item.Appealed == 1),
                 RequestedAppeal = section.BudgetLineItems.Sum(item => item.AppealAmount),
                 
-                ApprovedAppeal = section.BudgetLineItems.Sum(item => item.ApprovedAppeal),
-                
-                AmountApproved = GetTotalApproved(
-                    section.BudgetLineItems.Sum(item => item.AmountProposed), 
-                    section.BudgetLineItems.Sum(item => item.ApprovedAppeal))
+                ApprovedAppeal = section.BudgetLineItems.Sum(item => item.ApprovedAppeal)
             };
             
             return dto;
@@ -35,11 +31,6 @@ namespace Treasury.Application.DTOs
         public bool Appealed { get; set; }
         public decimal RequestedAppeal { get; set; }
         public decimal ApprovedAppeal { get; set; }
-        public decimal AmountApproved { get; set; }
-
-        private static decimal GetTotalApproved(decimal amtProposed, decimal approvedAppeal)
-        {
-            return amtProposed + approvedAppeal;
-        }
+        public decimal AmountApproved => AmountProposed + ApprovedAppeal;
     }
 }

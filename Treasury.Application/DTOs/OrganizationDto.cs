@@ -13,7 +13,7 @@ namespace Treasury.Application.DTOs
                 Classification = org.Classification,
                 TypeOfClub = org.TypeOfClub,
                 AccountNumber = org.AccountNumber,
-                Acronym1 = org.Acronym1,
+                Acronym = org.Acronym1,
                 Inactive = org.Inactive == 1,
                 Timestamp = org.Timestamp
             };
@@ -25,7 +25,7 @@ namespace Treasury.Application.DTOs
         public string Classification { get; set; }
         public string TypeOfClub { get; set; }
         public string AccountNumber { get; set; }
-        public string Acronym1 { get; set; }
+        public string Acronym { get; set; }
         public bool Inactive { get; set; }
         public DateTime Timestamp { get; set; }
     }
@@ -40,15 +40,15 @@ namespace Treasury.Application.DTOs
                 Classification = org.Classification,
                 TypeOfClub = org.TypeOfClub,
                 AccountNumber = org.AccountNumber,
-                Acronym1 = org.Acronym1,
+                Acronym = org.Acronym1,
                 Inactive = org.Inactive == 1,
                 Timestamp = org.Timestamp,
-                ClubClassification = org.ClubClassification.Category,
+                FiVizClubClassification = org.ClubClassification?.Category,
                 TechsyncName = org.TechsyncName.TechsyncName1
             };
         }
         
-        public string ClubClassification { get; set; }
+        public string FiVizClubClassification { get; set; }
         public string TechsyncName { get; set; }
     }
 }

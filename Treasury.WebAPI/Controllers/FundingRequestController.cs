@@ -64,7 +64,7 @@ namespace Treasury.WebAPI.Controllers
         /// <returns>List of Funding Requests</returns>
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Organization Data" })]
-        [Route("organization/{name}/fr")]
+        [Route("organization/{name}/frs")]
         public List<FundingRequestDto> Get(string name)
         {
             return new FundingRequestAccessor(_dbContext).GetFundingRequestsByOrganization(name);
@@ -78,7 +78,7 @@ namespace Treasury.WebAPI.Controllers
         /// <returns>List of Funding Requests</returns>
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Organization Data" })]
-        [Route("organization/{name}/fr/{fy:int}")]
+        [Route("organization/{name}/frs/{fy:int}")]
         public List<FundingRequestDto> Get(string name, int fy)
         {
             return new FundingRequestAccessor(_dbContext).GetFundingRequestsByOrganizationFy(name, fy);

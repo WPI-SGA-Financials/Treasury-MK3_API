@@ -14,18 +14,12 @@ namespace Treasury.Application.DTOs
                 Appealed = legacy.Appealed == 1,
                 AppealAmount = legacy.AppealAmount,
                 AppealDecision = legacy.AppealDecision,
-                ApprovedAppeal = legacy.ApprovedAppeal,
-                AmountApproved = GetTotalApproved(legacy.AmountProposed, legacy.ApprovedAppeal)
+                ApprovedAppeal = legacy.ApprovedAppeal
             };
 
             return dto;
         }
-
-        private static decimal GetTotalApproved(decimal legacyAmountProposed, decimal legacyApprovedAppeal)
-        {
-            return legacyAmountProposed + legacyApprovedAppeal;
-        }
-
+        
         public int Id { get; set; }
         public decimal AmountRequested { get; set; }
         public decimal AmountProposed { get; set; }
@@ -33,6 +27,6 @@ namespace Treasury.Application.DTOs
         public decimal AppealAmount { get; set; }
         public string AppealDecision { get; set; }
         public decimal ApprovedAppeal { get; set; }
-        public decimal AmountApproved { get; set; }
+        public decimal AmountApproved => AmountProposed + ApprovedAppeal;
     }
 }

@@ -50,13 +50,13 @@ namespace Treasury.Application.DTOs
                 AmountApproved = fr.AmountApproved,
                 Description = fr.Description,
                 DateOfEvent = fr.DateOfEvent,
-                Frappeal = fr.Frappeal
+                FrAppeal = fr.Frappeal != null ? FundingRequestAppealDto.CreateDtoFromAppeal(fr.Frappeal) : null
             };
 
             return dto;
         }
         
         public DateTime? DateOfEvent { get; set; }
-        public Frappeal Frappeal { get; set; }
+        public FundingRequestAppealDto FrAppeal { get; set; }
     }
 }

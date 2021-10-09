@@ -57,17 +57,17 @@ namespace Treasury.WebAPI.Controllers
             return new BudgetAccessor(_dbContext).GetBudgetById(id);
         }
 
-        /*/// <summary>
+        /// <summary>
         /// Gets the budgets for a given organization
         /// </summary>
         /// <param name="name">Club Name</param>
         /// <returns>List of Budgets</returns>
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Organization Data" })]
-        [Route("api/organization/{name}/budget")]
-        public IEnumerable<Budget> Get(string name)
+        [Route("organization/{name}/budget")]
+        public List<BudgetDto> Get(string name)
         {
-            return _dbContext.OrgBudgets.Where(b => b.NameOfClub.Equals(name));
+            return new BudgetAccessor(_dbContext).GetBudgetByOrganization(name);
         }
 
         /// <summary>
@@ -78,11 +78,11 @@ namespace Treasury.WebAPI.Controllers
         /// <returns>Budget for that Year</returns>
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Organization Data" })]
-        [Route("api/organization/{name}/budget/{fy:int}")]
-        public IEnumerable<Budget> Get(string name, int fy)
+        [Route("organization/{name}/budget/{fy:int}")]
+        public List<BudgetDto> Get(string name, int fy)
         {
-            return _dbContext.OrgBudgets.Where(b => b.NameOfClub.Equals(name) && b.FiscalYear.Contains("" + fy));
-        }*/
+            return new BudgetAccessor(_dbContext).GetBudgetByOrganizationFy(name, fy);
+        }
 
     }
 }

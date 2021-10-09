@@ -19,7 +19,7 @@ namespace Treasury.Application.Contexts
 
         public virtual DbSet<AllOperatingExpense> AllOperatingExpenses { get; set; }
         public virtual DbSet<Budget> Budgets { get; set; }
-        public virtual DbSet<BudgetByFy> BudgetByFies { get; set; }
+        public virtual DbSet<BudgetByFy> BudgetByFys { get; set; }
         public virtual DbSet<BudgetBySection> BudgetBySections { get; set; }
         public virtual DbSet<BudgetLegacy> BudgetLegacies { get; set; }
         public virtual DbSet<BudgetLineItem> BudgetLineItems { get; set; }

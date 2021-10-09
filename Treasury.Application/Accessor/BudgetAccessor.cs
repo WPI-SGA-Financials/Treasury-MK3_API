@@ -19,13 +19,37 @@ namespace Treasury.Application.Accessor
         }
         
         // Organization Data
+        public List<BudgetDto> GetBudgetByOrganization(string organization)
+        {
+            List<BudgetDto> budgets = _dbContext.BudgetByFys
+                .Where(budget => budget.NameOfClub.Equals(organization))
+                .OrderBy(budget => budget.NameOfClub)
+                .ThenByDescending(budget => budget.FiscalYear)
+                .Select(budget => BudgetDto.CreateDtoFromBudget(budget))
+                .ToList();
+
+            return budgets;
+        }
+        
+        public List<BudgetDto> GetBudgetByOrganizationFy(string organization, int fy)
+        {
+            List<BudgetDto> budgets = _dbContext.BudgetByFys
+                .Where(budget => budget.NameOfClub.Equals(organization))
+                .Where(budget => budget.FiscalYear.Contains(""+fy))
+                .OrderBy(budget => budget.NameOfClub)
+                .ThenByDescending(budget => budget.FiscalYear)
+                .Select(budget => BudgetDto.CreateDtoFromBudget(budget))
+                .ToList();
+
+            return budgets;
+        }
         
         
         
         // Financial Data
         public List<BudgetDto> GetBudgets()
         {
-            List<BudgetDto> budgets = _dbContext.Budgets
+            List<BudgetDto> budgets = _dbContext.BudgetByFys
                 .OrderBy(budget => budget.NameOfClub)
                 .ThenByDescending(budget => budget.FiscalYear)
                 .Select(budget => BudgetDto.CreateDtoFromBudget(budget))
@@ -36,7 +60,7 @@ namespace Treasury.Application.Accessor
         
         public List<BudgetDto> GetBudgetsByFy(int fy)
         {
-            List<BudgetDto> budgets = _dbContext.Budgets
+            List<BudgetDto> budgets = _dbContext.BudgetByFys
                 .Where(budget => budget.FiscalYear.Contains(""+fy))
                 .OrderBy(budget => budget.NameOfClub)
                 .ThenByDescending(budget => budget.FiscalYear)

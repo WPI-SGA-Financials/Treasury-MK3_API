@@ -7,13 +7,13 @@ namespace Treasury.Domain.Models.Views
         public int BudgetId { get; set; }
         public string NameOfClub { get; set; }
         public string FiscalYear { get; set; }
-        public decimal? NumOfItems { get; set; }
-        public decimal? AmountRequested { get; set; }
-        public decimal? AmountProposed { get; set; }
-        public decimal Appealed { get; set; }
-        public decimal? RequestedAppeal { get; set; }
-        public decimal? ApprovedAppeal { get; set; }
-        public decimal? AmountApproved { get; set; }
-        public decimal? AmountSpent { get; set; }
+        public int NumOfItems { get; set; }
+        public decimal AmountRequested { get; set; }
+        public decimal AmountProposed { get; set; }
+        public ulong Appealed { get; set; }
+        public decimal RequestedAppeal { get; set; }
+        public decimal ApprovedAppeal { get; set; }
+        public decimal AmountApproved { get; set; }
+        public decimal AmountSpent { get; set; }
     }
 }

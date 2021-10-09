@@ -1,18 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Treasury.Domain.Models.Tables;
+using Treasury.Domain.Models.Views;
 
 namespace Treasury.Application.DTOs
 {
     public class BudgetDto
     {
-        public static BudgetDto CreateDtoFromBudget(Budget budget)
+        public static BudgetDto CreateDtoFromBudget(BudgetByFy budget)
         {
             BudgetDto dto = new BudgetDto
             {
-                Id = budget.Id,
+                Id = budget.BudgetId,
                 NameOfClub = budget.NameOfClub,
-                FiscalYear = budget.FiscalYear
+                FiscalYear = budget.FiscalYear,
+                NumOfItems = budget.NumOfItems,
+                AmountRequested = budget.AmountRequested,
+                AmountProposed = budget.AmountProposed,
+                AmountApproved = budget.AmountApproved
             };
             
             return dto;

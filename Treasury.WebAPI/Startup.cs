@@ -1,16 +1,13 @@
+using System;
+using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System;
-using System.IO;
-using System.Reflection;
-using System.Text;
 using Treasury.Application;
-using Treasury.Domain;
 
 namespace Treasury.WebAPI
 {

@@ -1,6 +1,6 @@
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using System.IO;
 using Treasury.WebAPI.Util;
 
 namespace Treasury.WebAPI

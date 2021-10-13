@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Treasury.Application.Accessor;
 using Treasury.Application.Contexts;
 using Treasury.Application.DTOs;
+using Treasury.Application.Errors;
 
 namespace Treasury.WebAPI.Controllers
 {
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    
     [Produces("application/json")]
     [Route("api/")]
     [ApiController]
@@ -39,9 +39,19 @@ namespace Treasury.WebAPI.Controllers
         /// <returns>List of Organizations</returns>
         [SwaggerOperation(Tags = new[] { "Organizations Data" })]
         [HttpGet("organizations/{name}")]
-        public List<OrganizationDto> Get(string name)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<OrganizationDto>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(InvalidArgumentsError))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
+        public ActionResult<List<OrganizationDto>> Get(string name)
         {
-            return new OrganizationAccessor(_dbContext).GetFilteredOrganizations(name);
+            var res =  new OrganizationAccessor(_dbContext).GetFilteredOrganizations(name);
+            
+            return res switch
+            {
+                InvalidArgumentsError invalidArguments => BadRequest(invalidArguments),
+                NotFoundError notFoundError => NotFound(notFoundError),
+                _ => Ok(res)
+            };
         }
         
         /// <summary>
@@ -51,10 +61,19 @@ namespace Treasury.WebAPI.Controllers
         /// <returns>Basic details for the club</returns>
         [SwaggerOperation(Tags = new[] { "Organization Data" })]
         [HttpGet("organization/{name}")]
-        public OrganizationDetailDto GetOrg(string name)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OrganizationDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(InvalidArgumentsError))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
+        public ActionResult<OrganizationDto> GetOrg(string name)
         {
-            return new OrganizationAccessor(_dbContext).GetOrganization(name);
+            var res = new OrganizationAccessor(_dbContext).GetOrganization(name);
+            
+            return res switch
+            {
+                InvalidArgumentsError invalidArguments => BadRequest(invalidArguments),
+                NotFoundError notFoundError => NotFound(notFoundError),
+                _ => Ok(res)
+            };
         }
     }
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
 }

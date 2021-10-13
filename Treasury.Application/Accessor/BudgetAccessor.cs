@@ -27,7 +27,7 @@ namespace Treasury.Application.Accessor
             }
             
             List<BudgetDto> budgets = _dbContext.BudgetByFys
-                .Where(budget => budget.NameOfClub.Equals(organization))
+                .Where(budget => budget.NameOfClub.Equals(organization.Trim()))
                 .OrderBy(budget => budget.NameOfClub)
                 .ThenByDescending(budget => budget.FiscalYear)
                 .Select(budget => BudgetDto.CreateDtoFromBudget(budget))
@@ -56,7 +56,7 @@ namespace Treasury.Application.Accessor
             string fiscalYear = fy.ToString().PadLeft(2, '0');
             
             BudgetDto budget = _dbContext.BudgetByFys
-                .Where(b => b.NameOfClub.Equals(organization))
+                .Where(b => b.NameOfClub.Equals(organization.Trim()))
                 .Where(b => b.FiscalYear.Equals("FY " + fiscalYear))
                 .OrderBy(b => b.NameOfClub)
                 .ThenByDescending(b => b.FiscalYear)

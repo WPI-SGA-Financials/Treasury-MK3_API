@@ -1,8 +1,12 @@
-﻿namespace Treasury.Application.Errors
+﻿using System;
+using System.Collections.Generic;
+
+namespace Treasury.Application.Errors
 {
-    public class NotFoundError : IError
+    [Serializable]
+    public class NotFoundError
     {
-        public NotFoundError(string message, string searchQuery)
+        public NotFoundError(string message, Dictionary<string, object> searchQuery)
         {
             StatusCode = 404;
             Type = "Not found error";
@@ -14,6 +18,6 @@
         public int StatusCode { get; set; }
         public string Type { get; set; }
         public string Message { get; set; }
-        public string SearchQuery { get; set; }
+        public Dictionary<string, object> SearchQuery { get; set; }
     }
 }

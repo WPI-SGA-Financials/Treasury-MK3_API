@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Treasury.Application.Accessor;
 using Treasury.Application.Contexts;
 using Treasury.Application.DTOs;
+using Treasury.Application.Errors;
 
 namespace Treasury.WebAPI.Controllers
 {
@@ -39,9 +41,19 @@ namespace Treasury.WebAPI.Controllers
         [HttpGet]
         [SwaggerOperation(Tags = new[] {"Financial Data"})]
         [Route("financials/budgets/{fy:int}")]
-        public List<BudgetDto> Get(int fy)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<BudgetDto>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(InvalidArgumentsError))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
+        public ActionResult<List<BudgetDto>> Get(int fy)
         {
-            return new BudgetAccessor(_dbContext).GetBudgetsByFy(fy);
+            var res = new BudgetAccessor(_dbContext).GetBudgetsByFy(fy);
+            
+            return res switch
+            {
+                InvalidArgumentsError invalidArguments => BadRequest(invalidArguments),
+                NotFoundError notFoundError => NotFound(notFoundError),
+                _ => Ok(res)
+            };
         }
 
         /// <summary>
@@ -52,9 +64,19 @@ namespace Treasury.WebAPI.Controllers
         [HttpGet]
         [SwaggerOperation(Tags = new[] {"Financial Data"})]
         [Route("financials/budget/{id:int}")]
-        public BudgetDetailedDto GetExtended(int id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BudgetDetailedDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(InvalidArgumentsError))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
+        public ActionResult<BudgetDetailedDto> GetExtended(int id)
         {
-            return new BudgetAccessor(_dbContext).GetBudgetById(id);
+            var res =  new BudgetAccessor(_dbContext).GetBudgetById(id);
+            
+            return res switch
+            {
+                InvalidArgumentsError invalidArguments => BadRequest(invalidArguments),
+                NotFoundError notFoundError => NotFound(notFoundError),
+                _ => Ok(res)
+            };
         }
 
         /// <summary>
@@ -65,9 +87,19 @@ namespace Treasury.WebAPI.Controllers
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Organization Data" })]
         [Route("organization/{name}/budgets")]
-        public List<BudgetDto> Get(string name)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<BudgetDto>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(InvalidArgumentsError))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
+        public ActionResult<List<BudgetDto>> Get(string name)
         {
-            return new BudgetAccessor(_dbContext).GetBudgetByOrganization(name);
+            var res = new BudgetAccessor(_dbContext).GetBudgetByOrganization(name);
+            
+            return res switch
+            {
+                InvalidArgumentsError invalidArguments => BadRequest(invalidArguments),
+                NotFoundError notFoundError => NotFound(notFoundError),
+                _ => Ok(res)
+            };
         }
 
         /// <summary>
@@ -79,9 +111,19 @@ namespace Treasury.WebAPI.Controllers
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Organization Data" })]
         [Route("organization/{name}/budgets/{fy:int}")]
-        public List<BudgetDto> Get(string name, int fy)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BudgetDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(InvalidArgumentsError))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
+        public ActionResult<BudgetDto> Get(string name, int fy)
         {
-            return new BudgetAccessor(_dbContext).GetBudgetByOrganizationFy(name, fy);
+            var res = new BudgetAccessor(_dbContext).GetBudgetByOrganizationFy(name, fy);
+
+            return res switch
+            {
+                InvalidArgumentsError invalidArguments => BadRequest(invalidArguments),
+                NotFoundError notFoundError => NotFound(notFoundError),
+                _ => Ok(res)
+            };
         }
 
     }

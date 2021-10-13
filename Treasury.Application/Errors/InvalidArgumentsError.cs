@@ -1,8 +1,12 @@
-﻿namespace Treasury.Application.Errors
+﻿using System;
+using System.Collections.Generic;
+
+namespace Treasury.Application.Errors
 {
-    public class InvalidArgumentsError : IError
+    [Serializable]
+    public class InvalidArgumentsError
     {
-        public InvalidArgumentsError(string message, string searchQuery)
+        public InvalidArgumentsError(string message, Dictionary<string, object> searchQuery)
         {
             StatusCode = 400;
             Type = "Invalid arguments error";
@@ -12,7 +16,7 @@
         
         public int StatusCode { get; set; }
         public string Message { get; set; }
-        public string SearchQuery { get; set; }
+        public Dictionary<string, object> SearchQuery { get; set; }
         public string Type { get; set; }
     }
 }

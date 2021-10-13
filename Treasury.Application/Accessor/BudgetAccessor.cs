@@ -173,7 +173,7 @@ namespace Treasury.Application.Accessor
                 errorDict.Add("id", "Budget ID cannot be less than one");
             }
 
-            return errorDict.Count > 0 ? new InvalidArgumentsError("One or more parameters are invalid", errorDict) : null;
+            return errorDict.Count > 0 ? new InvalidArgumentsError("One or more parameters is invalid", errorDict) : null;
         }
     }
 }

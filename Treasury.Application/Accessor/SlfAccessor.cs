@@ -2,6 +2,7 @@
 using System.Linq;
 using Treasury.Application.Contexts;
 using Treasury.Application.DTOs;
+using Treasury.Application.Errors;
 using Treasury.Domain.Models.Tables;
 
 namespace Treasury.Application.Accessor
@@ -25,12 +26,32 @@ namespace Treasury.Application.Accessor
             return slf;
         }
 
-        public StudentLifeFeeDto GetSlfByFy(int fy)
+        public object GetSlfByFy(int fy)
         {
-            StudentLifeFee slf = _dbContext.StudentLifeFees
-                .FirstOrDefault(slf => slf.FiscalYear.Contains(""+ fy));
+            Dictionary<string, object> errorDict = new Dictionary<string, object>();
+            
+            if (fy is < 1 or > 99)
+            {
+                errorDict.Add("fy", "Fiscal Year is out of bounds");
+                return new InvalidArgumentsError("One or more parameters is invalid", errorDict);
+            }
 
-            return StudentLifeFeeDto.CreateDtoFromSlf(slf);
+            string fiscalYear = fy.ToString().PadLeft(2, '0');
+            
+            StudentLifeFee slf = _dbContext.StudentLifeFees
+                .FirstOrDefault(slf => slf.FiscalYear.Equals("FY " + fiscalYear));
+            
+            if (slf != null)
+            {
+                return StudentLifeFeeDto.CreateDtoFromSlf(slf);
+            }
+            
+            errorDict = new Dictionary<string, object>
+            {
+                { "fy", fy }
+            };
+
+            return new NotFoundError("The requested student life was not found", errorDict);
         }
     }
 }

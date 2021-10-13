@@ -87,7 +87,7 @@ namespace Treasury.Application.Accessor
                 errorDict.Add("nameOfClub", "Organization name cannot be empty");
             }
 
-            return errorDict.Count > 0 ? new InvalidArgumentsError("One or more parameters are invalid", errorDict) : null;
+            return errorDict.Count > 0 ? new InvalidArgumentsError("One or more parameters is invalid", errorDict) : null;
         }
     }
 }

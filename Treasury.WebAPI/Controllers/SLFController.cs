@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Treasury.Application.Accessor;
 using Treasury.Application.Contexts;
 using Treasury.Application.DTOs;
+using Treasury.Application.Errors;
 
 namespace Treasury.WebAPI.Controllers
 {
@@ -37,9 +39,19 @@ namespace Treasury.WebAPI.Controllers
         /// <returns>Student Life Fee data for the year</returns>
         [SwaggerOperation(Tags = new [] {"Financial Data"})]
         [HttpGet("{fy:int}")]
-        public StudentLifeFeeDto Get(int fy)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentLifeFeeDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(InvalidArgumentsError))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
+        public ActionResult<StudentLifeFeeDto> Get(int fy)
         {
-            return new SlfAccessor(_dbContext).GetSlfByFy(fy);
+            var res = new SlfAccessor(_dbContext).GetSlfByFy(fy);
+            
+            return res switch
+            {
+                InvalidArgumentsError invalidArguments => BadRequest(invalidArguments),
+                NotFoundError notFoundError => NotFound(notFoundError),
+                _ => Ok(res)
+            };
         }
     }
 }

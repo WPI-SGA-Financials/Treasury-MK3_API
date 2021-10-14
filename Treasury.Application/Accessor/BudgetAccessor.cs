@@ -71,7 +71,7 @@ namespace Treasury.Application.Accessor
             var errorDict = new Dictionary<string, object>
             {
                 { "nameOfClub", organization },
-                { "fiscalYear", fy }
+                { "fiscalYear", "FY " + fiscalYear }
             };
 
             return new NotFoundError("The requested organizations budgets were not found", errorDict);
@@ -112,7 +112,7 @@ namespace Treasury.Application.Accessor
             
             var errorDict = new Dictionary<string, object>
             {
-                { "fiscalYear", fy }
+                { "fiscalYear", "FY " + fiscalYear }
             };
 
             return new NotFoundError("The requested fiscal years budgets were not found", errorDict);

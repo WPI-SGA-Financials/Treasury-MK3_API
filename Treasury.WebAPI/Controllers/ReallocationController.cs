@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Treasury.Application.Accessor;
 using Treasury.Application.Contexts;
 using Treasury.Application.DTOs;
+using Treasury.Application.Errors;
 
 namespace Treasury.WebAPI.Controllers
 {
@@ -39,9 +41,19 @@ namespace Treasury.WebAPI.Controllers
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Financial Data" })]
         [Route("financials/reallocs/{fy:int}")]
-        public List<ReallocationRequestDto> Get(int fy)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ReallocationRequestDto>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(InvalidArgumentsError))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
+        public ActionResult<List<ReallocationRequestDto>> Get(int fy)
         {
-            return new ReallocationRequestAccessor(_dbContext).GetReallocationRequestsByFy(fy);
+            var res = new ReallocationRequestAccessor(_dbContext).GetReallocationRequestsByFy(fy);
+            
+            return res switch
+            {
+                InvalidArgumentsError invalidArguments => BadRequest(invalidArguments),
+                NotFoundError notFoundError => NotFound(notFoundError),
+                _ => Ok(res)
+            };
         }
         
         /// <summary>
@@ -52,9 +64,19 @@ namespace Treasury.WebAPI.Controllers
         [HttpGet]
         [SwaggerOperation(Tags= new [] {"Financial Data"})]
         [Route("financials/realloc/{id:int}")]
-        public ReallocationRequestDetailedDto GetById(int id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ReallocationRequestDetailedDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(InvalidArgumentsError))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
+        public ActionResult<ReallocationRequestDetailedDto> GetById(int id)
         {
-            return new ReallocationRequestAccessor(_dbContext).GetReallocationRequestById(id);
+            var res = new ReallocationRequestAccessor(_dbContext).GetReallocationRequestById(id);
+            
+            return res switch
+            {
+                InvalidArgumentsError invalidArguments => BadRequest(invalidArguments),
+                NotFoundError notFoundError => NotFound(notFoundError),
+                _ => Ok(res)
+            };
         }
 
         /// <summary>
@@ -65,9 +87,19 @@ namespace Treasury.WebAPI.Controllers
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Organization Data" })]
         [Route("organization/{name}/reallocs")]
-        public List<ReallocationRequestDto> Get(string name)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ReallocationRequestDto>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(InvalidArgumentsError))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
+        public ActionResult<List<ReallocationRequestDto>> Get(string name)
         {
-            return new ReallocationRequestAccessor(_dbContext).GetReallocationRequestsByOrganization(name);
+            var res = new ReallocationRequestAccessor(_dbContext).GetReallocationRequestsByOrganization(name);
+            
+            return res switch
+            {
+                InvalidArgumentsError invalidArguments => BadRequest(invalidArguments),
+                NotFoundError notFoundError => NotFound(notFoundError),
+                _ => Ok(res)
+            };
         }
 
         /// <summary>
@@ -79,9 +111,19 @@ namespace Treasury.WebAPI.Controllers
         [HttpGet]
         [SwaggerOperation(Tags = new[] { "Organization Data" })]
         [Route("organization/{name}/reallocs/{fy:int}")]
-        public List<ReallocationRequestDto> Get(string name, int fy)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ReallocationRequestDto>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(InvalidArgumentsError))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
+        public ActionResult<List<ReallocationRequestDto>> Get(string name, int fy)
         {
-            return new ReallocationRequestAccessor(_dbContext).GetReallocationRequestsByOrganizationFy(name, fy);
+            var res = new ReallocationRequestAccessor(_dbContext).GetReallocationRequestsByOrganizationFy(name, fy);
+            
+            return res switch
+            {
+                InvalidArgumentsError invalidArguments => BadRequest(invalidArguments),
+                NotFoundError notFoundError => NotFound(notFoundError),
+                _ => Ok(res)
+            };
         }
     }
 }

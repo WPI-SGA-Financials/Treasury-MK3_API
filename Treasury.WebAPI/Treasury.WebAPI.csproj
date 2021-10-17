@@ -9,6 +9,14 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.5" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.1.5" />
@@ -16,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Treasury.Application\Treasury.Application.csproj" />
+    <ProjectReference Include="..\Treasury.Contracts\Treasury.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

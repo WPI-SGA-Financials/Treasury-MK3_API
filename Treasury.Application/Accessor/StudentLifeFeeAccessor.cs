@@ -6,11 +6,11 @@ using Treasury.Domain.Models.Tables;
 
 namespace Treasury.Application.Accessor
 {
-    public class SlfAccessor
+    public class StudentLifeFeeAccessor
     {
-        private sgadbContext _dbContext;
+        private readonly sgadbContext _dbContext;
 
-        public SlfAccessor(sgadbContext dbContext)
+        public StudentLifeFeeAccessor(sgadbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -27,10 +27,12 @@ namespace Treasury.Application.Accessor
 
         public StudentLifeFeeDto GetSlfByFy(int fy)
         {
+            string fiscalYear = fy.ToString().PadLeft(2, '0');
+            
             StudentLifeFee slf = _dbContext.StudentLifeFees
-                .FirstOrDefault(slf => slf.FiscalYear.Contains(""+ fy));
-
-            return StudentLifeFeeDto.CreateDtoFromSlf(slf);
+                .FirstOrDefault(slf => slf.FiscalYear.Equals("FY " + fiscalYear));
+            
+            return slf != null ? StudentLifeFeeDto.CreateDtoFromSlf(slf) : null;
         }
     }
 }

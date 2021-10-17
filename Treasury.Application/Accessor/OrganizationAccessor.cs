@@ -9,8 +9,8 @@ namespace Treasury.Application.Accessor
 {
     public class OrganizationAccessor
     {
-        private sgadbContext _dbContext;
-
+        private readonly sgadbContext _dbContext;
+        
         public OrganizationAccessor(sgadbContext dbContext)
         {
             _dbContext = dbContext;
@@ -19,14 +19,19 @@ namespace Treasury.Application.Accessor
         // Organizations Data
         public List<OrganizationDto> GetOrganizations()
         {
-            return _dbContext.Organizations.Select(org => OrganizationDto.CreateDtoFromOrg(org)).ToList();
+            return _dbContext.Organizations
+                .Select(org => OrganizationDto.CreateDtoFromOrg(org))
+                .ToList();
         }
 
         public List<OrganizationDto> GetFilteredOrganizations(string name)
         {
-             return _dbContext.Organizations
-                 .Where(org => org.NameOfClub.Contains(name))
-                 .Select(org => OrganizationDto.CreateDtoFromOrg(org)).ToList();
+            List<OrganizationDto> orgs =  _dbContext.Organizations
+                .Where(org => org.NameOfClub.Contains(name.Trim()))
+                .Select(org => OrganizationDto.CreateDtoFromOrg(org))
+                .ToList();
+
+            return orgs.Any() ? orgs : null;
         }
 
         // Organization Data
@@ -35,9 +40,9 @@ namespace Treasury.Application.Accessor
             Organization org = _dbContext.Organizations
                 .Include(org => org.ClubClassification)
                 .Include(org => org.TechsyncName)
-                .FirstOrDefault(org => org.NameOfClub.Equals(name));
+                .FirstOrDefault(org => org.NameOfClub.Equals(name.Trim()));
 
-            return OrganizationDetailDto.CreateDtoFromOrg(org);
+            return org != null ? OrganizationDetailDto.CreateDtoFromOrg(org) : null;
         }
     }
 }

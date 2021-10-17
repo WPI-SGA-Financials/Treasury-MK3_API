@@ -9,40 +9,40 @@ namespace Treasury.Application.Accessor
 {
     public class BudgetAccessor
     {
-        private sgadbContext _dbContext;
+        private readonly sgadbContext _dbContext;
 
         public BudgetAccessor(sgadbContext dbContext)
         {
             _dbContext = dbContext;
         }
-        
+
         // Organization Data
         public List<BudgetDto> GetBudgetByOrganization(string organization)
         {
             List<BudgetDto> budgets = _dbContext.BudgetByFys
-                .Where(budget => budget.NameOfClub.Equals(organization))
+                .Where(budget => budget.NameOfClub.Equals(organization.Trim()))
                 .OrderBy(budget => budget.NameOfClub)
                 .ThenByDescending(budget => budget.FiscalYear)
                 .Select(budget => BudgetDto.CreateDtoFromBudget(budget))
                 .ToList();
 
-            return budgets;
+            return budgets.Any() ? budgets : null;
         }
-        
-        public List<BudgetDto> GetBudgetByOrganizationFy(string organization, int fy)
+
+        public BudgetDto GetBudgetByOrganizationFy(string organization, int fy)
         {
-            List<BudgetDto> budgets = _dbContext.BudgetByFys
-                .Where(budget => budget.NameOfClub.Equals(organization))
-                .Where(budget => budget.FiscalYear.Contains(""+fy))
-                .OrderBy(budget => budget.NameOfClub)
-                .ThenByDescending(budget => budget.FiscalYear)
-                .Select(budget => BudgetDto.CreateDtoFromBudget(budget))
-                .ToList();
+            string fiscalYear = fy.ToString().PadLeft(2, '0');
+            
+            BudgetDto budget = _dbContext.BudgetByFys
+                .Where(b => b.NameOfClub.Equals(organization.Trim()))
+                .Where(b => b.FiscalYear.Equals("FY " + fiscalYear))
+                .OrderBy(b => b.NameOfClub)
+                .ThenByDescending(b => b.FiscalYear)
+                .Select(b => BudgetDto.CreateDtoFromBudget(b))
+                .FirstOrDefault();
 
-            return budgets;
+            return budget;
         }
-        
-        
         
         // Financial Data
         public List<BudgetDto> GetBudgets()
@@ -55,29 +55,37 @@ namespace Treasury.Application.Accessor
 
             return budgets;
         }
-        
+
         public List<BudgetDto> GetBudgetsByFy(int fy)
         {
+            string fiscalYear = fy.ToString().PadLeft(2, '0');
+            
             List<BudgetDto> budgets = _dbContext.BudgetByFys
-                .Where(budget => budget.FiscalYear.Contains(""+fy))
+                .Where(budget => budget.FiscalYear.Equals("FY " + fiscalYear))
                 .OrderBy(budget => budget.NameOfClub)
                 .ThenByDescending(budget => budget.FiscalYear)
                 .Select(budget => BudgetDto.CreateDtoFromBudget(budget))
                 .ToList();
-
-            return budgets;
+            
+            return budgets.Any() ? budgets : null;
         }
 
         public BudgetDetailedDto GetBudgetById(int id)
         {
             Budget budget = _dbContext.Budgets.Find(id);
 
+            if (budget == null)
+            {
+                return null;
+            }
+
             BudgetLegacy legacy = _dbContext.BudgetLegacies
                 .FirstOrDefault(budgetLegacy => budgetLegacy.BId.Equals(id));
 
-            if (legacy != null )
+            if (legacy != null)
             {
-                return BudgetDetailedDto.CreateDtoFromBudgetAndLegacy(budget, BudgetLegacyDto.CreateDtoFromLegacy(legacy));
+                return BudgetDetailedDto.CreateDtoFromBudgetAndLegacy(budget,
+                    BudgetLegacyDto.CreateDtoFromLegacy(legacy));
             }
 
             List<BudgetSectionDto> budgetSections = _dbContext.BudgetSections

@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Treasury.Application.Contexts;
 using Treasury.Application.DTOs;
-using Treasury.Application.Errors;
 using Treasury.Domain.Models.Tables;
 
 namespace Treasury.Application.Accessor
 {
     public class BudgetAccessor
     {
-        private sgadbContext _dbContext;
+        private readonly sgadbContext _dbContext;
 
         public BudgetAccessor(sgadbContext dbContext)
         {
@@ -19,13 +17,8 @@ namespace Treasury.Application.Accessor
         }
 
         // Organization Data
-        public object GetBudgetByOrganization(string organization)
+        public List<BudgetDto> GetBudgetByOrganization(string organization)
         {
-            if (ValidateModel(organization) is { } validate)
-            {
-                return validate;
-            }
-            
             List<BudgetDto> budgets = _dbContext.BudgetByFys
                 .Where(budget => budget.NameOfClub.Equals(organization.Trim()))
                 .OrderBy(budget => budget.NameOfClub)
@@ -33,26 +26,11 @@ namespace Treasury.Application.Accessor
                 .Select(budget => BudgetDto.CreateDtoFromBudget(budget))
                 .ToList();
 
-            if (budgets.Any())
-            {
-                return budgets;
-            }
-
-            var errorDict = new Dictionary<string, object>
-            {
-                { "nameOfClub", organization }
-            };
-
-            return new NotFoundError("The requested organizations budgets were not found", errorDict);
+            return budgets.Any() ? budgets : null;
         }
 
-        public object GetBudgetByOrganizationFy(string organization, int fy)
+        public BudgetDto GetBudgetByOrganizationFy(string organization, int fy)
         {
-            if (ValidateModel(organization, fy) is { } validate)
-            {
-                return validate;
-            }
-            
             string fiscalYear = fy.ToString().PadLeft(2, '0');
             
             BudgetDto budget = _dbContext.BudgetByFys
@@ -63,18 +41,7 @@ namespace Treasury.Application.Accessor
                 .Select(b => BudgetDto.CreateDtoFromBudget(b))
                 .FirstOrDefault();
 
-            if (budget != null)
-            {
-                return budget;
-            }
-            
-            var errorDict = new Dictionary<string, object>
-            {
-                { "nameOfClub", organization },
-                { "fiscalYear", "FY " + fiscalYear }
-            };
-
-            return new NotFoundError("The requested organizations budgets were not found", errorDict);
+            return budget;
         }
         
         // Financial Data
@@ -89,13 +56,8 @@ namespace Treasury.Application.Accessor
             return budgets;
         }
 
-        public object GetBudgetsByFy(int fy)
+        public List<BudgetDto> GetBudgetsByFy(int fy)
         {
-            if (ValidateModel(fy: fy) is { } validate)
-            {
-                return validate;
-            }
-            
             string fiscalYear = fy.ToString().PadLeft(2, '0');
             
             List<BudgetDto> budgets = _dbContext.BudgetByFys
@@ -105,36 +67,16 @@ namespace Treasury.Application.Accessor
                 .Select(budget => BudgetDto.CreateDtoFromBudget(budget))
                 .ToList();
             
-            if (budgets.Any())
-            {
-                return budgets;
-            }
-            
-            var errorDict = new Dictionary<string, object>
-            {
-                { "fiscalYear", "FY " + fiscalYear }
-            };
-
-            return new NotFoundError("The requested fiscal years budgets were not found", errorDict);
+            return budgets.Any() ? budgets : null;
         }
 
-        public object GetBudgetById(int id)
+        public BudgetDetailedDto GetBudgetById(int id)
         {
-            if (ValidateModel(id: id) is { } validate)
-            {
-                return validate;
-            }
-            
             Budget budget = _dbContext.Budgets.Find(id);
 
             if (budget == null)
             {
-                var errorDict = new Dictionary<string, object>
-                {
-                    { "id", id }
-                };
-
-                return new NotFoundError("The requested budget was not found", errorDict);
+                return null;
             }
 
             BudgetLegacy legacy = _dbContext.BudgetLegacies
@@ -153,27 +95,6 @@ namespace Treasury.Application.Accessor
                 .ToList();
 
             return BudgetDetailedDto.CreateDtoFromBudgetAndSection(budget, budgetSections);
-        }
-
-        private static InvalidArgumentsError ValidateModel(string organization = null, int? fy = null, int? id = null)
-        {
-            Dictionary<string, object> errorDict = new Dictionary<string, object>();
-            
-            if (organization != null && String.IsNullOrWhiteSpace(organization))
-            {
-                errorDict.Add("nameOfClub", "Organization name cannot be empty");
-            }
-            if (fy != null && fy is < 1 or > 99)
-            {
-                errorDict.Add("fy", "Fiscal Year is out of bounds");
-            }
-
-            if (id != null && id < 1)
-            {
-                errorDict.Add("id", "Budget ID cannot be less than one");
-            }
-
-            return errorDict.Count > 0 ? new InvalidArgumentsError("One or more parameters is invalid", errorDict) : null;
         }
     }
 }

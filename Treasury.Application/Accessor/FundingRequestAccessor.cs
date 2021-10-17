@@ -9,7 +9,7 @@ namespace Treasury.Application.Accessor
 {
     public class FundingRequestAccessor
     {
-        private sgadbContext _dbContext;
+        private readonly sgadbContext _dbContext;
 
         public FundingRequestAccessor(sgadbContext dbContext)
         {
@@ -20,26 +20,28 @@ namespace Treasury.Application.Accessor
         public List<FundingRequestDto> GetFundingRequestsByOrganization(string organization)
         {
             List<FundingRequestDto> frs = _dbContext.FundingRequests
-                .Where(fr=> fr.NameOfClub.Equals(organization))
+                .Where(fr=> fr.NameOfClub.Equals(organization.Trim()))
                 .OrderByDescending(fr => fr.FundingDate)
                 .ThenByDescending(fr => fr.DotNumber)
                 .Select(fr => FundingRequestDto.CreateDtoFromFr(fr))
                 .ToList();
 
-            return frs;
+            return frs.Any() ? frs : null;
         }
         
         public List<FundingRequestDto> GetFundingRequestsByOrganizationFy(string organization, int fy)
         {
+            string fiscalYear = fy.ToString().PadLeft(2, '0');
+            
             List<FundingRequestDto> frs = _dbContext.FundingRequests
-                .Where(fr=> fr.NameOfClub.Equals(organization))
-                .Where(fr => fr.FiscalYear.Contains(""+fy))
+                .Where(fr=> fr.NameOfClub.Equals(organization.Trim()))
+                .Where(fr => fr.FiscalYear.Equals("FY " + fiscalYear))
                 .OrderByDescending(fr => fr.FundingDate)
                 .ThenByDescending(fr => fr.DotNumber)
                 .Select(fr => FundingRequestDto.CreateDtoFromFr(fr))
                 .ToList();
 
-            return frs;
+            return frs.Any() ? frs : null;
         }
         
         // Financials Data
@@ -56,14 +58,16 @@ namespace Treasury.Application.Accessor
         
         public List<FundingRequestDto> GetFundingRequestsByFy(int fy)
         {
+            string fiscalYear = fy.ToString().PadLeft(2, '0');
+            
             List<FundingRequestDto> frs = _dbContext.FundingRequests
-                .Where(fr => fr.FiscalYear.Contains(""+fy))
+                .Where(fr => fr.FiscalYear.Equals("FY " + fiscalYear))
                 .OrderByDescending(fr => fr.FundingDate)
                 .ThenByDescending(fr => fr.DotNumber)
                 .Select(fr => FundingRequestDto.CreateDtoFromFr(fr))
                 .ToList();
 
-            return frs;
+            return frs.Any() ? frs : null;
         }
 
         public FundingRequestDetailedDto GetFundingRequestById(int id)
@@ -72,7 +76,7 @@ namespace Treasury.Application.Accessor
                 .Include(fr => fr.Frappeal)
                 .FirstOrDefault(fr => fr.Id.Equals(id));
             
-            return FundingRequestDetailedDto.CreateDtoFromFr(fr);
+            return fr != null ? FundingRequestDetailedDto.CreateDtoFromFr(fr) : null;
         }
     }
 }

@@ -3,33 +3,33 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Treasury.Application.Accessor;
-using Treasury.Application.Contexts;
 using Treasury.Application.DTOs;
 using Treasury.Application.Errors;
+using Treasury.Contracts.V1;
+using Treasury.WebAPI.Filters.ActionFilters;
 
-namespace Treasury.WebAPI.Controllers
+namespace Treasury.WebAPI.Controllers.V1
 {
     [Produces("application/json")]
-    [Route("api/financials/[controller]")]
     [ApiController]
-    public class SLFController : ControllerBase
+    public class SlfController : ControllerBase
     {
-        private sgadbContext _dbContext;
+        private readonly StudentLifeFeeAccessor _accessor;
 
-        public SLFController(sgadbContext dbContext)
+        public SlfController(StudentLifeFeeAccessor accessor)
         {
-            _dbContext = dbContext;
+            _accessor = accessor;
         }
 
         /// <summary>
         /// Gets all Student Life Fee Data
         /// </summary>
         /// <returns>List of Student Life Fees</returns>
-        [SwaggerOperation(Tags = new [] {"Financial Data"})]
-        [HttpGet]
+        [HttpGet(ApiRoutes.StudentLifeFee.GetAll)]
+        [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.FinancialData, SwaggerTags.StudentLifeFee })]
         public IEnumerable<StudentLifeFeeDto> Get()
         {
-            return new SlfAccessor(_dbContext).GetSlfs();
+            return _accessor.GetSlfs();
         }
 
         /// <summary>
@@ -37,21 +37,16 @@ namespace Treasury.WebAPI.Controllers
         /// </summary>
         /// <param name="fy">Fiscal Year</param>
         /// <returns>Student Life Fee data for the year</returns>
-        [SwaggerOperation(Tags = new [] {"Financial Data"})]
-        [HttpGet("{fy:int}")]
+        [HttpGet(ApiRoutes.StudentLifeFee.GetByFy)]
+        [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.FinancialData, SwaggerTags.StudentLifeFee })]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentLifeFeeDto))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(InvalidArgumentsError))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
-        public ActionResult<StudentLifeFeeDto> Get(int fy)
+        [ValidateInputActionFilter]
+        public IActionResult Get(int fy)
         {
-            var res = new SlfAccessor(_dbContext).GetSlfByFy(fy);
+            StudentLifeFeeDto dto = _accessor.GetSlfByFy(fy);
             
-            return res switch
-            {
-                InvalidArgumentsError invalidArguments => BadRequest(invalidArguments),
-                NotFoundError notFoundError => NotFound(notFoundError),
-                _ => Ok(res)
-            };
+            return dto == null ? NotFound() : Ok(dto);
         }
     }
 }

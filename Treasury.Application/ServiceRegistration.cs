@@ -2,6 +2,7 @@
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Treasury.Application.Accessor;
 using Treasury.Application.Contexts;
 
 namespace Treasury.Application
@@ -25,6 +26,15 @@ namespace Treasury.Application
             builder.Append("database=").Append(database);
 
             services.AddDbContext<sgadbContext>(option => option.UseMySQL(builder.ToString()));
+        }
+
+        public static void AddAccessors(this IServiceCollection services)
+        {
+            services.AddScoped<BudgetAccessor>();
+            services.AddScoped<FundingRequestAccessor>();
+            services.AddScoped<OrganizationAccessor>();
+            services.AddScoped<ReallocationRequestAccessor>();
+            services.AddScoped<StudentLifeFeeAccessor>();
         }
     }
 }

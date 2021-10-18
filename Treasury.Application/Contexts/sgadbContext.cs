@@ -1165,7 +1165,8 @@ namespace Treasury.Application.Contexts
 
                 entity.Property(e => e.Inactive)
                     .HasColumnType("bit(1)")
-                    .HasColumnName("Inactive?");
+                    .HasColumnName("Inactive?")
+                    .HasConversion<bool>();
 
                 entity.Property(e => e.Timestamp)
                     .HasColumnType("timestamp")

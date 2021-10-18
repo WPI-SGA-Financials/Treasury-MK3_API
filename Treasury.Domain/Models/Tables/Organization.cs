@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -23,7 +24,7 @@ namespace Treasury.Domain.Models.Tables
         public string TypeOfClub { get; set; }
         public string AccountNumber { get; set; }
         public string Acronym1 { get; set; }
-        public ulong Inactive { get; set; }
+        public bool Inactive { get; set; }
         public DateTime Timestamp { get; set; }
 
         public virtual ClubClassification ClubClassification { get; set; }

@@ -3,10 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Treasury.Application.Accessor;
-using Treasury.Application.Contexts;
+using Treasury.Application.Contracts.V1;
 using Treasury.Application.DTOs;
 using Treasury.Application.Errors;
-using Treasury.Contracts.V1;
 using Treasury.WebAPI.Filters.ActionFilters;
 
 namespace Treasury.WebAPI.Controllers.V1

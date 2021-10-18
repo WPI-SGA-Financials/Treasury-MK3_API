@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Treasury.Application.Accessor;
+using Treasury.Application.Contracts.V1;
+using Treasury.Application.Contracts.V1.Requests;
+using Treasury.Application.Contracts.V1.Responses;
 using Treasury.Application.DTOs;
 using Treasury.Application.Errors;
-using Treasury.Contracts.V1;
 using Treasury.WebAPI.Filters.ActionFilters;
 
 namespace Treasury.WebAPI.Controllers.V1
@@ -22,34 +25,29 @@ namespace Treasury.WebAPI.Controllers.V1
         }
 
         /// <summary>
-        /// Gets all organizations
+        /// Get organizations based on optional filters in a paged response
         /// </summary>
         /// <returns>List of Organizations</returns>
         [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.OrganizationData })]
-        [HttpGet(ApiRoutes.Organizations.GetAll)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<OrganizationDto>))]
-        public List<OrganizationDto> Get()
+        [HttpPost(ApiRoutes.Organizations.GetAll)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResponse<OrganizationDto>))]
+        [ValidateFilters]
+        public IActionResult Get([FromBody] GeneralPagedRequest request)
         {
-            return _accessor.GetOrganizations();
+            List<OrganizationDto> dto = _accessor.GetOrganizations(request, out var maxResults);
+
+            PagedResponse<OrganizationDto> response = new(dto)
+                {
+                    PageNumber = request.Page,
+                    ResultsPerPage = request.Rpp,
+                    MaxResults = maxResults
+                };
+
+            response.Message = $"Successfully received {response.Data.Count()} Organizations.";
+            
+            return Ok(response);
         }
 
-        /// <summary>
-        /// Gets organizations matching search
-        /// </summary>
-        /// <param name="name">Club Name</param>
-        /// <returns>List of Organizations</returns>
-        [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.OrganizationData })]
-        [HttpGet(ApiRoutes.Organizations.FilterByName)]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<OrganizationDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
-        [ValidateInputActionFilter]
-        public IActionResult Get(string name)
-        {
-            List<OrganizationDto> dto =  _accessor.GetFilteredOrganizations(name);
-
-            return dto == null ? NotFound() : Ok(dto);
-        }
-        
         /// <summary>
         /// Gets a specific organization
         /// </summary>

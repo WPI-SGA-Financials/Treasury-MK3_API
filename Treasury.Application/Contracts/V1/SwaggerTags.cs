@@ -1,4 +1,4 @@
-﻿namespace Treasury.Contracts.V1
+﻿namespace Treasury.Application.Contracts.V1
 {
     public class SwaggerTags
     {

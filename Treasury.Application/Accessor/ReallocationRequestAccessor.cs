@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Treasury.Application.Contexts;
+using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.DTOs;
+using Treasury.Application.Util;
 using Treasury.Domain.Models.Tables;
 
 namespace Treasury.Application.Accessor
@@ -28,45 +30,26 @@ namespace Treasury.Application.Accessor
             return reallocs.Any() ? reallocs : null;
         }
         
-        public List<ReallocationRequestDto> GetReallocationRequestsByOrganizationFy(string organization, int fy)
-        {
-            string fiscalYear = fy.ToString().PadLeft(2, '0');
-            
-            List<ReallocationRequestDto> reallocs = _dbContext.Reallocations
-                .Where(realloc=> realloc.NameOfClub.Equals(organization.Trim()))
-                .Where(realloc => realloc.FiscalYear.Equals("FY " + fiscalYear))
-                .OrderByDescending(realloc => realloc.HearingDate)
-                .ThenByDescending(realloc => realloc.DotNumber)
-                .Select(realloc => ReallocationRequestDto.CreateDtoFromRealloc(realloc))
-                .ToList();
-
-            return reallocs.Any() ? reallocs : null;
-        }
         
         // Financials Data
-        public List<ReallocationRequestDto> GetReallocationRequests()
+        public List<ReallocationRequestDto> GetReallocationRequests(FinancialPagedRequest financialPagedRequest, out int maxResults)
         {
-            List<ReallocationRequestDto> reallocs = _dbContext.Reallocations
-                .OrderByDescending(realloc => realloc.HearingDate)
-                .ThenByDescending(realloc => realloc.DotNumber)
-                .Select(realloc => ReallocationRequestDto.CreateDtoFromRealloc(realloc))
-                .ToList();
+            int skip = HelperFunctions.GetPage(financialPagedRequest);
 
-            return reallocs;
-        }
-        
-        public List<ReallocationRequestDto> GetReallocationRequestsByFy(int fy)
-        {
-            string fiscalYear = fy.ToString().PadLeft(2, '0');
+            var baseQuery = _dbContext.Reallocations;
             
-            List<ReallocationRequestDto> reallocs = _dbContext.Reallocations
-                .Where(realloc => realloc.FiscalYear.Equals("FY " + fiscalYear))
+            maxResults = baseQuery.Count();
+            
+            // TODO: Add in Filtering based on all available filters
+            // TODO: Join in Organization Table to allow for filtering
+            
+           return baseQuery
                 .OrderByDescending(realloc => realloc.HearingDate)
                 .ThenByDescending(realloc => realloc.DotNumber)
+                .Skip(skip)
+                .Take(financialPagedRequest.Rpp)
                 .Select(realloc => ReallocationRequestDto.CreateDtoFromRealloc(realloc))
                 .ToList();
-
-            return reallocs.Any() ? reallocs : null;
         }
 
         public ReallocationRequestDetailedDto GetReallocationRequestById(int id)

@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Treasury.Application.Accessor;
 using Treasury.Application.Contracts.V1;
+using Treasury.Application.Contracts.V1.Requests;
+using Treasury.Application.Contracts.V1.Responses;
 using Treasury.Application.DTOs;
 using Treasury.Application.Errors;
 using Treasury.WebAPI.Filters.ActionFilters;
@@ -22,34 +25,28 @@ namespace Treasury.WebAPI.Controllers.V1
         }
         
         /// <summary>
-        /// Gets the Reallocation Requests
+        /// Get Reallocation Requests based on optional filters in a paged response
         /// </summary>
         /// <returns>List of Reallocation Requests</returns>
-        [HttpGet(ApiRoutes.ReallocationRequest.GetAll)]
+        [HttpPost(ApiRoutes.ReallocationRequest.GetAll)]
         [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.FinancialData, SwaggerTags.ReallocationRequests })]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ReallocationRequestDto>))]
-        public List<ReallocationRequestDto> Get()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResponse<ReallocationRequestDto>))]
+        public IActionResult Get([FromBody] FinancialPagedRequest request)
         {
-            return _accessor.GetReallocationRequests();
+            List<ReallocationRequestDto> dto = _accessor.GetReallocationRequests(request, out var maxResults);
+            
+            PagedResponse<ReallocationRequestDto> response = new(dto)
+            {
+                PageNumber = request.Page,
+                ResultsPerPage = request.Rpp,
+                MaxResults = maxResults
+            };
+
+            response.Message = $"Successfully received {response.Data.Count()} Reallocation Requests.";
+
+            return Ok(response);
         }
 
-        /// <summary>
-        /// Gets the Reallocation Requests for the requested fiscal year
-        /// </summary>
-        /// <param name="fy">Fiscal Year</param>
-        /// <returns>List of Reallocation Requests</returns>
-        [HttpGet(ApiRoutes.ReallocationRequest.GetByFy)]
-        [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.FinancialData, SwaggerTags.ReallocationRequests })]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ReallocationRequestDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
-        [ValidateInputActionFilter]
-        public IActionResult Get(int fy)
-        {
-            List<ReallocationRequestDto> dto = _accessor.GetReallocationRequestsByFy(fy);
-            
-            return dto == null ? NotFound() : Ok(dto);
-        }
-        
         /// <summary>
         /// Gets the Reallocation Request by ID
         /// </summary>
@@ -81,24 +78,6 @@ namespace Treasury.WebAPI.Controllers.V1
         {
             List<ReallocationRequestDto> dto = _accessor.GetReallocationRequestsByOrganization(name);
             
-            return dto == null ? NotFound() : Ok(dto);
-        }
-
-        /// <summary>
-        /// Gets the Reallocation Requests for the requested organization and fiscal year
-        /// </summary>
-        /// <param name="name">Club Name</param>
-        /// <param name="fy">Fiscal Year</param>
-        /// <returns>List of Reallocation Requests</returns>
-        [HttpGet(ApiRoutes.ReallocationRequest.GetByOrgFy)]
-        [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.OrganizationData, SwaggerTags.ReallocationRequests })]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ReallocationRequestDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
-        [ValidateInputActionFilter]
-        public IActionResult Get(string name, int fy)
-        {
-            List<ReallocationRequestDto> dto = _accessor.GetReallocationRequestsByOrganizationFy(name, fy);
-
             return dto == null ? NotFound() : Ok(dto);
         }
     }

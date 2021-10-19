@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Treasury.Application.Accessor;
 using Treasury.Application.Contracts.V1;
+using Treasury.Application.Contracts.V1.Requests;
+using Treasury.Application.Contracts.V1.Responses;
 using Treasury.Application.DTOs;
 using Treasury.Application.Errors;
 using Treasury.WebAPI.Filters.ActionFilters;
@@ -22,32 +25,27 @@ namespace Treasury.WebAPI.Controllers.V1
         }
 
         /// <summary>
-        /// Gets the Funding Requests
+        /// Get Funding Requests based on optional filters in a paged response
         /// </summary>
         /// <returns>List of Funding Requests</returns>
-        [HttpGet(ApiRoutes.FundingRequest.GetAll)]
+        [HttpPost(ApiRoutes.FundingRequest.GetAll)]
         [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.FinancialData, SwaggerTags.FundingRequests })]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<FundingRequestDto>))]
-        public List<FundingRequestDto> Get()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResponse<FundingRequestDto>))]
+        [ValidatePaginationAndFilters]
+        public IActionResult Get([FromBody] FinancialPagedRequest request)
         {
-            return _accessor.GetFundingRequests();
-        }
+            List<FundingRequestDto> dto = _accessor.GetFundingRequests(request, out var maxResults);
+            
+            PagedResponse<FundingRequestDto> response = new(dto)
+            {
+                PageNumber = request.Page,
+                ResultsPerPage = request.Rpp,
+                MaxResults = maxResults
+            };
 
-        /// <summary>
-        /// Gets the Funding Requests for the given fiscal year
-        /// </summary>
-        /// <param name="fy">Fiscal Year</param>
-        /// <returns>List of Funding Requests</returns>
-        [HttpGet(ApiRoutes.FundingRequest.GetByFy)]
-        [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.FinancialData, SwaggerTags.FundingRequests })]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<FundingRequestDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
-        [ValidateInputActionFilter]
-        public IActionResult Get(int fy)
-        {
-            List<FundingRequestDto> dto = _accessor.GetFundingRequestsByFy(fy);
+            response.Message = $"Successfully received {response.Data.Count()} Funding Requests.";
 
-            return dto == null ? NotFound() : Ok(dto);
+            return Ok(response);
         }
 
         /// <summary>
@@ -82,24 +80,6 @@ namespace Treasury.WebAPI.Controllers.V1
             List<FundingRequestDto> dto = _accessor.GetFundingRequestsByOrganization(name);
 
             return dto == null ? NotFound() : Ok(dto);
-        }
-
-        /// <summary>
-        /// Gets the Funding Requests for the requested organization and fiscal year
-        /// </summary>
-        /// <param name="name">Club Name</param>
-        /// <param name="fy">Fiscal Year</param>
-        /// <returns>List of Funding Requests</returns>
-        [HttpGet(ApiRoutes.FundingRequest.GetByOrgFy)]
-        [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.OrganizationData, SwaggerTags.FundingRequests })]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<FundingRequestDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
-        [ValidateInputActionFilter]
-        public IActionResult Get(string name, int fy)
-        {
-            List<FundingRequestDto> dto = _accessor.GetFundingRequestsByOrganizationFy(name, fy);
-
-            return dto == null ? NotFound() : Ok();
         }
     }
 }

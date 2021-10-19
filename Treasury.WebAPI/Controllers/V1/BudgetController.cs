@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Treasury.Application.Accessor;
 using Treasury.Application.Contracts.V1;
+using Treasury.Application.Contracts.V1.Requests;
+using Treasury.Application.Contracts.V1.Responses;
 using Treasury.Application.DTOs;
 using Treasury.Application.Errors;
 using Treasury.WebAPI.Filters.ActionFilters;
@@ -22,32 +25,27 @@ namespace Treasury.WebAPI.Controllers.V1
         }
         
         /// <summary>
-        /// Gets all Budgets
+        /// Get Budgets based on optional filters in a paged response
         /// </summary>
         /// <returns>List of Budgets</returns>
-        [HttpGet(ApiRoutes.Budget.GetAll)]        
+        [HttpPost(ApiRoutes.Budget.GetAll)]        
         [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.FinancialData, SwaggerTags.Budgets })]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<BudgetDto>))]
-        public List<BudgetDto> Get()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResponse<BudgetDto>))]
+        [ValidatePaginationAndFilters]
+        public IActionResult Get([FromBody] FinancialPagedRequest request)
         {
-            return _accessor.GetBudgets();
-        }
+            List<BudgetDto> dto = _accessor.GetBudgets(request, out var maxResults);
 
-        /// <summary>
-        /// Gets all Budgets for the given fiscal year
-        /// </summary>
-        /// <param name="fy">Fiscal Year</param>
-        /// <returns>List of Budgets</returns>
-        [HttpGet(ApiRoutes.Budget.GetByFy)]
-        [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.FinancialData, SwaggerTags.Budgets })]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<BudgetDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
-        [ValidateInputActionFilter]
-        public IActionResult Get(int fy)
-        {
-            List<BudgetDto> dto = _accessor.GetBudgetsByFy(fy);
+            PagedResponse<BudgetDto> response = new(dto)
+            {
+                PageNumber = request.Page,
+                ResultsPerPage = request.Rpp,
+                MaxResults = maxResults
+            };
 
-            return dto == null ? NotFound() : Ok(dto);
+            response.Message = $"Successfully received {response.Data.Count()} Budgets.";
+
+            return Ok(response);
         }
 
         /// <summary>
@@ -80,24 +78,6 @@ namespace Treasury.WebAPI.Controllers.V1
         public IActionResult Get(string name)
         {
             List<BudgetDto> dto = _accessor.GetBudgetByOrganization(name);
-
-            return dto == null ? NotFound() : Ok(dto);
-        }
-
-        /// <summary>
-        /// Gets the budget for an organization in a given fiscal year
-        /// </summary>
-        /// <param name="name">Club Name</param>
-        /// <param name="fy">Fiscal Year</param>
-        /// <returns>Budget for that Year</returns>
-        [HttpGet(ApiRoutes.Budget.GetByOrgFy)]
-        [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.OrganizationData, SwaggerTags.Budgets })]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BudgetDto))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
-        [ValidateInputActionFilter]
-        public IActionResult Get(string name, int fy)
-        {
-            BudgetDto dto = _accessor.GetBudgetByOrganizationFy(name, fy);
 
             return dto == null ? NotFound() : Ok(dto);
         }

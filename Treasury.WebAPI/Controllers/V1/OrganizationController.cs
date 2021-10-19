@@ -31,7 +31,7 @@ namespace Treasury.WebAPI.Controllers.V1
         [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.OrganizationData })]
         [HttpPost(ApiRoutes.Organizations.GetAll)]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResponse<OrganizationDto>))]
-        [ValidateFilters]
+        [ValidatePaginationAndFilters]
         public IActionResult Get([FromBody] GeneralPagedRequest request)
         {
             List<OrganizationDto> dto = _accessor.GetOrganizations(request, out var maxResults);

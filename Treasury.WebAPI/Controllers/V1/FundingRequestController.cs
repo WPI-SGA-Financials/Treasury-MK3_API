@@ -8,7 +8,6 @@ using Treasury.Application.Contracts.V1;
 using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.Contracts.V1.Responses;
 using Treasury.Application.DTOs;
-using Treasury.Application.Errors;
 using Treasury.WebAPI.Filters.ActionFilters;
 
 namespace Treasury.WebAPI.Controllers.V1

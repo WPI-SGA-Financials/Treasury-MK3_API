@@ -25,7 +25,7 @@ namespace Treasury.WebAPI.Controllers.V1
         }
 
         /// <summary>
-        /// Get organizations based on optional filters in a paged response
+        /// Get Organizations based on optional filters in a paged response
         /// </summary>
         /// <returns>List of Organizations</returns>
         [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.OrganizationData })]

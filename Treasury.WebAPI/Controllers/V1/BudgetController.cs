@@ -8,7 +8,6 @@ using Treasury.Application.Contracts.V1;
 using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.Contracts.V1.Responses;
 using Treasury.Application.DTOs;
-using Treasury.Application.Errors;
 using Treasury.WebAPI.Filters.ActionFilters;
 
 namespace Treasury.WebAPI.Controllers.V1
@@ -23,12 +22,12 @@ namespace Treasury.WebAPI.Controllers.V1
         {
             _accessor = budgetAccessor;
         }
-        
+
         /// <summary>
         /// Get Budgets based on optional filters in a paged response
         /// </summary>
         /// <returns>List of Budgets</returns>
-        [HttpPost(ApiRoutes.Budget.GetAll)]        
+        [HttpPost(ApiRoutes.Budget.GetAll)]
         [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.FinancialData, SwaggerTags.Budgets })]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PagedResponse<BudgetDto>))]
         [ValidatePaginationAndFilters]
@@ -55,14 +54,19 @@ namespace Treasury.WebAPI.Controllers.V1
         /// <returns></returns>
         [HttpGet(ApiRoutes.Budget.Get)]
         [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.FinancialData, SwaggerTags.Budgets })]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BudgetDetailedDto))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response<BudgetDetailedDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Response<>))]
         [ValidateInputActionFilter]
         public IActionResult GetExtended(int id)
         {
             BudgetDetailedDto dto = _accessor.GetBudgetById(id);
 
-            return dto == null ? NotFound() : Ok(dto);
+            Response<BudgetDetailedDto> response = new(dto)
+            {
+                Message = dto != null ? "Successfully received the requested Budget" : "Budget was not found"
+            };
+
+            return dto == null ? NotFound(response) : Ok(response);
         }
 
         /// <summary>
@@ -72,14 +76,21 @@ namespace Treasury.WebAPI.Controllers.V1
         /// <returns>List of Budgets</returns>
         [HttpGet(ApiRoutes.Budget.GetByOrg)]
         [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.OrganizationData, SwaggerTags.Budgets })]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<BudgetDto>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response<List<BudgetDto>>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Response<>))]
         [ValidateInputActionFilter]
         public IActionResult Get(string name)
         {
             List<BudgetDto> dto = _accessor.GetBudgetByOrganization(name);
 
-            return dto == null ? NotFound() : Ok(dto);
+            Response<List<BudgetDto>> response = new(dto)
+            {
+                Message = dto != null
+                    ? "Successfully received the requested Organization's Budgets"
+                    : "The Organization's Budgets were not found"
+            };
+
+            return dto == null ? NotFound(response) : Ok(response);
         }
     }
 }

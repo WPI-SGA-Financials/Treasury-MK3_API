@@ -2,7 +2,7 @@
 
 namespace Treasury.Application.Contracts.V1.Requests
 {
-    public class GeneralPagedRequest
+    public class GeneralPagedRequest : IPagedRequest
     {
         [Required] public int Page { get; set; } = 1;
 

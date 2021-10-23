@@ -11,14 +11,14 @@ namespace Treasury.WebAPI.Filters.ActionFilters
         {
             context.ActionArguments.TryGetValue("request", out var temp);
 
+            if (!PaginationValid(temp as IPagedRequest))
+            {
+                context.Result = new BadRequestObjectResult("Page and Results per a page (Rpp) must be greater than zero");
+                return;
+            }
+
             if (temp is FinancialPagedRequest finRequest)
             {
-                if (!PaginationValid(finRequest))
-                {
-                    context.Result = new BadRequestObjectResult("Page and Results per a page (Rpp) must be greater than zero");
-                    return;
-                }
-
                 finRequest = CleanFinancialInput(finRequest);
 
                 context.ActionArguments["request"] = finRequest;
@@ -26,12 +26,6 @@ namespace Treasury.WebAPI.Filters.ActionFilters
             else
             {
                 GeneralPagedRequest request = (GeneralPagedRequest)temp;
-                
-                if (!PaginationValid(request))
-                {
-                    context.Result = new BadRequestObjectResult("Page and Results per a page (Rpp) must be greater than zero");
-                    return;
-                }
 
                 request = CleanGeneralInput(request);
 
@@ -39,7 +33,7 @@ namespace Treasury.WebAPI.Filters.ActionFilters
             }
         }
 
-        private static bool PaginationValid(GeneralPagedRequest request)
+        private static bool PaginationValid(IPagedRequest request)
         {
             return request.Page > 0 && request.Rpp > 0;
         }

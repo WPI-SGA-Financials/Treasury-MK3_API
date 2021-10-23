@@ -4,7 +4,7 @@ namespace Treasury.Application.Util
 {
     public static class HelperFunctions
     {
-        public static int GetPage(GeneralPagedRequest generalPagedRequest)
+        public static int GetPage(IPagedRequest generalPagedRequest)
         {
             return generalPagedRequest.Page * generalPagedRequest.Rpp - generalPagedRequest.Rpp;
         }

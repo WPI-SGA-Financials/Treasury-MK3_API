@@ -28,7 +28,7 @@ namespace Treasury.WebAPI
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.AllowAnyOrigin();
+                        builder.AllowAnyOrigin().AllowAnyHeader();
                     });
             });
 

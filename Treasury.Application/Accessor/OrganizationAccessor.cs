@@ -2,7 +2,9 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Treasury.Application.Contexts;
+using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.DTOs;
+using Treasury.Application.Util;
 using Treasury.Domain.Models.Tables;
 
 namespace Treasury.Application.Accessor
@@ -10,28 +12,29 @@ namespace Treasury.Application.Accessor
     public class OrganizationAccessor
     {
         private readonly sgadbContext _dbContext;
-        
+
         public OrganizationAccessor(sgadbContext dbContext)
         {
             _dbContext = dbContext;
         }
-        
+
         // Organizations Data
-        public List<OrganizationDto> GetOrganizations()
+        public List<OrganizationDto> GetOrganizations(GeneralPagedRequest generalPagedRequest, out int maxResults)
         {
-            return _dbContext.Organizations
-                .Select(org => OrganizationDto.CreateDtoFromOrg(org))
-                .ToList();
-        }
+            int skip = HelperFunctions.GetPage(generalPagedRequest);
 
-        public List<OrganizationDto> GetFilteredOrganizations(string name)
-        {
-            List<OrganizationDto> orgs =  _dbContext.Organizations
-                .Where(org => org.NameOfClub.Contains(name.Trim()))
-                .Select(org => OrganizationDto.CreateDtoFromOrg(org))
-                .ToList();
+            DbSet<Organization> baseQuery = _dbContext.Organizations;
 
-            return orgs.Any() ? orgs : null;
+            var filteredQuery = ApplyFilters(generalPagedRequest, baseQuery);
+
+            maxResults = filteredQuery.Count();
+
+            return filteredQuery
+                    .OrderBy(org => org.NameOfClub)
+                    .Skip(skip)
+                    .Take(generalPagedRequest.Rpp)
+                    .Select(org => OrganizationDto.CreateDtoFromOrg(org))
+                    .ToList();
         }
 
         // Organization Data
@@ -43,6 +46,54 @@ namespace Treasury.Application.Accessor
                 .FirstOrDefault(org => org.NameOfClub.Equals(name.Trim()));
 
             return org != null ? OrganizationDetailDto.CreateDtoFromOrg(org) : null;
+        }
+
+        private static IQueryable<Organization> ApplyFilters(GeneralPagedRequest request, DbSet<Organization> orderedQueryable)
+        {
+            IQueryable<Organization> filtered = orderedQueryable;
+            
+            if (request.Name.Length > 0)
+            {
+                var predicate = PredicateBuilder.False<Organization>();
+
+                predicate = request.Name.Aggregate(predicate, (current, name) => current.Or(p => p.NameOfClub.Contains(name)));
+
+                filtered = filtered.Where(predicate);
+            }
+            
+            if (request.Acronym.Length > 0)
+            {
+                var predicate = PredicateBuilder.False<Organization>();
+
+                predicate = request.Acronym.Aggregate(predicate, (current, acronym) => current.Or(p => p.Acronym1.Contains(acronym)));
+
+                filtered = filtered.Where(predicate);
+            }
+            
+            if (request.Classification.Length > 0)
+            {
+                var predicate = PredicateBuilder.False<Organization>();
+                
+                predicate = request.Classification.Aggregate(predicate, (current, classification) => current.Or(p => p.Classification.Contains(classification)));
+
+                filtered = filtered.Where(predicate);
+            }
+            
+            if (request.Type.Length > 0)
+            {
+                var predicate = PredicateBuilder.False<Organization>();
+
+                predicate = request.Type.Aggregate(predicate, (current, type) => current.Or(p => p.TypeOfClub.Contains(type)));
+
+                filtered = filtered.Where(predicate);
+            }
+            
+            if (!request.IncludeInactive)
+            {
+                filtered = filtered.Where(query => !query.Inactive);
+            }
+
+            return filtered;
         }
     }
 }

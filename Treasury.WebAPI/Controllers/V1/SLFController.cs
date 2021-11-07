@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Treasury.Application.Accessor;
+using Treasury.Application.Contracts.V1;
+using Treasury.Application.Contracts.V1.Responses;
 using Treasury.Application.DTOs;
-using Treasury.Application.Errors;
-using Treasury.Contracts.V1;
 using Treasury.WebAPI.Filters.ActionFilters;
 
 namespace Treasury.WebAPI.Controllers.V1
@@ -27,9 +27,17 @@ namespace Treasury.WebAPI.Controllers.V1
         /// <returns>List of Student Life Fees</returns>
         [HttpGet(ApiRoutes.StudentLifeFee.GetAll)]
         [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.FinancialData, SwaggerTags.StudentLifeFee })]
-        public IEnumerable<StudentLifeFeeDto> Get()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response<List<StudentLifeFeeDto>>))]
+        public IActionResult Get()
         {
-            return _accessor.GetSlfs();
+            List<StudentLifeFeeDto> dto = _accessor.GetSlfs();
+            
+            Response<List<StudentLifeFeeDto>> response = new(dto)
+            {
+                Message = "Successfully received all Student Life Fees"
+            };
+
+            return Ok(response);
         }
 
         /// <summary>
@@ -39,14 +47,21 @@ namespace Treasury.WebAPI.Controllers.V1
         /// <returns>Student Life Fee data for the year</returns>
         [HttpGet(ApiRoutes.StudentLifeFee.GetByFy)]
         [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.FinancialData, SwaggerTags.StudentLifeFee })]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(StudentLifeFeeDto))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundError))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response<StudentLifeFeeDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Response<>))]
         [ValidateInputActionFilter]
         public IActionResult Get(int fy)
         {
             StudentLifeFeeDto dto = _accessor.GetSlfByFy(fy);
             
-            return dto == null ? NotFound() : Ok(dto);
+            Response<StudentLifeFeeDto> response = new(dto)
+            {
+                Message = dto != null
+                    ? "Successfully received the requested Student Life Fee"
+                    : "The Student Life Fee was not found"
+            };
+
+            return dto == null ? NotFound(response) : Ok(response);
         }
     }
 }

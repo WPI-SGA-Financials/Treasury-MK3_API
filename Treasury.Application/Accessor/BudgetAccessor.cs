@@ -2,8 +2,11 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Treasury.Application.Contexts;
+using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.DTOs;
+using Treasury.Application.Util;
 using Treasury.Domain.Models.Tables;
+using Treasury.Domain.Models.Views;
 
 namespace Treasury.Application.Accessor
 {
@@ -29,45 +32,25 @@ namespace Treasury.Application.Accessor
             return budgets.Any() ? budgets : null;
         }
 
-        public BudgetDto GetBudgetByOrganizationFy(string organization, int fy)
-        {
-            string fiscalYear = fy.ToString().PadLeft(2, '0');
-            
-            BudgetDto budget = _dbContext.BudgetByFys
-                .Where(b => b.NameOfClub.Equals(organization.Trim()))
-                .Where(b => b.FiscalYear.Equals("FY " + fiscalYear))
-                .OrderBy(b => b.NameOfClub)
-                .ThenByDescending(b => b.FiscalYear)
-                .Select(b => BudgetDto.CreateDtoFromBudget(b))
-                .FirstOrDefault();
-
-            return budget;
-        }
-        
         // Financial Data
-        public List<BudgetDto> GetBudgets()
+        public List<BudgetDto> GetBudgets(FinancialPagedRequest financialPagedRequest, out int maxResults)
         {
-            List<BudgetDto> budgets = _dbContext.BudgetByFys
+            int skip = HelperFunctions.GetPage(financialPagedRequest);
+
+            DbSet<BudgetByFy> baseQuery = _dbContext.BudgetByFys;
+
+            maxResults = baseQuery.Count();
+            
+            // TODO: Add in Filtering based on all available filters
+            // TODO: Join in Organization Table to allow for filtering
+            
+            return baseQuery 
                 .OrderBy(budget => budget.NameOfClub)
                 .ThenByDescending(budget => budget.FiscalYear)
+                .Skip(skip)
+                .Take(financialPagedRequest.Rpp)
                 .Select(budget => BudgetDto.CreateDtoFromBudget(budget))
                 .ToList();
-
-            return budgets;
-        }
-
-        public List<BudgetDto> GetBudgetsByFy(int fy)
-        {
-            string fiscalYear = fy.ToString().PadLeft(2, '0');
-            
-            List<BudgetDto> budgets = _dbContext.BudgetByFys
-                .Where(budget => budget.FiscalYear.Equals("FY " + fiscalYear))
-                .OrderBy(budget => budget.NameOfClub)
-                .ThenByDescending(budget => budget.FiscalYear)
-                .Select(budget => BudgetDto.CreateDtoFromBudget(budget))
-                .ToList();
-            
-            return budgets.Any() ? budgets : null;
         }
 
         public BudgetDetailedDto GetBudgetById(int id)

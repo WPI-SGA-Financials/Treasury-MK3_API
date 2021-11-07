@@ -2,7 +2,9 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Treasury.Application.Contexts;
+using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.DTOs;
+using Treasury.Application.Util;
 using Treasury.Domain.Models.Tables;
 
 namespace Treasury.Application.Accessor
@@ -28,46 +30,26 @@ namespace Treasury.Application.Accessor
 
             return frs.Any() ? frs : null;
         }
-        
-        public List<FundingRequestDto> GetFundingRequestsByOrganizationFy(string organization, int fy)
-        {
-            string fiscalYear = fy.ToString().PadLeft(2, '0');
-            
-            List<FundingRequestDto> frs = _dbContext.FundingRequests
-                .Where(fr=> fr.NameOfClub.Equals(organization.Trim()))
-                .Where(fr => fr.FiscalYear.Equals("FY " + fiscalYear))
-                .OrderByDescending(fr => fr.FundingDate)
-                .ThenByDescending(fr => fr.DotNumber)
-                .Select(fr => FundingRequestDto.CreateDtoFromFr(fr))
-                .ToList();
 
-            return frs.Any() ? frs : null;
-        }
-        
         // Financials Data
-        public List<FundingRequestDto> GetFundingRequests()
+        public List<FundingRequestDto> GetFundingRequests(FinancialPagedRequest financialPagedRequest, out int maxResults)
         {
-            List<FundingRequestDto> frs = _dbContext.FundingRequests
-                .OrderByDescending(fr => fr.FundingDate)
-                .ThenByDescending(fr => fr.DotNumber)
-                .Select(fr => FundingRequestDto.CreateDtoFromFr(fr))
-                .ToList();
+            int skip = HelperFunctions.GetPage(financialPagedRequest);
 
-            return frs;
-        }
-        
-        public List<FundingRequestDto> GetFundingRequestsByFy(int fy)
-        {
-            string fiscalYear = fy.ToString().PadLeft(2, '0');
+            var baseQuery = _dbContext.FundingRequests;
+
+            maxResults = baseQuery.Count();
             
-            List<FundingRequestDto> frs = _dbContext.FundingRequests
-                .Where(fr => fr.FiscalYear.Equals("FY " + fiscalYear))
+            // TODO: Add in Filtering based on all available filters
+            // TODO: Join in Organization Table to allow for filtering
+            
+            return baseQuery
                 .OrderByDescending(fr => fr.FundingDate)
                 .ThenByDescending(fr => fr.DotNumber)
+                .Skip(skip)
+                .Take(financialPagedRequest.Rpp)
                 .Select(fr => FundingRequestDto.CreateDtoFromFr(fr))
                 .ToList();
-
-            return frs.Any() ? frs : null;
         }
 
         public FundingRequestDetailedDto GetFundingRequestById(int id)

@@ -14,7 +14,7 @@ namespace Treasury.Application.DTOs
                 TypeOfClub = org.TypeOfClub,
                 AccountNumber = org.AccountNumber,
                 Acronym = org.Acronym1,
-                Inactive = org.Inactive == 1,
+                Inactive = org.Inactive,
                 Timestamp = org.Timestamp
             };
 
@@ -41,10 +41,10 @@ namespace Treasury.Application.DTOs
                 TypeOfClub = org.TypeOfClub,
                 AccountNumber = org.AccountNumber,
                 Acronym = org.Acronym1,
-                Inactive = org.Inactive == 1,
+                Inactive = org.Inactive,
                 Timestamp = org.Timestamp,
                 FiVizClubClassification = org.ClubClassification?.Category,
-                TechsyncName = org.TechsyncName.TechsyncName1
+                TechsyncName = org.TechsyncName?.TechsyncName1
             };
         }
         

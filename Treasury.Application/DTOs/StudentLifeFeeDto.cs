@@ -23,6 +23,7 @@ namespace Treasury.Application.DTOs
         public string FiscalYear { get; set; }
         public decimal SlfAmount { get; set; }
         public int? FallStudentAmount { get; set; }
+        public decimal? TotalStudentLifeFeeAmount => SlfAmount * FallStudentAmount;
         public DateTime Timestamp { get; set; }
     }
 }

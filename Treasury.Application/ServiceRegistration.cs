@@ -35,6 +35,7 @@ namespace Treasury.Application
             services.AddScoped<OrganizationAccessor>();
             services.AddScoped<ReallocationRequestAccessor>();
             services.AddScoped<StudentLifeFeeAccessor>();
+            services.AddScoped<MetadataAccessor>();
         }
     }
 }

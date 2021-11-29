@@ -8,10 +8,6 @@ namespace Treasury.Application.Contexts
 {
     public partial class sgadbContext : DbContext
     {
-        public sgadbContext()
-        {
-        }
-
         public sgadbContext(DbContextOptions<sgadbContext> options)
             : base(options)
         {

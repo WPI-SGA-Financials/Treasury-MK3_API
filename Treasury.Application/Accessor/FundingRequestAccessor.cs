@@ -38,12 +38,11 @@ namespace Treasury.Application.Accessor
 
             var baseQuery = _dbContext.FundingRequests;
 
-            maxResults = baseQuery.Count();
+            var filteredQuery = ApplyFilters(financialPagedRequest, baseQuery);
             
-            // TODO: Add in Filtering based on all available filters
-            // TODO: Join in Organization Table to allow for filtering
-            
-            return baseQuery
+            maxResults = filteredQuery.Count();
+
+            return filteredQuery
                 .OrderByDescending(fr => fr.FundingDate)
                 .ThenByDescending(fr => fr.DotNumber)
                 .Skip(skip)
@@ -59,6 +58,77 @@ namespace Treasury.Application.Accessor
                 .FirstOrDefault(fr => fr.Id.Equals(id));
             
             return fr != null ? FundingRequestDetailedDto.CreateDtoFromFr(fr) : null;
+        }
+
+        
+        private IQueryable<FundingRequest> ApplyFilters(FinancialPagedRequest request, DbSet<FundingRequest> baseQuery)
+        {
+            IQueryable<FundingRequest> filtered = baseQuery.Include(fundingRequest => fundingRequest.NameOfClubNavigation);
+            
+            // TODO: Abstract Org Filters out
+            // Organization Based Filters
+            if (request.Name.Length > 0)
+            {
+                var predicate = PredicateBuilder.False<FundingRequest>();
+
+                predicate = request.Name.Aggregate(predicate, (current, name) => current.Or(p => p.NameOfClub.Contains(name)));
+
+                filtered = filtered.Where(predicate);
+            }
+            
+            if (request.Acronym.Length > 0)
+            {
+                var predicate = PredicateBuilder.False<FundingRequest>();
+
+                predicate = request.Acronym.Aggregate(predicate, (current, acronym) => current.Or(p => p.NameOfClubNavigation.Acronym1.Contains(acronym)));
+
+                filtered = filtered.Where(predicate);
+            }
+            
+            if (request.Classification.Length > 0)
+            {
+                var predicate = PredicateBuilder.False<FundingRequest>();
+                
+                predicate = request.Classification.Aggregate(predicate, (current, classification) => current.Or(p => p.NameOfClubNavigation.Classification.Contains(classification)));
+
+                filtered = filtered.Where(predicate);
+            }
+            
+            if (request.Type.Length > 0)
+            {
+                var predicate = PredicateBuilder.False<FundingRequest>();
+
+                predicate = request.Type.Aggregate(predicate, (current, type) => current.Or(p => p.NameOfClubNavigation.TypeOfClub.Contains(type)));
+
+                filtered = filtered.Where(predicate);
+            }
+            
+            if (!request.IncludeInactive)
+            {
+                filtered = filtered.Where(query => !query.NameOfClubNavigation.Inactive);
+            }
+
+            // Financial Based Filters
+            if (request.FiscalYear != -1)
+            {
+                filtered = filtered.Where(query => query.FiscalYear.Equals($"FY {request.FiscalYear}"));
+            }
+            
+            if (request.Description.Length > 0)
+            {
+                var predicate = PredicateBuilder.False<FundingRequest>();
+
+                predicate = request.Description.Aggregate(predicate, (current, description) => current.Or(p => p.Description.Contains(description)));
+
+                filtered = filtered.Where(predicate);
+            }
+            
+            if (request.RequestedAmount > 0)
+            {
+                filtered = filtered.Where(query => query.AmountRequested > request.RequestedAmount);
+            }
+            
+            return filtered;
         }
     }
 }

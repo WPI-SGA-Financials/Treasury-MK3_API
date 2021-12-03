@@ -23,5 +23,10 @@ namespace Treasury.WebAPI.Util
         {
             return requestType.Length > 0 ? requestType.Where(s => !string.IsNullOrEmpty(s)).ToArray() : requestType;
         }
+
+        public static string[] CleanDescription(string[] requestDescription)
+        {
+            return requestDescription.Length > 0 ? requestDescription.Where(s => !string.IsNullOrEmpty(s)).ToArray() : requestDescription;
+        }
     }
 }

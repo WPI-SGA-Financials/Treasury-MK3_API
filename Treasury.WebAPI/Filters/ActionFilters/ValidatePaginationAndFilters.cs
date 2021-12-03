@@ -54,6 +54,7 @@ namespace Treasury.WebAPI.Filters.ActionFilters
             request.Acronym = HelperFunctions.CleanAcronym(request.Acronym);
             request.Classification = HelperFunctions.CleanClassification(request.Classification);
             request.Type = HelperFunctions.CleanType(request.Type);
+            request.Description = HelperFunctions.CleanDescription(request.Description);
             
             return request;
         }

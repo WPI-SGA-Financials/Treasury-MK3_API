@@ -11,7 +11,7 @@ namespace Treasury.Application.DTOs
                 Id = legacy.Id,
                 AmountRequested = legacy.AmountRequested,
                 AmountProposed = legacy.AmountProposed,
-                Appealed = legacy.Appealed == 1,
+                Appealed = legacy.Appealed,
                 AppealAmount = legacy.AppealAmount,
                 AppealDecision = legacy.AppealDecision,
                 ApprovedAppeal = legacy.ApprovedAppeal

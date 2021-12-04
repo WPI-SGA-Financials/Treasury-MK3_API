@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using Treasury.Application.Accessor;
+using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contracts.V1;
 using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.Contracts.V1.Responses;
@@ -16,11 +16,11 @@ namespace Treasury.WebAPI.Controllers.V1
     [ApiController]
     public class BudgetController : ControllerBase
     {
-        private readonly BudgetAccessor _accessor;
+        private readonly IBudgetAccessor _accessor;
 
-        public BudgetController(BudgetAccessor budgetAccessor)
+        public BudgetController(IBudgetAccessor accessor)
         {
-            _accessor = budgetAccessor;
+            _accessor = accessor;
         }
 
         /// <summary>

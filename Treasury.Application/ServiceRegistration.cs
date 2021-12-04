@@ -2,7 +2,8 @@
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Treasury.Application.Accessor;
+using Treasury.Application.Accessor.Implementation;
+using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contexts;
 
 namespace Treasury.Application
@@ -30,12 +31,12 @@ namespace Treasury.Application
 
         public static void AddAccessors(this IServiceCollection services)
         {
-            services.AddScoped<BudgetAccessor>();
-            services.AddScoped<FundingRequestAccessor>();
-            services.AddScoped<OrganizationAccessor>();
-            services.AddScoped<ReallocationRequestAccessor>();
-            services.AddScoped<StudentLifeFeeAccessor>();
-            services.AddScoped<MetadataAccessor>();
+            services.AddScoped<IBudgetAccessor, BudgetAccessorImpl>();
+            services.AddScoped<IFundingRequestAccessor, FundingRequestAccessorImpl>();
+            services.AddScoped<IOrganizationAccessor, OrganizationAccessorImpl>();
+            services.AddScoped<IReallocationRequestAccessor, ReallocationRequestAccessorImpl>();
+            services.AddScoped<IStudentLifeFeeAccessor, StudentLifeFeeAccessorImpl>();
+            services.AddScoped<IMetadataAccessor, MetadataAccessorImpl>();
         }
     }
 }

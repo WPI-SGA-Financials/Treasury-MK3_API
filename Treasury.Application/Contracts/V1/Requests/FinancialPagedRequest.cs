@@ -25,7 +25,7 @@ namespace Treasury.Application.Contracts.V1.Requests
         public int FiscalYear { get; set; } = -1;
 
         // Minimum Requested Amount
-        public int RequestedAmount { get; set; } = 0;
+        public int MinimumRequestedAmount { get; set; } = 0;
 
         // TODO: Maximum Requested Amount
         

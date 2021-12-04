@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
+using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contexts;
 using Treasury.Application.DTOs;
 
-namespace Treasury.Application.Accessor
+namespace Treasury.Application.Accessor.Implementation
 {
-    public class MetadataAccessor
+    public class MetadataAccessorImpl: IMetadataAccessor
     {
         private readonly sgadbContext _dbContext;
 
-        public MetadataAccessor(sgadbContext dbContext)
+        public MetadataAccessorImpl(sgadbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -147,11 +148,13 @@ namespace Treasury.Application.Accessor
 
         public List<object> GetMqpTypes()
         {
-            // TODO: Refactor Database to make mqp types an id name pairing or roll in to organization
-            return new List<object>()
-            {
+            // TODO: Refactor Database to make mqp types an id name pairing
+            throw new System.NotImplementedException();
+        }
 
-            };
+        public List<object> GetFiscalYears()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

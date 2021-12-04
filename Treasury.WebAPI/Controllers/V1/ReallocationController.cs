@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using Treasury.Application.Accessor;
+using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contracts.V1;
 using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.Contracts.V1.Responses;
@@ -16,9 +16,9 @@ namespace Treasury.WebAPI.Controllers.V1
     [Produces("application/json")]
     public class ReallocationController : ControllerBase
     {
-        private readonly ReallocationRequestAccessor _accessor;
+        private readonly IReallocationRequestAccessor _accessor;
 
-        public ReallocationController(ReallocationRequestAccessor accessor)
+        public ReallocationController(IReallocationRequestAccessor accessor)
         {
             _accessor = accessor;
         }

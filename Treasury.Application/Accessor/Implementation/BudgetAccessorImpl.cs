@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contexts;
 using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.DTOs;
@@ -8,13 +9,13 @@ using Treasury.Application.Util;
 using Treasury.Domain.Models.Tables;
 using Treasury.Domain.Models.Views;
 
-namespace Treasury.Application.Accessor
+namespace Treasury.Application.Accessor.Implementation
 {
-    public class BudgetAccessor
+    public class BudgetAccessorImpl : IBudgetAccessor
     {
         private readonly sgadbContext _dbContext;
 
-        public BudgetAccessor(sgadbContext dbContext)
+        public BudgetAccessorImpl(sgadbContext dbContext)
         {
             _dbContext = dbContext;
         }

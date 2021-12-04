@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contexts;
 using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.DTOs;
 using Treasury.Application.Util;
 using Treasury.Domain.Models.Tables;
 
-namespace Treasury.Application.Accessor
+namespace Treasury.Application.Accessor.Implementation
 {
-    public class FundingRequestAccessor
+    public class FundingRequestAccessorImpl : IFundingRequestAccessor
     {
         private readonly sgadbContext _dbContext;
 
-        public FundingRequestAccessor(sgadbContext dbContext)
+        public FundingRequestAccessorImpl(sgadbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -123,9 +124,9 @@ namespace Treasury.Application.Accessor
                 filtered = filtered.Where(predicate);
             }
             
-            if (request.RequestedAmount > 0)
+            if (request.MinimumRequestedAmount > 0)
             {
-                filtered = filtered.Where(query => query.AmountRequested > request.RequestedAmount);
+                filtered = filtered.Where(query => query.AmountRequested > request.MinimumRequestedAmount);
             }
             
             return filtered;

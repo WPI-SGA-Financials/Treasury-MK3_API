@@ -14,7 +14,7 @@ namespace Treasury.Application.DTOs
                 NumOfItems = section.BudgetLineItems.Count,
                 AmountRequested = section.BudgetLineItems.Sum(item => item.AmountRequest),
                 AmountProposed = section.BudgetLineItems.Sum(item => item.AmountProposed),
-                Appealed = section.BudgetLineItems.Any(item => item.Appealed == 1),
+                Appealed = section.BudgetLineItems.Any(item => item.Appealed),
                 RequestedAppeal = section.BudgetLineItems.Sum(item => item.AppealAmount),
                 
                 ApprovedAppeal = section.BudgetLineItems.Sum(item => item.ApprovedAppeal)

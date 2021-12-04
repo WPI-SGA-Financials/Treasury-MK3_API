@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contexts;
 using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.DTOs;
 using Treasury.Application.Util;
 using Treasury.Domain.Models.Tables;
 
-namespace Treasury.Application.Accessor
+namespace Treasury.Application.Accessor.Implementation
 {
-    public class ReallocationRequestAccessor
+    public class ReallocationRequestAccessorImpl : IReallocationRequestAccessor
     {
         private readonly sgadbContext _dbContext;
 
-        public ReallocationRequestAccessor(sgadbContext dbContext)
+        public ReallocationRequestAccessorImpl(sgadbContext dbContext)
         {
             _dbContext = dbContext;
         }

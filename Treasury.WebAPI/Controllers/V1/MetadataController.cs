@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using Treasury.Application.Accessor;
+using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contracts.V1;
 using Treasury.Application.Contracts.V1.Responses;
 using Treasury.Application.DTOs;
@@ -13,9 +13,9 @@ namespace Treasury.WebAPI.Controllers.V1
     [ApiController]
     public class MetadataController : ControllerBase
     {
-        private readonly MetadataAccessor _accessor;
+        private readonly IMetadataAccessor _accessor;
         
-        public MetadataController(MetadataAccessor accessor)
+        public MetadataController(IMetadataAccessor accessor)
         {
             _accessor = accessor;
         }

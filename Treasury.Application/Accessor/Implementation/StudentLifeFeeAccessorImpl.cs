@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contexts;
 using Treasury.Application.DTOs;
 using Treasury.Domain.Models.Tables;
 
-namespace Treasury.Application.Accessor
+namespace Treasury.Application.Accessor.Implementation
 {
-    public class StudentLifeFeeAccessor
+    public class StudentLifeFeeAccessorImpl : IStudentLifeFeeAccessor
     {
         private readonly sgadbContext _dbContext;
 
-        public StudentLifeFeeAccessor(sgadbContext dbContext)
+        public StudentLifeFeeAccessorImpl(sgadbContext dbContext)
         {
             _dbContext = dbContext;
         }

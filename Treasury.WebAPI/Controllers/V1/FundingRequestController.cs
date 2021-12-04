@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using Treasury.Application.Accessor;
+using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contracts.V1;
 using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.Contracts.V1.Responses;
@@ -16,9 +16,9 @@ namespace Treasury.WebAPI.Controllers.V1
     [ApiController]
     public class FundingRequestController : ControllerBase
     {
-        private readonly FundingRequestAccessor _accessor;
+        private readonly IFundingRequestAccessor _accessor;
 
-        public FundingRequestController(FundingRequestAccessor accessor)
+        public FundingRequestController(IFundingRequestAccessor accessor)
         {
             _accessor = accessor;
         }

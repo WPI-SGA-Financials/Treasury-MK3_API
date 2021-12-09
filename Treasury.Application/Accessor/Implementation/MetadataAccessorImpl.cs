@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contexts;
 using Treasury.Application.DTOs;
@@ -57,21 +58,26 @@ namespace Treasury.Application.Accessor.Implementation
                 new()
                 {
                     Id = 7,
-                    Classification = "Classless"
+                    Classification = "Class 8 - Student Run Business"
                 },
                 new()
                 {
                     Id = 8,
-                    Classification = "Department"
+                    Classification = "Classless"
                 },
                 new()
                 {
                     Id = 9,
-                    Classification = "Graduate"
+                    Classification = "Department"
                 },
                 new()
                 {
                     Id = 10,
+                    Classification = "Graduate"
+                },
+                new()
+                {
+                    Id = 11,
                     Classification = "Mandatory Transfer"
                 }
             };
@@ -152,9 +158,14 @@ namespace Treasury.Application.Accessor.Implementation
             throw new System.NotImplementedException();
         }
 
-        public List<object> GetFiscalYears()
+        public List<FiscalYearDto> GetFiscalYears()
         {
-            throw new System.NotImplementedException();
+            // TODO: Refactor Database to make fiscal year an id name pairing. For now, use slf table
+
+            return _dbContext.StudentLifeFees
+                .OrderByDescending(slf => slf.FiscalYear)
+                .Select(slf => new FiscalYearDto{ID = slf.Id, FY = slf.FiscalYear})
+                .ToList();
         }
     }
 }

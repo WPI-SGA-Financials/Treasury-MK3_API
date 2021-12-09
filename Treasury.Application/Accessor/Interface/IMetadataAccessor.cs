@@ -8,6 +8,6 @@ namespace Treasury.Application.Accessor.Interface
         List<ClassificationDto> GetClassifications();
         List<ClubTypeDto> GetClubTypes();
         List<object> GetMqpTypes();
-        List<object> GetFiscalYears();
+        List<FiscalYearDto> GetFiscalYears();
     }
 }

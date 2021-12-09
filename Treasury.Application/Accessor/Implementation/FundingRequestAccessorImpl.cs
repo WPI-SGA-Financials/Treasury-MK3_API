@@ -110,9 +110,13 @@ namespace Treasury.Application.Accessor.Implementation
             }
 
             // Financial Based Filters
-            if (request.FiscalYear != -1)
+            if (request.FiscalYear.Length > 0)
             {
-                filtered = filtered.Where(query => query.FiscalYear.Equals($"FY {request.FiscalYear}"));
+                var predicate = PredicateBuilder.False<FundingRequest>();
+
+                predicate = request.FiscalYear.Aggregate(predicate, (current, fiscalYear) => current.Or(p => p.FiscalYear.Equals(fiscalYear)));
+
+                filtered = filtered.Where(predicate);
             }
             
             if (request.Description.Length > 0)

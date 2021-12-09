@@ -22,7 +22,7 @@ namespace Treasury.Application.Contracts.V1.Requests
         
         public string FiscalClass { get; set; } = "";
 
-        public int FiscalYear { get; set; } = -1;
+        public string[] FiscalYear { get; set; } = System.Array.Empty<string>();
 
         // Minimum Requested Amount
         public int MinimumRequestedAmount { get; set; } = 0;

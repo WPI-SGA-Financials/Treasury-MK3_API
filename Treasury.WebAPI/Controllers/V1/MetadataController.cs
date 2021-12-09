@@ -32,7 +32,8 @@ namespace Treasury.WebAPI.Controllers.V1
             AllMetadataDto dto = new AllMetadataDto
             {
                 ClubClassifications = _accessor.GetClassifications(),
-                ClubTypes = _accessor.GetClubTypes()
+                ClubTypes = _accessor.GetClubTypes(),
+                FiscalYears = _accessor.GetFiscalYears()
             };
 
             return Ok(new Response<AllMetadataDto>(dto)
@@ -74,6 +75,25 @@ namespace Treasury.WebAPI.Controllers.V1
             Response<List<ClubTypeDto>> response = new(dtos)
             {
                 Message = "Successfully returned the list of Club Types."
+            };
+
+            return Ok(response);
+        }
+        
+        /// <summary>
+        /// Get the List of Fiscal Years
+        /// </summary>
+        /// <returns>List of Fiscal Years</returns>
+        [HttpGet(ApiRoutes.Metadata.FiscalYear)]
+        [SwaggerOperation(Tags = new []{SwaggerTags.Campus, SwaggerTags.Metadata})]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response<List<FiscalYearDto>>))]
+        public IActionResult GetFiscalYears()
+        {
+            List<FiscalYearDto> dtos = _accessor.GetFiscalYears();
+
+            Response<List<FiscalYearDto>> response = new(dtos)
+            {
+                Message = "Successfully returned the list of Fiscal Years."
             };
 
             return Ok(response);

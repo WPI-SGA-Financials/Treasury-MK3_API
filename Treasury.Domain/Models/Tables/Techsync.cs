@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Treasury.Domain.Models.Tables
 {
     [Table("Techsync Names")]
-    public partial class TechsyncName
+    public partial class Techsync
     {
         [Key]
         [Column("Name of Club")]

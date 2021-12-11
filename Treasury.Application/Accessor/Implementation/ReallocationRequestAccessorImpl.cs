@@ -35,7 +35,7 @@ namespace Treasury.Application.Accessor.Implementation
         // Financials Data
         public List<ReallocationRequestDto> GetReallocationRequests(FinancialPagedRequest financialPagedRequest, out int maxResults)
         {
-            int skip = HelperFunctions.GetPage(financialPagedRequest);
+            int skip = GeneralHelperFunctions.GetPage(financialPagedRequest);
 
             var baseQuery = _dbContext.Reallocations;
             

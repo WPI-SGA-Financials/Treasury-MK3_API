@@ -13,9 +13,11 @@ namespace Treasury.Domain.Models.Views
         [Column("Fiscal Year")]
         [StringLength(255)]
         public string FiscalYear { get; set; }
+
         [Required]
         [StringLength(255)]
         public string Category { get; set; }
+
         [Required]
         [Column("Active Members")]
         [StringLength(255)]

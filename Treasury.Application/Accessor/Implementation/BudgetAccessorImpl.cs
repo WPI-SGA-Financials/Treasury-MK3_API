@@ -36,7 +36,7 @@ namespace Treasury.Application.Accessor.Implementation
         // Financial Data
         public List<BudgetDto> GetBudgets(FinancialPagedRequest financialPagedRequest, out int maxResults)
         {
-            int skip = HelperFunctions.GetPage(financialPagedRequest);
+            int skip = GeneralHelperFunctions.GetPage(financialPagedRequest);
 
             DbSet<BudgetByFy> baseQuery = _dbContext.BudgetByFys;
 

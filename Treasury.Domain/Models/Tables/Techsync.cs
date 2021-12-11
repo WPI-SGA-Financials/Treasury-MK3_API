@@ -12,14 +12,16 @@ namespace Treasury.Domain.Models.Tables
         [Key]
         [Column("Name of Club")]
         public string NameOfClub { get; set; }
+
         [Column("Techsync Name")]
         [StringLength(255)]
         public string TechsyncName1 { get; set; }
+
         [Column(TypeName = "timestamp")]
         public DateTime Timestamp { get; set; }
 
         [ForeignKey(nameof(NameOfClub))]
-        [InverseProperty(nameof(Organization.TechsyncName))]
-        public virtual Organization NameOfClubNavigation { get; set; }
+        [InverseProperty(nameof(Tables.Organization.TechsyncInfo))]
+        public virtual Organization Organization { get; set; }
     }
 }

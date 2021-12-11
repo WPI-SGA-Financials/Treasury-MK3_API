@@ -14,14 +14,18 @@ namespace Treasury.Domain.Models.Tables
         [Key]
         [Column("ID")]
         public int Id { get; set; }
+
         [Required]
         [Column("Name of Club")]
         public string NameOfClub { get; set; }
+
         [Column("Comment Date", TypeName = "date")]
         public DateTime CommentDate { get; set; }
+
         [Required]
         [StringLength(255)]
         public string Comment { get; set; }
+
         [Column(TypeName = "timestamp")]
         public DateTime Timestamp { get; set; }
 

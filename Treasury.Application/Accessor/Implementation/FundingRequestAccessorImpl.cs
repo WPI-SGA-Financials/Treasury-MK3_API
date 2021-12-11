@@ -35,7 +35,7 @@ namespace Treasury.Application.Accessor.Implementation
         // Financials Data
         public List<FundingRequestDto> GetFundingRequests(FinancialPagedRequest financialPagedRequest, out int maxResults)
         {
-            int skip = HelperFunctions.GetPage(financialPagedRequest);
+            int skip = GeneralHelperFunctions.GetPage(financialPagedRequest);
 
             var baseQuery = _dbContext.FundingRequests;
 
@@ -64,7 +64,7 @@ namespace Treasury.Application.Accessor.Implementation
         
         private IQueryable<FundingRequest> ApplyFilters(FinancialPagedRequest request, DbSet<FundingRequest> baseQuery)
         {
-            IQueryable<FundingRequest> filtered = baseQuery.Include(fundingRequest => fundingRequest.NameOfClubNavigation);
+            IQueryable<FundingRequest> filtered = baseQuery.Include(fundingRequest => fundingRequest.Organization);
             
             // TODO: Abstract Org Filters out
             // Organization Based Filters
@@ -81,7 +81,7 @@ namespace Treasury.Application.Accessor.Implementation
             {
                 var predicate = PredicateBuilder.False<FundingRequest>();
 
-                predicate = request.Acronym.Aggregate(predicate, (current, acronym) => current.Or(p => p.NameOfClubNavigation.Acronym1.Contains(acronym)));
+                predicate = request.Acronym.Aggregate(predicate, (current, acronym) => current.Or(p => p.Organization.Acronym1.Contains(acronym)));
 
                 filtered = filtered.Where(predicate);
             }
@@ -90,7 +90,7 @@ namespace Treasury.Application.Accessor.Implementation
             {
                 var predicate = PredicateBuilder.False<FundingRequest>();
                 
-                predicate = request.Classification.Aggregate(predicate, (current, classification) => current.Or(p => p.NameOfClubNavigation.Classification.Contains(classification)));
+                predicate = request.Classification.Aggregate(predicate, (current, classification) => current.Or(p => p.Organization.Classification.Contains(classification)));
 
                 filtered = filtered.Where(predicate);
             }
@@ -99,14 +99,14 @@ namespace Treasury.Application.Accessor.Implementation
             {
                 var predicate = PredicateBuilder.False<FundingRequest>();
 
-                predicate = request.Type.Aggregate(predicate, (current, type) => current.Or(p => p.NameOfClubNavigation.TypeOfClub.Contains(type)));
+                predicate = request.Type.Aggregate(predicate, (current, type) => current.Or(p => p.Organization.TypeOfClub.Contains(type)));
 
                 filtered = filtered.Where(predicate);
             }
             
             if (!request.IncludeInactive)
             {
-                filtered = filtered.Where(query => !query.NameOfClubNavigation.Inactive);
+                filtered = filtered.Where(query => !query.Organization.Inactive);
             }
 
             // Financial Based Filters

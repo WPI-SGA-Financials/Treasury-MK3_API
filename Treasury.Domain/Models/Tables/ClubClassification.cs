@@ -10,12 +10,13 @@ namespace Treasury.Domain.Models.Tables
     {
         [Key]
         public string Name { get; set; }
+
         [Required]
         [StringLength(255)]
         public string Category { get; set; }
 
         [ForeignKey(nameof(Name))]
-        [InverseProperty(nameof(Organization.ClubClassification))]
-        public virtual Organization NameNavigation { get; set; }
+        [InverseProperty(nameof(Tables.Organization.ClubCategory))]
+        public virtual Organization Organization { get; set; }
     }
 }

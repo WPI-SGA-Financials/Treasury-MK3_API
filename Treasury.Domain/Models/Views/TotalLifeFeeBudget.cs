@@ -13,6 +13,7 @@ namespace Treasury.Domain.Models.Views
         [Column("Fiscal Year")]
         [StringLength(6)]
         public string FiscalYear { get; set; }
+
         public decimal? Total { get; set; }
     }
 }

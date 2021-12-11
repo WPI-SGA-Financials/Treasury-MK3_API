@@ -2,7 +2,7 @@
 
 namespace Treasury.Application.Util
 {
-    public static class HelperFunctions
+    public static class GeneralHelperFunctions
     {
         public static int GetPage(IPagedRequest generalPagedRequest)
         {

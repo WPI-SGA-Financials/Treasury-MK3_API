@@ -41,14 +41,14 @@ namespace Treasury.Application.Contexts
         public virtual DbSet<Organization> Organizations { get; set; }
         public virtual DbSet<OrganizationComment> OrganizationComments { get; set; }
         public virtual DbSet<OrganizationMembershipNumber> OrganizationMembershipNumbers { get; set; }
-        public virtual DbSet<OrganizationsContactInfo> OrganizationsContactInfos { get; set; }
+        public virtual DbSet<OrganizationContactInfo> OrganizationsContactInfos { get; set; }
         public virtual DbSet<ReallocMinute> ReallocMinutes { get; set; }
         public virtual DbSet<Reallocation> Reallocations { get; set; }
         public virtual DbSet<ReclassMinute> ReclassMinutes { get; set; }
         public virtual DbSet<Reclassification> Reclassifications { get; set; }
         public virtual DbSet<Soc> Socs { get; set; }
         public virtual DbSet<StudentLifeFee> StudentLifeFees { get; set; }
-        public virtual DbSet<TechsyncName> TechsyncNames { get; set; }
+        public virtual DbSet<Techsync> TechsyncNames { get; set; }
         public virtual DbSet<TotalBudget> TotalBudgets { get; set; }
         public virtual DbSet<TotalLifeFeeBudget> TotalLifeFeeBudgets { get; set; }
         public virtual DbSet<Transfer> Transfers { get; set; }
@@ -98,7 +98,7 @@ namespace Treasury.Application.Contexts
 
                 entity.Property(e => e.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.HasOne(d => d.NameOfClubNavigation)
+                entity.HasOne(d => d.Organization)
                     .WithMany(p => p.Budgets)
                     .HasForeignKey(d => d.NameOfClub)
                     .HasConstraintName("Budget_ibfk_1");
@@ -295,8 +295,8 @@ namespace Treasury.Application.Contexts
                 entity.HasCharSet("latin1")
                     .UseCollation("latin1_swedish_ci");
 
-                entity.HasOne(d => d.NameNavigation)
-                    .WithOne(p => p.ClubClassification)
+                entity.HasOne(d => d.Organization)
+                    .WithOne(p => p.ClubCategory)
                     .HasForeignKey<ClubClassification>(d => d.Name)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Club Classifications_Organizations_Name of Club_fk");
@@ -479,7 +479,7 @@ namespace Treasury.Application.Contexts
 
                 entity.Property(e => e.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.HasOne(d => d.NameOfClubNavigation)
+                entity.HasOne(d => d.Organization)
                     .WithMany(p => p.FundingRequests)
                     .HasForeignKey(d => d.NameOfClub)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -621,7 +621,7 @@ namespace Treasury.Application.Contexts
                     .HasConstraintName("orgMemName");
             });
 
-            modelBuilder.Entity<OrganizationsContactInfo>(entity =>
+            modelBuilder.Entity<OrganizationContactInfo>(entity =>
             {
                 entity.HasKey(e => e.NameOfClub)
                     .HasName("PRIMARY");
@@ -631,9 +631,9 @@ namespace Treasury.Application.Contexts
 
                 entity.Property(e => e.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.HasOne(d => d.NameOfClubNavigation)
-                    .WithOne(p => p.OrganizationsContactInfo)
-                    .HasForeignKey<OrganizationsContactInfo>(d => d.NameOfClub)
+                entity.HasOne(d => d.Organization)
+                    .WithOne(p => p.ContactInfo)
+                    .HasForeignKey<OrganizationContactInfo>(d => d.NameOfClub)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("Organizations Contact Info_Organizations_Name of Club_fk");
             });
@@ -717,7 +717,7 @@ namespace Treasury.Application.Contexts
                 entity.Property(e => e.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
             });
 
-            modelBuilder.Entity<TechsyncName>(entity =>
+            modelBuilder.Entity<Techsync>(entity =>
             {
                 entity.HasKey(e => e.NameOfClub)
                     .HasName("PRIMARY");
@@ -727,9 +727,9 @@ namespace Treasury.Application.Contexts
 
                 entity.Property(e => e.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.HasOne(d => d.NameOfClubNavigation)
-                    .WithOne(p => p.TechsyncName)
-                    .HasForeignKey<TechsyncName>(d => d.NameOfClub)
+                entity.HasOne(d => d.Organization)
+                    .WithOne(p => p.TechsyncInfo)
+                    .HasForeignKey<Techsync>(d => d.NameOfClub)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("orgTechName");
             });

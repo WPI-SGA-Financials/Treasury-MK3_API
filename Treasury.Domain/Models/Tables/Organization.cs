@@ -23,40 +23,55 @@ namespace Treasury.Domain.Models.Tables
         [Key]
         [Column("Name of Club")]
         public string NameOfClub { get; set; }
+
         [StringLength(100)]
         public string Classification { get; set; }
+
         [Column("Type of Club")]
         [StringLength(100)]
         public string TypeOfClub { get; set; }
+
         [Column("Account Number")]
         [StringLength(8)]
         public string AccountNumber { get; set; }
+
         [Column("Acronym 1")]
         [StringLength(50)]
         public string Acronym1 { get; set; }
+
         [Column("Inactive?", TypeName = "bit(1)")]
         public bool Inactive { get; set; }
+
         [Column(TypeName = "timestamp")]
         public DateTime Timestamp { get; set; }
 
-        [InverseProperty("NameNavigation")]
-        public virtual ClubClassification ClubClassification { get; set; }
-        [InverseProperty("NameOfClubNavigation")]
-        public virtual OrganizationsContactInfo OrganizationsContactInfo { get; set; }
-        [InverseProperty("NameOfClubNavigation")]
-        public virtual TechsyncName TechsyncName { get; set; }
-        [InverseProperty(nameof(Budget.NameOfClubNavigation))]
+        [InverseProperty(nameof(ClubClassification.Organization))]
+        public virtual ClubClassification ClubCategory { get; set; }
+
+        [InverseProperty(nameof(OrganizationContactInfo.Organization))]
+        public virtual OrganizationContactInfo ContactInfo { get; set; }
+
+        [InverseProperty(nameof(Techsync.Organization))]
+        public virtual Techsync TechsyncInfo { get; set; }
+
+        [InverseProperty(nameof(Budget.Organization))]
         public virtual ICollection<Budget> Budgets { get; set; }
-        [InverseProperty(nameof(FundingRequest.NameOfClubNavigation))]
+
+        [InverseProperty(nameof(FundingRequest.Organization))]
         public virtual ICollection<FundingRequest> FundingRequests { get; set; }
+
         [InverseProperty(nameof(MandatoryTransfer.ParentOrganizationNavigation))]
         public virtual ICollection<MandatoryTransfer> MandatoryTransfers { get; set; }
+
         [InverseProperty(nameof(OrganizationComment.NameOfClubNavigation))]
         public virtual ICollection<OrganizationComment> OrganizationComments { get; set; }
+
         [InverseProperty(nameof(OrganizationMembershipNumber.NameOfOrganizationNavigation))]
         public virtual ICollection<OrganizationMembershipNumber> OrganizationMembershipNumbers { get; set; }
+
         [InverseProperty(nameof(Reallocation.NameOfClubNavigation))]
         public virtual ICollection<Reallocation> Reallocations { get; set; }
+
         [InverseProperty(nameof(Reclassification.NameOfClubNavigation))]
         public virtual ICollection<Reclassification> Reclassifications { get; set; }
     }

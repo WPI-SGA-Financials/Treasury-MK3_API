@@ -12,13 +12,16 @@ namespace Treasury.Domain.Models.Tables
         [Key]
         [Column("Name of Organization")]
         public string NameOfOrganization { get; set; }
+
         [Key]
         [Column("Fiscal Year")]
         public string FiscalYear { get; set; }
+
         [Required]
         [Column("Active Members")]
         [StringLength(255)]
         public string ActiveMembers { get; set; }
+
         [Column(TypeName = "timestamp")]
         public DateTime Timestamp { get; set; }
 

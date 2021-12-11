@@ -14,23 +14,31 @@ namespace Treasury.Domain.Models.Tables
         [Key]
         [Column("ID")]
         public int Id { get; set; }
+
         [Column("FR_ID")]
         public int FrId { get; set; }
+
         [Required]
         [Column("Item Type")]
         [StringLength(100)]
         public string ItemType { get; set; }
+
         [Column("Other Type")]
         [StringLength(100)]
         public string OtherType { get; set; }
+
         [Column("Amount Requested")]
         public decimal AmountRequested { get; set; }
+
         [Column(TypeName = "bit(1)")]
         public bool? Amended { get; set; }
+
         [Column("Amended Amount")]
         public decimal? AmendedAmount { get; set; }
+
         [StringLength(255)]
         public string Notes { get; set; }
+
         [Column(TypeName = "timestamp")]
         public DateTime? Timestamp { get; set; }
 

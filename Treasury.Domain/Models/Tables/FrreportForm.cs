@@ -14,18 +14,25 @@ namespace Treasury.Domain.Models.Tables
         [Key]
         [Column("ID")]
         public int Id { get; set; }
+
         [Column("FR_ID")]
         public int FrId { get; set; }
+
         [Column("Spent Amount")]
         public decimal? SpentAmount { get; set; }
+
         [StringLength(25)]
         public string Status { get; set; }
+
         [Column("Approved Amount")]
         public decimal? ApprovedAmount { get; set; }
+
         [Column("Approved Date", TypeName = "date")]
         public DateTime? ApprovedDate { get; set; }
+
         [StringLength(255)]
         public string Notes { get; set; }
+
         [Column(TypeName = "timestamp")]
         public DateTime Timestamp { get; set; }
 

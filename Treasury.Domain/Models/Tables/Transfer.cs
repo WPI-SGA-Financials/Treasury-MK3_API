@@ -14,14 +14,20 @@ namespace Treasury.Domain.Models.Tables
         [Key]
         [Column("Fiscal Year")]
         public string FiscalYear { get; set; }
+
         public string From { get; set; }
+
         public string To { get; set; }
+
         public decimal? Amount { get; set; }
+
         [Key]
         [Column("Date of Transfer", TypeName = "date")]
         public DateTime DateOfTransfer { get; set; }
+
         [StringLength(255)]
         public string Notes { get; set; }
+
         [Column(TypeName = "timestamp")]
         public DateTime Timestamp { get; set; }
     }

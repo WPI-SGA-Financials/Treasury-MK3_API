@@ -20,21 +20,27 @@ namespace Treasury.Domain.Models.Tables
         [Key]
         [Column("ID")]
         public int Id { get; set; }
+
         [Column("MT_ID")]
         public int MtId { get; set; }
+
         [Required]
         [Column("Line Item")]
         [StringLength(255)]
         public string LineItem { get; set; }
+
         public decimal Amount { get; set; }
+
         [StringLength(255)]
         public string Notes { get; set; }
+
         [Column(TypeName = "timestamp")]
         public DateTime Timestamp { get; set; }
 
         [ForeignKey(nameof(MtId))]
         [InverseProperty(nameof(MandatoryTransfer.MtlineItems))]
         public virtual MandatoryTransfer Mt { get; set; }
+
         [InverseProperty(nameof(OperatingExpense.Mtli))]
         public virtual ICollection<OperatingExpense> OperatingExpenses { get; set; }
     }

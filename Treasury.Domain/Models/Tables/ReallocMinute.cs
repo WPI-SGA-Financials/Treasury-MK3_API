@@ -13,16 +13,20 @@ namespace Treasury.Domain.Models.Tables
         [Key]
         [Column("ID")]
         public int Id { get; set; }
+
         [Required]
         [Column("Agenda Number")]
         [StringLength(9)]
         public string AgendaNumber { get; set; }
+
         [Column("Realloc_ID")]
         public int ReallocId { get; set; }
+
         [Required]
         [Column("Minutes Link")]
         [StringLength(255)]
         public string MinutesLink { get; set; }
+
         [Column(TypeName = "timestamp")]
         public DateTime Timestamp { get; set; }
 

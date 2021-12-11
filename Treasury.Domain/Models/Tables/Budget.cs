@@ -10,12 +10,11 @@ namespace Treasury.Domain.Models.Tables
 {
     [Table("Budget")]
     [Index(nameof(NameOfClub), Name = "Name of Club")]
-    public partial class Budget
+    public partial class Budget : IOrgBasedEntity
     {
         public Budget()
         {
-            BudgetLegacies = new HashSet<BudgetLegacy>();
-            BudgetSections = new HashSet<BudgetSection>();
+            Sections = new HashSet<BudgetSection>();
         }
 
         [Key]
@@ -42,9 +41,9 @@ namespace Treasury.Domain.Models.Tables
         public virtual Organization Organization { get; set; }
 
         [InverseProperty(nameof(BudgetLegacy.BIdNavigation))]
-        public virtual ICollection<BudgetLegacy> BudgetLegacies { get; set; }
+        public virtual BudgetLegacy Legacy { get; set; }
 
         [InverseProperty(nameof(BudgetSection.BIdNavigation))]
-        public virtual ICollection<BudgetSection> BudgetSections { get; set; }
+        public virtual ICollection<BudgetSection> Sections { get; set; }
     }
 }

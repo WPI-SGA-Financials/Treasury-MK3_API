@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Treasury.Domain.Models.Tables
 {
     [Index(nameof(NameOfClub), Name = "orgRealName_idx")]
-    public partial class Reallocation
+    public partial class Reallocation : IOrgBasedEntity
     {
         public Reallocation()
         {
@@ -66,8 +66,8 @@ namespace Treasury.Domain.Models.Tables
         public DateTime Timestamp { get; set; }
 
         [ForeignKey(nameof(NameOfClub))]
-        [InverseProperty(nameof(Organization.Reallocations))]
-        public virtual Organization NameOfClubNavigation { get; set; }
+        [InverseProperty(nameof(Tables.Organization.Reallocations))]
+        public virtual Organization Organization { get; set; }
 
         [InverseProperty(nameof(ReallocMinute.Realloc))]
         public virtual ICollection<ReallocMinute> ReallocMinutes { get; set; }

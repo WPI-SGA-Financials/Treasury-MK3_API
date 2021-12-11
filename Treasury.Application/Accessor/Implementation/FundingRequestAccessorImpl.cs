@@ -66,8 +66,6 @@ namespace Treasury.Application.Accessor.Implementation
         {
             IQueryable<FundingRequest> filtered = baseQuery.Include(fundingRequest => fundingRequest.Organization);
             
-            // TODO: Abstract Org Filters out
-            // Organization Based Filters
             if (request.Name.Length > 0)
             {
                 var predicate = PredicateBuilder.False<FundingRequest>();
@@ -77,37 +75,7 @@ namespace Treasury.Application.Accessor.Implementation
                 filtered = filtered.Where(predicate);
             }
             
-            if (request.Acronym.Length > 0)
-            {
-                var predicate = PredicateBuilder.False<FundingRequest>();
-
-                predicate = request.Acronym.Aggregate(predicate, (current, acronym) => current.Or(p => p.Organization.Acronym1.Contains(acronym)));
-
-                filtered = filtered.Where(predicate);
-            }
-            
-            if (request.Classification.Length > 0)
-            {
-                var predicate = PredicateBuilder.False<FundingRequest>();
-                
-                predicate = request.Classification.Aggregate(predicate, (current, classification) => current.Or(p => p.Organization.Classification.Contains(classification)));
-
-                filtered = filtered.Where(predicate);
-            }
-            
-            if (request.Type.Length > 0)
-            {
-                var predicate = PredicateBuilder.False<FundingRequest>();
-
-                predicate = request.Type.Aggregate(predicate, (current, type) => current.Or(p => p.Organization.TypeOfClub.Contains(type)));
-
-                filtered = filtered.Where(predicate);
-            }
-            
-            if (!request.IncludeInactive)
-            {
-                filtered = filtered.Where(query => !query.Organization.Inactive);
-            }
+            filtered = GeneralHelperFunctions.ApplyOrgBasedFilters(request, filtered);
 
             // Financial Based Filters
             if (request.FiscalYear.Length > 0)

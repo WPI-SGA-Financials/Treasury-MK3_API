@@ -1,25 +1,7 @@
-﻿using Treasury.Domain.Models.Tables;
-
-namespace Treasury.Application.DTOs
+﻿namespace Treasury.Application.DTOs
 {
     public class BudgetLegacyDto
-    {
-        public static BudgetLegacyDto CreateDtoFromLegacy(BudgetLegacy legacy)
-        {
-            BudgetLegacyDto dto = new BudgetLegacyDto
-            {
-                Id = legacy.Id,
-                AmountRequested = legacy.AmountRequested,
-                AmountProposed = legacy.AmountProposed,
-                Appealed = legacy.Appealed,
-                AppealAmount = legacy.AppealAmount,
-                AppealDecision = legacy.AppealDecision,
-                ApprovedAppeal = legacy.ApprovedAppeal
-            };
-
-            return dto;
-        }
-        
+    { 
         public int Id { get; set; }
         public decimal AmountRequested { get; set; }
         public decimal AmountProposed { get; set; }

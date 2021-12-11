@@ -60,19 +60,19 @@ namespace Treasury.Domain.Models.Tables
         [InverseProperty(nameof(FundingRequest.Organization))]
         public virtual ICollection<FundingRequest> FundingRequests { get; set; }
 
-        [InverseProperty(nameof(MandatoryTransfer.ParentOrganizationNavigation))]
+        [InverseProperty(nameof(MandatoryTransfer.Organization))]
         public virtual ICollection<MandatoryTransfer> MandatoryTransfers { get; set; }
 
-        [InverseProperty(nameof(OrganizationComment.NameOfClubNavigation))]
+        [InverseProperty(nameof(OrganizationComment.Organization))]
         public virtual ICollection<OrganizationComment> OrganizationComments { get; set; }
 
-        [InverseProperty(nameof(OrganizationMembershipNumber.NameOfOrganizationNavigation))]
+        [InverseProperty(nameof(OrganizationMembershipNumber.Organization))]
         public virtual ICollection<OrganizationMembershipNumber> OrganizationMembershipNumbers { get; set; }
 
-        [InverseProperty(nameof(Reallocation.NameOfClubNavigation))]
+        [InverseProperty(nameof(Reallocation.Organization))]
         public virtual ICollection<Reallocation> Reallocations { get; set; }
 
-        [InverseProperty(nameof(Reclassification.NameOfClubNavigation))]
+        [InverseProperty(nameof(Reclassification.Organization))]
         public virtual ICollection<Reclassification> Reclassifications { get; set; }
     }
 }

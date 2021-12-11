@@ -9,7 +9,7 @@ namespace Treasury.Domain.Models.Tables
 {
     [Table("Organization Comments")]
     [Index(nameof(NameOfClub), Name = "orgCommentName_idx")]
-    public partial class OrganizationComment
+    public partial class OrganizationComment : IOrgBasedEntity
     {
         [Key]
         [Column("ID")]
@@ -30,7 +30,7 @@ namespace Treasury.Domain.Models.Tables
         public DateTime Timestamp { get; set; }
 
         [ForeignKey(nameof(NameOfClub))]
-        [InverseProperty(nameof(Organization.OrganizationComments))]
-        public virtual Organization NameOfClubNavigation { get; set; }
+        [InverseProperty(nameof(Tables.Organization.OrganizationComments))]
+        public virtual Organization Organization { get; set; }
     }
 }

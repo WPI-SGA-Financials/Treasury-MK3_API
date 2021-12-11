@@ -5,6 +5,7 @@ using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contexts;
 using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.DTOs;
+using Treasury.Application.Mappers;
 using Treasury.Application.Util;
 using Treasury.Domain.Models.Tables;
 using Treasury.Domain.Models.Views;
@@ -23,11 +24,16 @@ namespace Treasury.Application.Accessor.Implementation
         // Organization Data
         public List<BudgetDto> GetBudgetByOrganization(string organization)
         {
-            List<BudgetDto> budgets = _dbContext.BudgetByFys
+            List<BudgetDto> budgets = _dbContext.Budgets
+                .Include(budget => budget.Legacy)
+                .Include(budget => budget.Sections)
+                .ThenInclude(section => section.BudgetLineItems)
                 .Where(budget => budget.NameOfClub.Equals(organization.Trim()))
-                .OrderBy(budget => budget.NameOfClub)
-                .ThenByDescending(budget => budget.FiscalYear)
-                .Select(budget => BudgetDto.CreateDtoFromBudget(budget))
+                .OrderByDescending(budget => budget.FiscalYear)
+                .Select(budget =>
+                    budget.Legacy != null
+                        ? BudgetMapper.FromBudgetLegacyToBudgetDto(budget)
+                        : BudgetMapper.FromBudgetSectionToBudgetDto(budget))
                 .ToList();
 
             return budgets.Any() ? budgets : null;
@@ -38,27 +44,43 @@ namespace Treasury.Application.Accessor.Implementation
         {
             int skip = GeneralHelperFunctions.GetPage(financialPagedRequest);
 
-            DbSet<BudgetByFy> baseQuery = _dbContext.BudgetByFys;
+            IQueryable<Budget> budgets = _dbContext.Budgets
+                .Include(budget => budget.Legacy)
+                .Include(budget => budget.Sections)
+                .ThenInclude(section => section.BudgetLineItems);
 
-            maxResults = baseQuery.Count();
-            
-            // TODO: Add in Filtering based on all available filters
-            // TODO: Join in Organization Table to allow for filtering
-            
-            return baseQuery 
+            var filteredQuery = ApplyFilters(financialPagedRequest, budgets);
+
+            maxResults = filteredQuery.Count();
+
+            return filteredQuery
                 .OrderBy(budget => budget.NameOfClub)
                 .ThenByDescending(budget => budget.FiscalYear)
                 .Skip(skip)
                 .Take(financialPagedRequest.Rpp)
-                .Select(budget => BudgetDto.CreateDtoFromBudget(budget))
+                .Select(budget =>
+                    budget.Legacy != null
+                        ? BudgetMapper.FromBudgetLegacyToBudgetDto(budget)
+                        : BudgetMapper.FromBudgetSectionToBudgetDto(budget))
                 .ToList();
         }
 
         public BudgetDetailedDto GetBudgetById(int id)
         {
-            Budget budget = _dbContext.Budgets.Find(id);
+            IQueryable<Budget> queryable = _dbContext.Budgets
+                .Include(budget => budget.Legacy)
+                .Include(budget => budget.Sections)
+                .ThenInclude(section => section.BudgetLineItems)
+                .Where(budget => budget.Id == id);
 
-            if (budget == null)
+            return queryable.Select(budget =>
+                    budget.Legacy != null
+                        ? BudgetMapper.FromBudgetLegacyToBudgetDetailedDto(budget)
+                        : BudgetMapper.FromBudgetSectionToBudgetDetailedDto(budget))
+                .FirstOrDefault();
+
+
+            /*if (budgetObj == null)
             {
                 return null;
             }
@@ -68,7 +90,7 @@ namespace Treasury.Application.Accessor.Implementation
 
             if (legacy != null)
             {
-                return BudgetDetailedDto.CreateDtoFromBudgetAndLegacy(budget,
+                return BudgetDetailedDto.CreateDtoFromBudgetAndLegacy(budgetObj,
                     BudgetLegacyDto.CreateDtoFromLegacy(legacy));
             }
 
@@ -78,7 +100,37 @@ namespace Treasury.Application.Accessor.Implementation
                 .Select(section => BudgetSectionDto.CreateDtoFromBudgetSection(section))
                 .ToList();
 
-            return BudgetDetailedDto.CreateDtoFromBudgetAndSection(budget, budgetSections);
+            return BudgetDetailedDto.CreateDtoFromBudgetAndSection(budgetObj, budgetSections);*/
+        }
+
+        private IQueryable<Budget> ApplyFilters(FinancialPagedRequest request, IQueryable<Budget> baseQuery)
+        {
+            IQueryable<Budget> filtered = baseQuery.Include(fundingRequest => fundingRequest.Organization);
+
+            if (request.Name.Length > 0)
+            {
+                var predicate = PredicateBuilder.False<Budget>();
+
+                predicate = request.Name.Aggregate(predicate,
+                    (current, name) => current.Or(p => p.NameOfClub.Contains(name)));
+
+                filtered = filtered.Where(predicate);
+            }
+
+            filtered = GeneralHelperFunctions.ApplyOrgBasedFilters(request, filtered);
+
+            // Financial Based Filters
+            if (request.FiscalYear.Length > 0)
+            {
+                var predicate = PredicateBuilder.False<Budget>();
+
+                predicate = request.FiscalYear.Aggregate(predicate,
+                    (current, fiscalYear) => current.Or(p => p.FiscalYear.Equals(fiscalYear)));
+
+                filtered = filtered.Where(predicate);
+            }
+
+            return filtered;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Treasury.Domain.Models;
 using Treasury.Domain.Models.Tables;
 using Treasury.Domain.Models.Views;
 
@@ -186,8 +185,8 @@ namespace Treasury.Application.Contexts
                 entity.Property(e => e.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasOne(d => d.BIdNavigation)
-                    .WithMany(p => p.BudgetLegacies)
-                    .HasForeignKey(d => d.BId)
+                    .WithOne(p => p.Legacy)
+                    .HasForeignKey<BudgetLegacy>(d => d.BId)
                     .HasConstraintName("BudgetLegacy_Budget_ID_fk");
             });
 
@@ -257,7 +256,7 @@ namespace Treasury.Application.Contexts
                 entity.Property(e => e.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasOne(d => d.BIdNavigation)
-                    .WithMany(p => p.BudgetSections)
+                    .WithMany(p => p.Sections)
                     .HasForeignKey(d => d.BId)
                     .HasConstraintName("BudgetSection_Budget_ID_fk");
             });
@@ -518,7 +517,7 @@ namespace Treasury.Application.Contexts
 
                 entity.Property(e => e.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.HasOne(d => d.ParentOrganizationNavigation)
+                entity.HasOne(d => d.Organization)
                     .WithMany(p => p.MandatoryTransfers)
                     .HasForeignKey(d => d.ParentOrganization)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -594,7 +593,7 @@ namespace Treasury.Application.Contexts
 
                 entity.Property(e => e.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.HasOne(d => d.NameOfClubNavigation)
+                entity.HasOne(d => d.Organization)
                     .WithMany(p => p.OrganizationComments)
                     .HasForeignKey(d => d.NameOfClub)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -614,7 +613,7 @@ namespace Treasury.Application.Contexts
 
                 entity.Property(e => e.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.HasOne(d => d.NameOfOrganizationNavigation)
+                entity.HasOne(d => d.Organization)
                     .WithMany(p => p.OrganizationMembershipNumbers)
                     .HasForeignKey(d => d.NameOfOrganization)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -663,7 +662,7 @@ namespace Treasury.Application.Contexts
 
                 entity.Property(e => e.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.HasOne(d => d.NameOfClubNavigation)
+                entity.HasOne(d => d.Organization)
                     .WithMany(p => p.Reallocations)
                     .HasForeignKey(d => d.NameOfClub)
                     .OnDelete(DeleteBehavior.ClientSetNull)
@@ -692,7 +691,7 @@ namespace Treasury.Application.Contexts
 
                 entity.Property(e => e.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.HasOne(d => d.NameOfClubNavigation)
+                entity.HasOne(d => d.Organization)
                     .WithMany(p => p.Reclassifications)
                     .HasForeignKey(d => d.NameOfClub)
                     .OnDelete(DeleteBehavior.ClientSetNull)

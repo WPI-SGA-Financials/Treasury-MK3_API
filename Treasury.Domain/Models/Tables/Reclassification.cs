@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Treasury.Domain.Models.Tables
 {
     [Index(nameof(NameOfClub), Name = "orgReclName_idx")]
-    public partial class Reclassification
+    public partial class Reclassification : IOrgBasedEntity
     {
         public Reclassification()
         {
@@ -63,8 +63,8 @@ namespace Treasury.Domain.Models.Tables
         public DateTime Timestamp { get; set; }
 
         [ForeignKey(nameof(NameOfClub))]
-        [InverseProperty(nameof(Organization.Reclassifications))]
-        public virtual Organization NameOfClubNavigation { get; set; }
+        [InverseProperty(nameof(Tables.Organization.Reclassifications))]
+        public virtual Organization Organization { get; set; }
 
         [InverseProperty(nameof(ReclassMinute.Reclass))]
         public virtual ICollection<ReclassMinute> ReclassMinutes { get; set; }

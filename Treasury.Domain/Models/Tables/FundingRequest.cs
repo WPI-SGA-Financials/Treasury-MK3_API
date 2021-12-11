@@ -10,7 +10,7 @@ namespace Treasury.Domain.Models.Tables
 {
     [Table("Funding Requests")]
     [Index(nameof(NameOfClub), Name = "Funding Requests_Organizations_Name of Club_fk")]
-    public partial class FundingRequest
+    public partial class FundingRequest : IOrgBasedEntity
     {
         public FundingRequest()
         {

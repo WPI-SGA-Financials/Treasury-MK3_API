@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Treasury.Domain.Models.Tables
 {
     [Table("Organization Membership Numbers")]
-    public partial class OrganizationMembershipNumber
+    public partial class OrganizationMembershipNumber : IOrgBasedEntity
     {
         [Key]
         [Column("Name of Organization")]
@@ -26,7 +26,7 @@ namespace Treasury.Domain.Models.Tables
         public DateTime Timestamp { get; set; }
 
         [ForeignKey(nameof(NameOfOrganization))]
-        [InverseProperty(nameof(Organization.OrganizationMembershipNumbers))]
-        public virtual Organization NameOfOrganizationNavigation { get; set; }
+        [InverseProperty(nameof(Tables.Organization.OrganizationMembershipNumbers))]
+        public virtual Organization Organization { get; set; }
     }
 }

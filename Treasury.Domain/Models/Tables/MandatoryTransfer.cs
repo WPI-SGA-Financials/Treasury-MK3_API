@@ -10,7 +10,7 @@ namespace Treasury.Domain.Models.Tables
 {
     [Table("Mandatory Transfers")]
     [Index(nameof(ParentOrganization), Name = "Mandatory Transfers_Organizations_Name of Club_fk")]
-    public partial class MandatoryTransfer
+    public partial class MandatoryTransfer : IOrgBasedEntity
     {
         public MandatoryTransfer()
         {
@@ -55,8 +55,8 @@ namespace Treasury.Domain.Models.Tables
         public DateTime Timestamp { get; set; }
 
         [ForeignKey(nameof(ParentOrganization))]
-        [InverseProperty(nameof(Organization.MandatoryTransfers))]
-        public virtual Organization ParentOrganizationNavigation { get; set; }
+        [InverseProperty(nameof(Tables.Organization.MandatoryTransfers))]
+        public virtual Organization Organization { get; set; }
 
         [InverseProperty(nameof(MtlineItem.Mt))]
         public virtual ICollection<MtlineItem> MtlineItems { get; set; }

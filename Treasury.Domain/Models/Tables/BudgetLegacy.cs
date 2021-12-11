@@ -45,7 +45,7 @@ namespace Treasury.Domain.Models.Tables
         public DateTime Timestamp { get; set; }
 
         [ForeignKey(nameof(BId))]
-        [InverseProperty(nameof(Budget.BudgetLegacies))]
+        [InverseProperty(nameof(Budget.Legacy))]
         public virtual Budget BIdNavigation { get; set; }
     }
 }

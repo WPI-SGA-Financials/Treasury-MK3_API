@@ -1,14 +1,16 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contexts;
 using Treasury.Application.DTOs;
 
-namespace Treasury.Application.Accessor
+namespace Treasury.Application.Accessor.Implementation
 {
-    public class MetadataAccessor
+    public class MetadataAccessorImpl: IMetadataAccessor
     {
         private readonly sgadbContext _dbContext;
 
-        public MetadataAccessor(sgadbContext dbContext)
+        public MetadataAccessorImpl(sgadbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -56,21 +58,26 @@ namespace Treasury.Application.Accessor
                 new()
                 {
                     Id = 7,
-                    Classification = "Classless"
+                    Classification = "Class 8 - Student Run Business"
                 },
                 new()
                 {
                     Id = 8,
-                    Classification = "Department"
+                    Classification = "Classless"
                 },
                 new()
                 {
                     Id = 9,
-                    Classification = "Graduate"
+                    Classification = "Department"
                 },
                 new()
                 {
                     Id = 10,
+                    Classification = "Graduate"
+                },
+                new()
+                {
+                    Id = 11,
                     Classification = "Mandatory Transfer"
                 }
             };
@@ -147,10 +154,31 @@ namespace Treasury.Application.Accessor
 
         public List<object> GetMqpTypes()
         {
-            // TODO: Refactor Database to make mqp types an id name pairing or roll in to organization
-            return new List<object>()
-            {
+            // TODO: Refactor Database to make mqp types an id name pairing
+            throw new System.NotImplementedException();
+        }
 
+        public List<FiscalYearDto> GetFiscalYears()
+        {
+            // TODO: Refactor Database to make fiscal year an id name pairing. For now, use slf table
+
+            return _dbContext.StudentLifeFees
+                .OrderByDescending(slf => slf.FiscalYear)
+                .Select(slf => new FiscalYearDto{ID = slf.Id, FY = slf.FiscalYear})
+                .ToList();
+        }
+        
+        public List<string> GetFiscalClasses()
+        {
+            return new List<string>
+            {
+                "Class A",
+                "Class B",
+                "Class C",
+                "Class D",
+                "Class E",
+                "Class F",
+                "Not Budgeted",
             };
         }
     }

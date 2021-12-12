@@ -18,12 +18,17 @@ namespace Treasury.Application.Contracts.V1.Requests
         
         public bool IncludeInactive { get; set; } = false;
         
-        public string FiscalClass { get; set; } = "";
+        public string[] Description { get; set; } = System.Array.Empty<string>();
+        
+        public string[] FiscalClass { get; set; } = System.Array.Empty<string>();
 
-        public int FiscalYear { get; set; } = 0;
+        public string[] FiscalYear { get; set; } = System.Array.Empty<string>();
 
-        public int RequestedAmount { get; set; } = 0;
+        // Minimum Requested Amount
+        public int MinimumRequestedAmount { get; set; } = 0;
 
+        // TODO: Maximum Requested Amount
+        
         // Date Range
     }
 }

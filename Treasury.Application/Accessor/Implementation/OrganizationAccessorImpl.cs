@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contexts;
 using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.DTOs;
 using Treasury.Application.Util;
 using Treasury.Domain.Models.Tables;
 
-namespace Treasury.Application.Accessor
+namespace Treasury.Application.Accessor.Implementation
 {
-    public class OrganizationAccessor
+    public class OrganizationAccessorImpl : IOrganizationAccessor
     {
         private readonly sgadbContext _dbContext;
 
-        public OrganizationAccessor(sgadbContext dbContext)
+        public OrganizationAccessorImpl(sgadbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -21,7 +22,7 @@ namespace Treasury.Application.Accessor
         // Organizations Data
         public List<OrganizationDto> GetOrganizations(GeneralPagedRequest generalPagedRequest, out int maxResults)
         {
-            int skip = HelperFunctions.GetPage(generalPagedRequest);
+            int skip = GeneralHelperFunctions.GetPage(generalPagedRequest);
 
             DbSet<Organization> baseQuery = _dbContext.Organizations;
 
@@ -41,8 +42,8 @@ namespace Treasury.Application.Accessor
         public OrganizationDetailDto GetOrganization(string name)
         {
             Organization org = _dbContext.Organizations
-                .Include(org => org.ClubClassification)
-                .Include(org => org.TechsyncName)
+                .Include(org => org.ClubCategory)
+                .Include(org => org.TechsyncInfo)
                 .FirstOrDefault(org => org.NameOfClub.Equals(name.Trim()));
 
             return org != null ? OrganizationDetailDto.CreateDtoFromOrg(org) : null;

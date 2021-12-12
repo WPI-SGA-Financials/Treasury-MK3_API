@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using Treasury.Application.Accessor;
+using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contracts.V1;
 using Treasury.Application.Contracts.V1.Responses;
 using Treasury.Application.DTOs;
@@ -14,9 +14,9 @@ namespace Treasury.WebAPI.Controllers.V1
     [ApiController]
     public class SlfController : ControllerBase
     {
-        private readonly StudentLifeFeeAccessor _accessor;
+        private readonly IStudentLifeFeeAccessor _accessor;
 
-        public SlfController(StudentLifeFeeAccessor accessor)
+        public SlfController(IStudentLifeFeeAccessor accessor)
         {
             _accessor = accessor;
         }

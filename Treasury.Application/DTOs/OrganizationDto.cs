@@ -43,8 +43,8 @@ namespace Treasury.Application.DTOs
                 Acronym = org.Acronym1,
                 Inactive = org.Inactive,
                 Timestamp = org.Timestamp,
-                FiVizClubClassification = org.ClubClassification?.Category,
-                TechsyncName = org.TechsyncName?.TechsyncName1
+                FiVizClubClassification = org.ClubCategory?.Category,
+                TechsyncName = org.TechsyncInfo?.TechsyncName1
             };
         }
         

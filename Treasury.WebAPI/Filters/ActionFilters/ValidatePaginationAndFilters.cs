@@ -55,6 +55,10 @@ namespace Treasury.WebAPI.Filters.ActionFilters
             request.Classification = HelperFunctions.CleanClassification(request.Classification);
             request.Type = HelperFunctions.CleanType(request.Type);
             
+            request.Description = HelperFunctions.CleanDescription(request.Description);
+            request.FiscalYear = HelperFunctions.CleanFiscalYear(request.FiscalYear);
+            request.FiscalClass = HelperFunctions.CleanFiscalClass(request.FiscalClass);
+            
             return request;
         }
 

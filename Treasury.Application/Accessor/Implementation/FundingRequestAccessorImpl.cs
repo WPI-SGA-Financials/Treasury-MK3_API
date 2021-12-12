@@ -65,16 +65,7 @@ namespace Treasury.Application.Accessor.Implementation
         private IQueryable<FundingRequest> ApplyFilters(FinancialPagedRequest request, DbSet<FundingRequest> baseQuery)
         {
             IQueryable<FundingRequest> filtered = baseQuery.Include(fundingRequest => fundingRequest.Organization);
-            
-            if (request.Name.Length > 0)
-            {
-                var predicate = PredicateBuilder.False<FundingRequest>();
 
-                predicate = request.Name.Aggregate(predicate, (current, name) => current.Or(p => p.NameOfClub.Contains(name)));
-
-                filtered = filtered.Where(predicate);
-            }
-            
             filtered = GeneralHelperFunctions.ApplyOrgBasedFilters(request, filtered);
 
             // Financial Based Filters

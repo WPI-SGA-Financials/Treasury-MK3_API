@@ -167,5 +167,19 @@ namespace Treasury.Application.Accessor.Implementation
                 .Select(slf => new FiscalYearDto{ID = slf.Id, FY = slf.FiscalYear})
                 .ToList();
         }
+        
+        public List<string> GetFiscalClasses()
+        {
+            return new List<string>
+            {
+                "Class A",
+                "Class B",
+                "Class C",
+                "Class D",
+                "Class E",
+                "Class F",
+                "Not Budgeted",
+            };
+        }
     }
 }

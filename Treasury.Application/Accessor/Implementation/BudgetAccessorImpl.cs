@@ -28,6 +28,7 @@ namespace Treasury.Application.Accessor.Implementation
                 .Include(budget => budget.Legacy)
                 .Include(budget => budget.Sections)
                 .ThenInclude(section => section.BudgetLineItems)
+                .AsSingleQuery()
                 .Where(budget => budget.NameOfClub.Equals(organization.Trim()))
                 .OrderByDescending(budget => budget.FiscalYear)
                 .Select(budget =>
@@ -53,11 +54,14 @@ namespace Treasury.Application.Accessor.Implementation
 
             maxResults = filteredQuery.Count();
 
-            return filteredQuery
+            var rawFilteredBudgets = filteredQuery
+                .AsSingleQuery()
                 .OrderBy(budget => budget.NameOfClub)
                 .ThenByDescending(budget => budget.FiscalYear)
                 .Skip(skip)
-                .Take(financialPagedRequest.Rpp)
+                .Take(financialPagedRequest.Rpp);
+
+            return rawFilteredBudgets
                 .Select(budget =>
                     budget.Legacy != null
                         ? BudgetMapper.FromBudgetLegacyToBudgetDto(budget)
@@ -71,6 +75,7 @@ namespace Treasury.Application.Accessor.Implementation
                 .Include(budget => budget.Legacy)
                 .Include(budget => budget.Sections)
                 .ThenInclude(section => section.BudgetLineItems)
+                .AsSingleQuery()
                 .Where(budget => budget.Id == id);
 
             return queryable.Select(budget =>
@@ -107,16 +112,6 @@ namespace Treasury.Application.Accessor.Implementation
         {
             IQueryable<Budget> filtered = baseQuery.Include(fundingRequest => fundingRequest.Organization);
 
-            if (request.Name.Length > 0)
-            {
-                var predicate = PredicateBuilder.False<Budget>();
-
-                predicate = request.Name.Aggregate(predicate,
-                    (current, name) => current.Or(p => p.NameOfClub.Contains(name)));
-
-                filtered = filtered.Where(predicate);
-            }
-
             filtered = GeneralHelperFunctions.ApplyOrgBasedFilters(request, filtered);
 
             // Financial Based Filters
@@ -126,6 +121,20 @@ namespace Treasury.Application.Accessor.Implementation
 
                 predicate = request.FiscalYear.Aggregate(predicate,
                     (current, fiscalYear) => current.Or(p => p.FiscalYear.Equals(fiscalYear)));
+
+                filtered = filtered.Where(predicate);
+            }
+            
+            if (request.FiscalClass.Length > 0)
+            {
+                var predicate = PredicateBuilder.False<Budget>();
+
+                predicate = request.FiscalClass.Aggregate(predicate,
+                    (current, fiscalClass) => current.Or(p => p.Legacy != null ?
+                        _dbContext.GetFiscalClass(p.Legacy.AmountProposed, p.Legacy.ApprovedAppeal).Equals(fiscalClass) : 
+                        _dbContext.GetFiscalClass(
+                            p.Sections.Sum(section => section.BudgetLineItems.Sum(item => item.AmountProposed)), 
+                            p.Sections.Sum(section => section.BudgetLineItems.Sum(item => item.ApprovedAppeal))).Equals(fiscalClass)));
 
                 filtered = filtered.Where(predicate);
             }

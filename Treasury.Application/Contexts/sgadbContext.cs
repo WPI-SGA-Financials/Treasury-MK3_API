@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Treasury.Domain.Models.Tables;
 using Treasury.Domain.Models.Views;
 
@@ -765,7 +766,19 @@ namespace Treasury.Application.Contexts
                 entity.Property(e => e.Timestamp).HasDefaultValueSql("CURRENT_TIMESTAMP");
             });
 
+            /* DB Functions */
+            modelBuilder.HasDbFunction(
+                    typeof(sgadbContext)
+                        .GetMethod(nameof(GetFiscalClass),
+                            new[] { typeof(decimal), typeof(decimal) }))
+                .HasName("fnc_FiscalClass");
+            
             OnModelCreatingPartial(modelBuilder);
+        }
+        
+        public string GetFiscalClass(decimal amtProposed, decimal amtAppealApproved)
+        {
+            throw new NotSupportedException();
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

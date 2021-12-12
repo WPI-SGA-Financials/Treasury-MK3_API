@@ -57,6 +57,7 @@ namespace Treasury.WebAPI.Filters.ActionFilters
             
             request.Description = HelperFunctions.CleanDescription(request.Description);
             request.FiscalYear = HelperFunctions.CleanFiscalYear(request.FiscalYear);
+            request.FiscalClass = HelperFunctions.CleanFiscalClass(request.FiscalClass);
             
             return request;
         }

@@ -33,7 +33,8 @@ namespace Treasury.WebAPI.Controllers.V1
             {
                 ClubClassifications = _accessor.GetClassifications(),
                 ClubTypes = _accessor.GetClubTypes(),
-                FiscalYears = _accessor.GetFiscalYears()
+                FiscalYears = _accessor.GetFiscalYears(),
+                FiscalClasses = _accessor.GetFiscalClasses()
             };
 
             return Ok(new Response<AllMetadataDto>(dto)

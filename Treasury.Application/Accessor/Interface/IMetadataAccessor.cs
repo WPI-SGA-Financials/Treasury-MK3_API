@@ -9,5 +9,6 @@ namespace Treasury.Application.Accessor.Interface
         List<ClubTypeDto> GetClubTypes();
         List<object> GetMqpTypes();
         List<FiscalYearDto> GetFiscalYears();
+        List<string> GetFiscalClasses();
     }
 }

@@ -15,6 +15,16 @@ namespace Treasury.Application.Util
         {
             IQueryable<T> filtered = queryable; 
             
+            if (request.Name.Length > 0)
+            {
+                var predicate = PredicateBuilder.False<T>();
+
+                predicate = request.Name.Aggregate(predicate,
+                    (current, name) => current.Or(p => p.Organization.NameOfClub.Contains(name)));
+
+                filtered = filtered.Where(predicate);
+            }
+            
             if (request.Acronym.Length > 0)
             {
                 var predicate = PredicateBuilder.False<T>();

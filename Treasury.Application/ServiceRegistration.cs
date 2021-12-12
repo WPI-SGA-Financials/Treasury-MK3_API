@@ -2,6 +2,7 @@
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Treasury.Application.Accessor.Implementation;
 using Treasury.Application.Accessor.Interface;
 using Treasury.Application.Contexts;
@@ -26,7 +27,12 @@ namespace Treasury.Application
             string database = Environment.GetEnvironmentVariable("TREASURY_DATABASE");
             builder.Append("database=").Append(database);
 
-            services.AddDbContext<sgadbContext>(option => option.UseMySQL(builder.ToString()));
+            services.AddDbContext<sgadbContext>(option =>
+            {
+                option.UseMySQL(builder.ToString())
+                    /*.EnableSensitiveDataLogging()
+                    .LogTo(Console.WriteLine, LogLevel.Information)*/;
+            });
         }
 
         public static void AddAccessors(this IServiceCollection services)

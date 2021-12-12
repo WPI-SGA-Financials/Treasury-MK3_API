@@ -65,16 +65,6 @@ namespace Treasury.Application.Accessor.Implementation
         private IQueryable<Reallocation> ApplyFilters(FinancialPagedRequest request, IQueryable<Reallocation> baseQuery)
         {
             IQueryable<Reallocation> filtered = baseQuery.Include(reallocation => reallocation.Organization);
-            
-            if (request.Name.Length > 0)
-            {
-                var predicate = PredicateBuilder.False<Reallocation>();
-
-                predicate = request.Name.Aggregate(predicate,
-                    (current, name) => current.Or(p => p.NameOfClub.Contains(name)));
-
-                filtered = filtered.Where(predicate);
-            }
 
             filtered = GeneralHelperFunctions.ApplyOrgBasedFilters(request, filtered);
 

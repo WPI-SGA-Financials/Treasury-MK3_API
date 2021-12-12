@@ -6,7 +6,7 @@ namespace Treasury.Application.DTOs
     {
         public List<ClassificationDto> ClubClassifications { get; set; }
         public List<ClubTypeDto> ClubTypes { get; set; }
-        
         public List<FiscalYearDto> FiscalYears { get; set; }
+        public List<string> FiscalClasses { get; set; }
     }
 }

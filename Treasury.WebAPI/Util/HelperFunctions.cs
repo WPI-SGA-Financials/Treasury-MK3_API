@@ -33,5 +33,10 @@ namespace Treasury.WebAPI.Util
         {
             return requestFiscalYear.Length > 0 ? requestFiscalYear.Where(s => !string.IsNullOrEmpty(s)).ToArray() : requestFiscalYear;
         }
+
+        public static string[] CleanFiscalClass(string[] requestFiscalClass)
+        {
+            return requestFiscalClass.Length > 0 ? requestFiscalClass.Where(s => !string.IsNullOrEmpty(s)).ToArray() : requestFiscalClass;
+        }
     }
 }

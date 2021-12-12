@@ -20,7 +20,7 @@ namespace Treasury.Application.Contracts.V1.Requests
         
         public string[] Description { get; set; } = System.Array.Empty<string>();
         
-        public string FiscalClass { get; set; } = "";
+        public string[] FiscalClass { get; set; } = System.Array.Empty<string>();
 
         public string[] FiscalYear { get; set; } = System.Array.Empty<string>();
 

@@ -1,27 +1,26 @@
 ﻿using System;
 using System.IO;
 
-namespace Treasury.WebAPI.Util
+namespace Treasury.WebAPI.Util;
+
+// Author: https://dusted.codes/dotenv-in-dotnet
+public class DotEnv
 {
-    // Author: https://dusted.codes/dotenv-in-dotnet
-    public class DotEnv
+    public static void Load(string filePath)
     {
-        public static void Load(string filePath)
+        if (!File.Exists(filePath))
+            return;
+
+        foreach (var line in File.ReadAllLines(filePath))
         {
-            if (!File.Exists(filePath))
-                return;
+            var parts = line.Split(
+                '=',
+                StringSplitOptions.RemoveEmptyEntries);
 
-            foreach (var line in File.ReadAllLines(filePath))
-            {
-                string[] parts = line.Split(
-                    '=',
-                    StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length != 2)
+                continue;
 
-                if (parts.Length != 2)
-                    continue;
-
-                Environment.SetEnvironmentVariable(parts[0], parts[1]);
-            }
+            Environment.SetEnvironmentVariable(parts[0], parts[1]);
         }
     }
 }

@@ -3,20 +3,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
-namespace Treasury.Domain.Models.Tables
+namespace Treasury.Domain.Models.Tables;
+
+[Table("Club Classifications")]
+public partial class ClubClassification
 {
-    [Table("Club Classifications")]
-    public partial class ClubClassification
-    {
-        [Key]
-        public string Name { get; set; }
+    [Key]
+    public string Name { get; set; }
 
-        [Required]
-        [StringLength(255)]
-        public string Category { get; set; }
+    [Required]
+    [StringLength(255)]
+    public string Category { get; set; }
 
-        [ForeignKey(nameof(Name))]
-        [InverseProperty(nameof(Tables.Organization.ClubCategory))]
-        public virtual Organization Organization { get; set; }
-    }
+    [ForeignKey(nameof(Name))]
+    [InverseProperty(nameof(Tables.Organization.ClubCategory))]
+    public virtual Organization Organization { get; set; }
 }

@@ -3,24 +3,22 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Treasury.WebAPI.Util;
 
-namespace Treasury.WebAPI
+namespace Treasury.WebAPI;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            string root = Directory.GetCurrentDirectory();
-            string dotenv = Path.Combine(root, ".env");
-            DotEnv.Load(dotenv);
+        var root = Directory.GetCurrentDirectory();
+        var dotenv = Path.Combine(root, ".env");
+        DotEnv.Load(dotenv);
 
-            CreateHostBuilder(args).Build().Run();
-        }
+        CreateHostBuilder(args).Build().Run();
+    }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+    public static IHostBuilder CreateHostBuilder(string[] args)
+    {
+        return Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
     }
 }

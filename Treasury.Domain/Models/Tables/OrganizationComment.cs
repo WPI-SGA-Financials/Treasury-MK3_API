@@ -5,32 +5,31 @@ using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
-namespace Treasury.Domain.Models.Tables
+namespace Treasury.Domain.Models.Tables;
+
+[Table("Organization Comments")]
+[Index(nameof(NameOfClub), Name = "orgCommentName_idx")]
+public partial class OrganizationComment : IOrgBasedEntity
 {
-    [Table("Organization Comments")]
-    [Index(nameof(NameOfClub), Name = "orgCommentName_idx")]
-    public partial class OrganizationComment : IOrgBasedEntity
-    {
-        [Key]
-        [Column("ID")]
-        public int Id { get; set; }
+    [Key]
+    [Column("ID")]
+    public int Id { get; set; }
 
-        [Required]
-        [Column("Name of Club")]
-        public string NameOfClub { get; set; }
+    [Required]
+    [Column("Name of Club")]
+    public string NameOfClub { get; set; }
 
-        [Column("Comment Date", TypeName = "date")]
-        public DateTime CommentDate { get; set; }
+    [Column("Comment Date", TypeName = "date")]
+    public DateTime CommentDate { get; set; }
 
-        [Required]
-        [StringLength(255)]
-        public string Comment { get; set; }
+    [Required]
+    [StringLength(255)]
+    public string Comment { get; set; }
 
-        [Column(TypeName = "timestamp")]
-        public DateTime Timestamp { get; set; }
+    [Column(TypeName = "timestamp")]
+    public DateTime Timestamp { get; set; }
 
-        [ForeignKey(nameof(NameOfClub))]
-        [InverseProperty(nameof(Tables.Organization.OrganizationComments))]
-        public virtual Organization Organization { get; set; }
-    }
+    [ForeignKey(nameof(NameOfClub))]
+    [InverseProperty(nameof(Tables.Organization.OrganizationComments))]
+    public virtual Organization Organization { get; set; }
 }

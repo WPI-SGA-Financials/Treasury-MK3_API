@@ -3,64 +3,62 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Treasury.Application.Contracts.V1.Requests;
 using Treasury.WebAPI.Util;
 
-namespace Treasury.WebAPI.Filters.ActionFilters
+namespace Treasury.WebAPI.Filters.ActionFilters;
+
+public class ValidatePaginationAndFilters : ActionFilterAttribute
 {
-    public class ValidatePaginationAndFilters : ActionFilterAttribute
+    public override void OnActionExecuting(ActionExecutingContext context)
     {
-        public override void OnActionExecuting(ActionExecutingContext context)
+        context.ActionArguments.TryGetValue("request", out var temp);
+
+        if (!PaginationValid(temp as IPagedRequest))
         {
-            context.ActionArguments.TryGetValue("request", out var temp);
-
-            if (!PaginationValid(temp as IPagedRequest))
-            {
-                context.Result = new BadRequestObjectResult("Page and Results per a page (Rpp) must be greater than zero");
-                return;
-            }
-
-            if (temp is FinancialPagedRequest finRequest)
-            {
-                finRequest = CleanFinancialInput(finRequest);
-
-                context.ActionArguments["request"] = finRequest;
-            }
-            else
-            {
-                GeneralPagedRequest request = (GeneralPagedRequest)temp;
-
-                request = CleanGeneralInput(request);
-
-                context.ActionArguments["request"] = request;
-            }
+            context.Result = new BadRequestObjectResult("Page and Results per a page (Rpp) must be greater than zero");
+            return;
         }
 
-        private static bool PaginationValid(IPagedRequest request)
+        if (temp is FinancialPagedRequest finRequest)
         {
-            return request.Page > 0 && request.Rpp > 0;
-        }
-        
-        private static GeneralPagedRequest CleanGeneralInput(GeneralPagedRequest request)
-        {
-            request.Name = HelperFunctions.CleanName(request.Name);
-            request.Acronym = HelperFunctions.CleanAcronym(request.Acronym);
-            request.Classification = HelperFunctions.CleanClassification(request.Classification);
-            request.Type = HelperFunctions.CleanType(request.Type);
+            finRequest = CleanFinancialInput(finRequest);
 
-            return request;
+            context.ActionArguments["request"] = finRequest;
         }
-        
-        private static FinancialPagedRequest CleanFinancialInput(FinancialPagedRequest request)
+        else
         {
-            request.Name = HelperFunctions.CleanName(request.Name);
-            request.Acronym = HelperFunctions.CleanAcronym(request.Acronym);
-            request.Classification = HelperFunctions.CleanClassification(request.Classification);
-            request.Type = HelperFunctions.CleanType(request.Type);
-            
-            request.Description = HelperFunctions.CleanDescription(request.Description);
-            request.FiscalYear = HelperFunctions.CleanFiscalYear(request.FiscalYear);
-            request.FiscalClass = HelperFunctions.CleanFiscalClass(request.FiscalClass);
-            
-            return request;
-        }
+            var request = (GeneralPagedRequest)temp;
 
+            request = CleanGeneralInput(request);
+
+            context.ActionArguments["request"] = request;
+        }
+    }
+
+    private static bool PaginationValid(IPagedRequest request)
+    {
+        return request.Page > 0 && request.Rpp > 0;
+    }
+
+    private static GeneralPagedRequest CleanGeneralInput(GeneralPagedRequest request)
+    {
+        request.Name = HelperFunctions.CleanName(request.Name);
+        request.Acronym = HelperFunctions.CleanAcronym(request.Acronym);
+        request.Classification = HelperFunctions.CleanClassification(request.Classification);
+        request.Type = HelperFunctions.CleanType(request.Type);
+
+        return request;
+    }
+
+    private static FinancialPagedRequest CleanFinancialInput(FinancialPagedRequest request)
+    {
+        request.Name = HelperFunctions.CleanName(request.Name);
+        request.Acronym = HelperFunctions.CleanAcronym(request.Acronym);
+        request.Classification = HelperFunctions.CleanClassification(request.Classification);
+        request.Type = HelperFunctions.CleanType(request.Type);
+
+        request.Description = HelperFunctions.CleanDescription(request.Description);
+        request.FiscalYear = HelperFunctions.CleanFiscalYear(request.FiscalYear);
+        request.FiscalClass = HelperFunctions.CleanFiscalClass(request.FiscalClass);
+
+        return request;
     }
 }

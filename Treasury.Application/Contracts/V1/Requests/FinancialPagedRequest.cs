@@ -1,34 +1,36 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace Treasury.Application.Contracts.V1.Requests
+namespace Treasury.Application.Contracts.V1.Requests;
+
+public class FinancialPagedRequest : IPagedRequest
 {
-    public class FinancialPagedRequest : IPagedRequest
-    {
-        [Required] public int Page { get; set; } = 1;
+    public string[] Name { get; set; } = Array.Empty<string>();
 
-        [Required] public int Rpp { get; set; } = 10;
+    public string[] Acronym { get; set; } = Array.Empty<string>();
 
-        public string[] Name { get; set; } = System.Array.Empty<string>();
-        
-        public string[] Acronym { get; set; } = System.Array.Empty<string>();
-        
-        public string[] Classification { get; set; } = System.Array.Empty<string>();
+    public string[] Classification { get; set; } = Array.Empty<string>();
 
-        public string[] Type { get; set; } = System.Array.Empty<string>();
-        
-        public bool IncludeInactive { get; set; } = false;
-        
-        public string[] Description { get; set; } = System.Array.Empty<string>();
-        
-        public string[] FiscalClass { get; set; } = System.Array.Empty<string>();
+    public string[] Type { get; set; } = Array.Empty<string>();
 
-        public string[] FiscalYear { get; set; } = System.Array.Empty<string>();
+    public bool IncludeInactive { get; set; } = false;
 
-        // Minimum Requested Amount
-        public int MinimumRequestedAmount { get; set; } = 0;
+    public string[] Description { get; set; } = Array.Empty<string>();
 
-        // TODO: Maximum Requested Amount
-        
-        // Date Range
-    }
+    public string[] FiscalClass { get; set; } = Array.Empty<string>();
+
+    public string[] FiscalYear { get; set; } = Array.Empty<string>();
+
+    // Minimum Requested Amount
+    public int MinimumRequestedAmount { get; set; } = 0;
+
+    [Required]
+    public int Page { get; set; } = 1;
+
+    [Required]
+    public int Rpp { get; set; } = 10;
+
+    // TODO: Maximum Requested Amount
+
+    // Date Range
 }

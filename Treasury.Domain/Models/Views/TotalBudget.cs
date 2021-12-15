@@ -2,10 +2,9 @@
 
 #nullable disable
 
-namespace Treasury.Domain.Models.Views
+namespace Treasury.Domain.Models.Views;
+
+[Keyless]
+public partial class TotalBudget
 {
-    [Keyless]
-    public partial class TotalBudget
-    {
-    }
 }

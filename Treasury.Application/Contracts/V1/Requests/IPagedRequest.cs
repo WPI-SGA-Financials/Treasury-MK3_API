@@ -1,8 +1,8 @@
-﻿namespace Treasury.Application.Contracts.V1.Requests
+﻿namespace Treasury.Application.Contracts.V1.Requests;
+
+public interface IPagedRequest
 {
-    public interface IPagedRequest
-    {
-        public int Page { get; set; }
-        public int Rpp { get; set; }
-    }
+    public int Page { get; set; }
+
+    public int Rpp { get; set; }
 }

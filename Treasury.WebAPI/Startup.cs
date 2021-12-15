@@ -9,71 +9,61 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Treasury.Application;
 
-namespace Treasury.WebAPI
+namespace Treasury.WebAPI;
+
+public class Startup
 {
-    public class Startup
+    public Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
+        Configuration = configuration;
+    }
+
+    public IConfiguration Configuration { get; }
+
+    // This method gets called by the runtime. Use this method to add services to the container.
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddCors(options =>
         {
-            Configuration = configuration;
-        }
+            options.AddDefaultPolicy(
+                builder => { builder.AllowAnyOrigin().AllowAnyHeader(); });
+        });
 
-        public IConfiguration Configuration { get; }
+        services.AddControllers();
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        services.AddSwaggerGen(c =>
         {
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin().AllowAnyHeader();
-                    });
-            });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Treasury", Version = "v1" });
+            // Set the comments path for the Swagger JSON and UI.
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            c.IncludeXmlComments(xmlPath);
+            c.EnableAnnotations();
+            c.OrderActionsBy(apiDesc => $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.RelativePath}");
+        });
 
-            services.AddControllers();
-            
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Treasury", Version = "v1" });
-                // Set the comments path for the Swagger JSON and UI.
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-                c.EnableAnnotations();
-                c.OrderActionsBy((apiDesc) => $"{apiDesc.ActionDescriptor.RouteValues["controller"]}_{apiDesc.RelativePath}");
-            });
+        services.AddRouting(options => options.LowercaseUrls = true);
 
-            services.AddRouting(options => options.LowercaseUrls = true);
-            
-            services.AddDatabase();
-            services.AddAccessors();
-        }
+        services.AddDatabase();
+        services.AddAccessors();
+    }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Treasury v1"));
+        app.UseSwagger();
+        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Treasury v1"));
 
-            app.UseHttpsRedirection();
+        app.UseHttpsRedirection();
 
-            app.UseRouting();
-            
-            app.UseCors();
+        app.UseRouting();
 
-            app.UseAuthorization();
+        app.UseCors();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-        }
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
 }

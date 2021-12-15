@@ -7,97 +7,96 @@ using Treasury.Application.Contracts.V1;
 using Treasury.Application.Contracts.V1.Responses;
 using Treasury.Application.DTOs;
 
-namespace Treasury.WebAPI.Controllers.V1
+namespace Treasury.WebAPI.Controllers.V1;
+
+[Produces("application/json")]
+[ApiController]
+public class MetadataController : ControllerBase
 {
-    [Produces("application/json")]
-    [ApiController]
-    public class MetadataController : ControllerBase
+    private readonly IMetadataAccessor _accessor;
+
+    public MetadataController(IMetadataAccessor accessor)
     {
-        private readonly IMetadataAccessor _accessor;
-        
-        public MetadataController(IMetadataAccessor accessor)
+        _accessor = accessor;
+    }
+
+    /// <summary>
+    ///     Get all Metadata values
+    /// </summary>
+    /// <returns>All Metadata values</returns>
+    [HttpGet(ApiRoutes.Metadata.All)]
+    [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.Metadata })]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response<AllMetadataDto>))]
+    public IActionResult GetAll()
+    {
+        var dto = new AllMetadataDto
         {
-            _accessor = accessor;
-        }
+            ClubClassifications = _accessor.GetClassifications(),
+            ClubTypes = _accessor.GetClubTypes(),
+            FiscalYears = _accessor.GetFiscalYears(),
+            FiscalClasses = _accessor.GetFiscalClasses()
+        };
 
-        /// <summary>
-        /// Get all Metadata values
-        /// </summary>
-        /// <returns>All Metadata values</returns>
-        [HttpGet(ApiRoutes.Metadata.All)]
-        [SwaggerOperation(Tags = new []{SwaggerTags.Campus, SwaggerTags.Metadata})]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response<AllMetadataDto>))]
-        public IActionResult GetAll()
+        return Ok(new Response<AllMetadataDto>(dto)
         {
-            AllMetadataDto dto = new AllMetadataDto
-            {
-                ClubClassifications = _accessor.GetClassifications(),
-                ClubTypes = _accessor.GetClubTypes(),
-                FiscalYears = _accessor.GetFiscalYears(),
-                FiscalClasses = _accessor.GetFiscalClasses()
-            };
+            Message = "Successfully received all metadata values."
+        });
+    }
 
-            return Ok(new Response<AllMetadataDto>(dto)
-            {
-                Message = "Successfully received all metadata values."
-            });
-        }
-        
-        /// <summary>
-        /// Get the List of Club Classifications
-        /// </summary>
-        /// <returns>List of Club Classifications</returns>
-        [HttpGet(ApiRoutes.Metadata.Classification)]
-        [SwaggerOperation(Tags = new []{SwaggerTags.Campus, SwaggerTags.Metadata})]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response<List<ClassificationDto>>))]
-        public IActionResult GetClassifications()
+    /// <summary>
+    ///     Get the List of Club Classifications
+    /// </summary>
+    /// <returns>List of Club Classifications</returns>
+    [HttpGet(ApiRoutes.Metadata.Classification)]
+    [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.Metadata })]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response<List<ClassificationDto>>))]
+    public IActionResult GetClassifications()
+    {
+        var dtos = _accessor.GetClassifications();
+
+        Response<List<ClassificationDto>> response = new(dtos)
         {
-            List<ClassificationDto> dtos = _accessor.GetClassifications();
+            Message = "Successfully returned the list of Club Classifications."
+        };
 
-            Response<List<ClassificationDto>> response = new(dtos)
-            {
-                Message = "Successfully returned the list of Club Classifications."
-            };
+        return Ok(response);
+    }
 
-            return Ok(response);
-        }
-        
-        /// <summary>
-        /// Get the List of Club Types
-        /// </summary>
-        /// <returns>List of Club Types</returns>
-        [HttpGet(ApiRoutes.Metadata.ClubTypes)]
-        [SwaggerOperation(Tags = new []{SwaggerTags.Campus, SwaggerTags.Metadata})]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response<List<ClubTypeDto>>))]
-        public IActionResult GetClubTypes()
+    /// <summary>
+    ///     Get the List of Club Types
+    /// </summary>
+    /// <returns>List of Club Types</returns>
+    [HttpGet(ApiRoutes.Metadata.ClubTypes)]
+    [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.Metadata })]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response<List<ClubTypeDto>>))]
+    public IActionResult GetClubTypes()
+    {
+        var dtos = _accessor.GetClubTypes();
+
+        Response<List<ClubTypeDto>> response = new(dtos)
         {
-            List<ClubTypeDto> dtos = _accessor.GetClubTypes();
+            Message = "Successfully returned the list of Club Types."
+        };
 
-            Response<List<ClubTypeDto>> response = new(dtos)
-            {
-                Message = "Successfully returned the list of Club Types."
-            };
+        return Ok(response);
+    }
 
-            return Ok(response);
-        }
-        
-        /// <summary>
-        /// Get the List of Fiscal Years
-        /// </summary>
-        /// <returns>List of Fiscal Years</returns>
-        [HttpGet(ApiRoutes.Metadata.FiscalYear)]
-        [SwaggerOperation(Tags = new []{SwaggerTags.Campus, SwaggerTags.Metadata})]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response<List<FiscalYearDto>>))]
-        public IActionResult GetFiscalYears()
+    /// <summary>
+    ///     Get the List of Fiscal Years
+    /// </summary>
+    /// <returns>List of Fiscal Years</returns>
+    [HttpGet(ApiRoutes.Metadata.FiscalYear)]
+    [SwaggerOperation(Tags = new[] { SwaggerTags.Campus, SwaggerTags.Metadata })]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response<List<FiscalYearDto>>))]
+    public IActionResult GetFiscalYears()
+    {
+        var dtos = _accessor.GetFiscalYears();
+
+        Response<List<FiscalYearDto>> response = new(dtos)
         {
-            List<FiscalYearDto> dtos = _accessor.GetFiscalYears();
+            Message = "Successfully returned the list of Fiscal Years."
+        };
 
-            Response<List<FiscalYearDto>> response = new(dtos)
-            {
-                Message = "Successfully returned the list of Fiscal Years."
-            };
-
-            return Ok(response);
-        }
+        return Ok(response);
     }
 }

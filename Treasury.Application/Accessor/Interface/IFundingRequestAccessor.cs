@@ -2,12 +2,11 @@
 using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.DTOs;
 
-namespace Treasury.Application.Accessor.Interface
+namespace Treasury.Application.Accessor.Interface;
+
+public interface IFundingRequestAccessor
 {
-    public interface IFundingRequestAccessor
-    {
-        List<FundingRequestDto> GetFundingRequestsByOrganization(string organization);
-        List<FundingRequestDto> GetFundingRequests(FinancialPagedRequest financialPagedRequest, out int maxResults);
-        FundingRequestDetailedDto GetFundingRequestById(int id);
-    }
+    List<FundingRequestDto> GetFundingRequestsByOrganization(string organization);
+    List<FundingRequestDto> GetFundingRequests(FinancialPagedRequest financialPagedRequest, out int maxResults);
+    FundingRequestDetailedDto GetFundingRequestById(int id);
 }

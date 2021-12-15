@@ -2,11 +2,10 @@
 using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.DTOs;
 
-namespace Treasury.Application.Accessor.Interface
+namespace Treasury.Application.Accessor.Interface;
+
+public interface IOrganizationAccessor
 {
-    public interface IOrganizationAccessor
-    {
-        List<OrganizationDto> GetOrganizations(GeneralPagedRequest generalPagedRequest, out int maxResults);
-        OrganizationDetailDto GetOrganization(string name);
-    }
+    List<OrganizationDto> GetOrganizations(GeneralPagedRequest generalPagedRequest, out int maxResults);
+    OrganizationDetailDto GetOrganization(string name);
 }

@@ -2,12 +2,14 @@
 using Treasury.Application.Contracts.V1.Requests;
 using Treasury.Application.DTOs;
 
-namespace Treasury.Application.Accessor.Interface
+namespace Treasury.Application.Accessor.Interface;
+
+public interface IReallocationRequestAccessor
 {
-    public interface IReallocationRequestAccessor
-    {
-        List<ReallocationRequestDto> GetReallocationRequestsByOrganization(string organization);
-        List<ReallocationRequestDto> GetReallocationRequests(FinancialPagedRequest financialPagedRequest, out int maxResults);
-        ReallocationRequestDetailedDto GetReallocationRequestById(int id);
-    }
+    List<ReallocationRequestDto> GetReallocationRequestsByOrganization(string organization);
+
+    List<ReallocationRequestDto> GetReallocationRequests(FinancialPagedRequest financialPagedRequest,
+        out int maxResults);
+
+    ReallocationRequestDetailedDto GetReallocationRequestById(int id);
 }

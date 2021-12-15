@@ -4,29 +4,28 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
-namespace Treasury.Domain.Models.Tables
+namespace Treasury.Domain.Models.Tables;
+
+[Table("Organization Membership Numbers")]
+public partial class OrganizationMembershipNumber : IOrgBasedEntity
 {
-    [Table("Organization Membership Numbers")]
-    public partial class OrganizationMembershipNumber : IOrgBasedEntity
-    {
-        [Key]
-        [Column("Name of Organization")]
-        public string NameOfOrganization { get; set; }
+    [Key]
+    [Column("Name of Organization")]
+    public string NameOfOrganization { get; set; }
 
-        [Key]
-        [Column("Fiscal Year")]
-        public string FiscalYear { get; set; }
+    [Key]
+    [Column("Fiscal Year")]
+    public string FiscalYear { get; set; }
 
-        [Required]
-        [Column("Active Members")]
-        [StringLength(255)]
-        public string ActiveMembers { get; set; }
+    [Required]
+    [Column("Active Members")]
+    [StringLength(255)]
+    public string ActiveMembers { get; set; }
 
-        [Column(TypeName = "timestamp")]
-        public DateTime Timestamp { get; set; }
+    [Column(TypeName = "timestamp")]
+    public DateTime Timestamp { get; set; }
 
-        [ForeignKey(nameof(NameOfOrganization))]
-        [InverseProperty(nameof(Tables.Organization.OrganizationMembershipNumbers))]
-        public virtual Organization Organization { get; set; }
-    }
+    [ForeignKey(nameof(NameOfOrganization))]
+    [InverseProperty(nameof(Tables.Organization.OrganizationMembershipNumbers))]
+    public virtual Organization Organization { get; set; }
 }

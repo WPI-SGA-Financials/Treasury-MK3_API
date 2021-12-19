@@ -48,4 +48,11 @@ public class HelperFunctions
             ? requestFiscalClass.Where(s => !string.IsNullOrEmpty(s)).ToArray()
             : requestFiscalClass;
     }
+
+    public static string[] CleanDotNumber(string[] requestDotNumber)
+    {
+        return requestDotNumber.Length > 0
+            ? requestDotNumber.Where(s => !string.IsNullOrEmpty(s)).ToArray()
+            : requestDotNumber;
+    }
 }

@@ -56,6 +56,7 @@ public class ValidatePaginationAndFilters : ActionFilterAttribute
         request.Type = HelperFunctions.CleanType(request.Type);
 
         request.Description = HelperFunctions.CleanDescription(request.Description);
+        request.DotNumber = HelperFunctions.CleanDotNumber(request.DotNumber);
         request.FiscalYear = HelperFunctions.CleanFiscalYear(request.FiscalYear);
         request.FiscalClass = HelperFunctions.CleanFiscalClass(request.FiscalClass);
 

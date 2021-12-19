@@ -88,6 +88,16 @@ public class ReallocationRequestAccessorImpl : IReallocationRequestAccessor
 
             filtered = filtered.Where(predicate);
         }
+        
+        if (request.DotNumber.Length > 0)
+        {
+            var predicate = PredicateBuilder.False<Reallocation>();
+
+            predicate = request.DotNumber.Aggregate(predicate,
+                (current, dotNumber) => current.Or(p => p.DotNumber.Contains(dotNumber)));
+
+            filtered = filtered.Where(predicate);
+        }
 
         return filtered;
     }

@@ -21,6 +21,8 @@ public class FinancialPagedRequest : IPagedRequest
 
     public string[] FiscalYear { get; set; } = Array.Empty<string>();
 
+    public string[] DotNumber { get; set; } = Array.Empty<string>();
+
     // Minimum Requested Amount
     public int MinimumRequestedAmount { get; set; } = 0;
 

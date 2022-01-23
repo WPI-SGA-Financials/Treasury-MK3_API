@@ -3,11 +3,10 @@ package edu.wpi.sga.treasury.domain.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Organizations")
@@ -35,5 +34,11 @@ public class Organization {
 
     @Column(name = "Timestamp", nullable = false)
     private LocalDateTime timestamp;
+
+    @OneToMany(mappedBy = "organization")
+    private List<Budget> budgets = new ArrayList<>();
+
+    @OneToMany(mappedBy = "organization")
+    private List<FundingRequest> fundingRequests = new ArrayList<>();
 
 }

@@ -12,9 +12,9 @@ public class GeneralPagedRequest implements PagedRequest {
     private Integer page = 1;
     private Integer resultsPerPage = 10;
 
-    private List<String> name;
-    private List<String> acronym;
-    private List<String> classification;
-    private List<String> type;
-    private Boolean includeInactive = false;
+    private List<String> name = List.of();
+    private List<String> acronym = List.of();
+    private List<String> classification = List.of();
+    private List<String> type = List.of();
+    private boolean includeInactive = false;
 }

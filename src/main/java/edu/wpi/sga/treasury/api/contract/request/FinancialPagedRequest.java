@@ -15,7 +15,7 @@ public class FinancialPagedRequest implements PagedRequest {
     private List<String> acronym;
     private List<String> classification;
     private List<String> type;
-    private Boolean includeInactive = false;
+    private boolean includeInactive = false;
 
     private List<String> description;
     private List<String> fiscalClass;

@@ -4,12 +4,12 @@ import edu.wpi.sga.treasury.api.contract.request.GeneralPagedRequest;
 import edu.wpi.sga.treasury.application.dto.OrganizationDto;
 import edu.wpi.sga.treasury.application.mapper.OrganizationMapper;
 import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
-import edu.wpi.sga.treasury.application.util.PagedTuple;
 import edu.wpi.sga.treasury.domain.model.Organization;
 import edu.wpi.sga.treasury.domain.repository.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -29,13 +29,19 @@ public class OrganizationAccessorImpl implements OrganizationAccessor {
     private final GeneralHelperFunctions generalHelperFunctions;
 
     @Override
-    public PagedTuple<List<OrganizationDto>, Long> getAllOrganizations(GeneralPagedRequest request) {
+    public Page<OrganizationDto> getAllOrganizations(GeneralPagedRequest request) {
         Pageable pageable = generalHelperFunctions.generatePagedRequest(request);
 
-        Page<Organization> organizations = organizationRepository.findAll(pageable);
+        Page<Organization> organizations;
+
+        if(generalHelperFunctions.determineGeneralFilterable(request)) {
+            organizations = organizationRepository.findOrganizationsByFilters(request);
+        } else {
+            organizations = organizationRepository.findAllByInactiveIsFalse(pageable);
+        }
 
         List<OrganizationDto> dtos = organizationMapper.organizationsToOrganizationsDtos(organizations.getContent());
 
-        return new PagedTuple<>(dtos, organizations.getTotalElements());
+        return new PageImpl<>(dtos, pageable, organizations.getTotalElements());
     }
 }

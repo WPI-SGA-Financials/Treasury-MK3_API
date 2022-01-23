@@ -57,6 +57,19 @@ public class BudgetSectionHelperFunctions {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    public String getAppealDecision(BigDecimal requested, BigDecimal approvedAppeal) {
+        if(requested.compareTo(BigDecimal.ZERO) == 0) {
+            return "N/A";
+        }
+        if (requested.compareTo(approvedAppeal) == 0) {
+            return "Passed in Full";
+        }
+        if(requested.compareTo(approvedAppeal) > 0 && approvedAppeal.compareTo(BigDecimal.ZERO) > 0) {
+            return "Partially Passed";
+        }
+        return "Denied";
+    }
+
     public BigDecimal getAmountApproved(List<BudgetSection> sections) {
         return getAmountProposed(sections).add(getApprovedAppealAmount(sections));
     }
@@ -74,6 +87,7 @@ public class BudgetSectionHelperFunctions {
         dto.setAppealed(isAppealedFromSection(budgetSection));
         dto.setAppealAmount(getAppealAmountFromSection(budgetSection));
         dto.setApprovedAppeal(getApprovedAppealAmountFromSection(budgetSection));
+        dto.setAppealDecision(getAppealDecision(dto.getAppealAmount(), dto.getApprovedAppeal()));
         dto.setAmountApproved(getAmountApprovedFromSection(budgetSection));
 
         return dto;

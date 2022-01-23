@@ -41,29 +41,31 @@ public class BudgetHelperFunctions {
     public BudgetDetailedDto translateBudgetToBudgetDetailedDto(Budget budget) {
         BudgetDto budgetDto = translateBudgetToBudgetDto(budget);
 
-        BudgetDetailedDto.BudgetDetailedDtoBuilder dto = BudgetDetailedDto.builder()
+        BudgetDetailedDto dto = BudgetDetailedDto.builder()
                 .id(budgetDto.getId())
                 .fiscalYear(budget.getFiscalYear())
                 .numOfItems(budgetDto.getNumOfItems())
                 .amountRequested(budgetDto.getAmountRequested())
                 .amountProposed(budgetDto.getAmountProposed())
-                .amountApproved(budgetDto.getAmountApproved());
+                .amountApproved(budgetDto.getAmountApproved()).build();
 
         if (budget.getBudgetLegacy() != null) {
             BudgetLegacy legacy = budget.getBudgetLegacy();
-            dto.appealed(legacy.getAppealed())
-                    .appealAmount(legacy.getAppealAmount())
-                    .appealDecision(legacy.getAppealDecision())
-                    .approvedAppeal(legacy.getApprovedAppeal());
+            dto.setAppealed(legacy.getAppealed());
+            dto.setAppealAmount(legacy.getAppealAmount());
+            dto.setAppealDecision(legacy.getAppealDecision());
+            dto.setApprovedAppeal(legacy.getApprovedAppeal());
         } else {
             List<BudgetSection> sections = budget.getBudgetSections();
-            dto.sections(bsHelperFunctions.translateBudgetSectionsToBudgetSectionDtos(sections))
-                    .appealed(bsHelperFunctions.isAppealed(sections))
-                    .appealAmount(bsHelperFunctions.getAppealAmount(sections))
-                    .approvedAppeal(bsHelperFunctions.getApprovedAppealAmount(sections));
+            dto.setSections(bsHelperFunctions.translateBudgetSectionsToBudgetSectionDtos(sections));
+            dto.setAppealed(bsHelperFunctions.isAppealed(sections));
+            dto.setAppealAmount(bsHelperFunctions.getAppealAmount(sections));
+            dto.setApprovedAppeal(bsHelperFunctions.getApprovedAppealAmount(sections));
+
+            dto.setAppealDecision(bsHelperFunctions.getAppealDecision(dto.getAppealAmount(), dto.getApprovedAppeal()));
         }
 
-        return dto.build();
+        return dto;
     }
 
     /* Private Helper Functions*/

@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +31,8 @@ public class Budget {
     @Column(name = "Timestamp", nullable = false)
     private LocalDateTime timestamp;
 
-    @OneToMany(mappedBy = "budget")
-    private List<BudgetLegacy> budgetLegacies = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "budget")
+    private BudgetLegacy budgetLegacy;
 
     @OneToMany(mappedBy = "budget")
     private List<BudgetSection> budgetSections = new ArrayList<>();

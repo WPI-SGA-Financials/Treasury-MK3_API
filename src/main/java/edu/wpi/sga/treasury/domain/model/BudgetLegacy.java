@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,8 +18,8 @@ public class BudgetLegacy {
     @Column(name = "ID", nullable = false)
     private Integer id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "B_ID", nullable = false)
+    @OneToOne(optional = false)
+    @JoinColumn(name = "b_id", nullable = false)
     private Budget budget;
 
     @Column(name = "`Amount Requested`", nullable = false, precision = 10, scale = 2)
@@ -43,6 +44,6 @@ public class BudgetLegacy {
     private BigDecimal amountSpent;
 
     @Column(name = "Timestamp", nullable = false)
-    private Instant timestamp;
+    private LocalDateTime timestamp;
 
 }

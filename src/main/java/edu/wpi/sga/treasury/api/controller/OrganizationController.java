@@ -1,6 +1,6 @@
 package edu.wpi.sga.treasury.api.controller;
 
-import edu.wpi.sga.treasury.api.contract.request.GeneralPagedRequest;
+import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
 import edu.wpi.sga.treasury.api.contract.response.PagedResponse;
 import edu.wpi.sga.treasury.application.accessor.OrganizationAccessor;
 import edu.wpi.sga.treasury.application.dto.OrganizationDto;
@@ -22,7 +22,7 @@ public class OrganizationController {
     private final OrganizationAccessor organizationAccessor;
 
     @PostMapping(value = "/organizations", produces = MediaType.APPLICATION_JSON_VALUE)
-    public PagedResponse<List<OrganizationDto>> getAllOrganizations(@RequestBody GeneralPagedRequest request) {
+    public PagedResponse<List<OrganizationDto>> getAllOrganizations(@RequestBody PagedRequest request) {
         Page<OrganizationDto> data = organizationAccessor.getAllOrganizations(request);
 
         return PagedResponse.<List<OrganizationDto>>builder()

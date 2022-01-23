@@ -1,6 +1,6 @@
 package edu.wpi.sga.treasury.domain.repository.custom;
 
-import edu.wpi.sga.treasury.api.contract.request.GeneralPagedRequest;
+import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
 import edu.wpi.sga.treasury.domain.model.Organization;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -17,7 +17,7 @@ public class OrganizationRepositoryCustomImpl implements OrganizationRepositoryC
     private EntityManager entityManager;
 
     @Override
-    public Page<Organization> findOrganizationsByFilters(GeneralPagedRequest request) {
+    public Page<Organization> findOrganizationsByFilters(PagedRequest request) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Organization> query = cb.createQuery(Organization.class);
         Root<Organization> organization = query.from(Organization.class);
@@ -50,7 +50,7 @@ public class OrganizationRepositoryCustomImpl implements OrganizationRepositoryC
         return entityManager.createQuery(countQuery).getSingleResult();
     }
 
-    private Predicate getPredicate(GeneralPagedRequest request, CriteriaBuilder cb, Root<Organization> organization) {
+    private Predicate getPredicate(PagedRequest request, CriteriaBuilder cb, Root<Organization> organization) {
         Predicate filter = cb.conjunction();
 
         if (!request.getName().isEmpty()) {

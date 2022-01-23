@@ -1,6 +1,6 @@
 package edu.wpi.sga.treasury.application.accessor;
 
-import edu.wpi.sga.treasury.api.contract.request.GeneralPagedRequest;
+import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
 import edu.wpi.sga.treasury.application.dto.OrganizationDto;
 import edu.wpi.sga.treasury.application.mapper.OrganizationMapper;
 import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
@@ -29,12 +29,14 @@ public class OrganizationAccessorImpl implements OrganizationAccessor {
     private final GeneralHelperFunctions generalHelperFunctions;
 
     @Override
-    public Page<OrganizationDto> getAllOrganizations(GeneralPagedRequest request) {
+    public Page<OrganizationDto> getAllOrganizations(PagedRequest request) {
         Pageable pageable = generalHelperFunctions.generatePagedRequest(request);
 
         Page<Organization> organizations;
 
-        if(generalHelperFunctions.determineGeneralFilterable(request)) {
+        request = generalHelperFunctions.cleanRequest(request);
+
+        if(generalHelperFunctions.determineFilterable(request)) {
             organizations = organizationRepository.findOrganizationsByFilters(request);
         } else {
             organizations = organizationRepository.findAllByInactiveIsFalse(pageable);

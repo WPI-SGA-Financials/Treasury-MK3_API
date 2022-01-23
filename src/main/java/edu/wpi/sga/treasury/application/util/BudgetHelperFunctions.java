@@ -43,6 +43,7 @@ public class BudgetHelperFunctions {
 
         BudgetDetailedDto.BudgetDetailedDtoBuilder dto = BudgetDetailedDto.builder()
                 .id(budgetDto.getId())
+                .fiscalYear(budget.getFiscalYear())
                 .numOfItems(budgetDto.getNumOfItems())
                 .amountRequested(budgetDto.getAmountRequested())
                 .amountProposed(budgetDto.getAmountProposed())
@@ -57,12 +58,13 @@ public class BudgetHelperFunctions {
         } else {
             List<BudgetSection> sections = budget.getBudgetSections();
             dto.sections(bsHelperFunctions.translateBudgetSectionsToBudgetSectionDtos(sections))
+                    .appealed(bsHelperFunctions.isAppealed(sections))
+                    .appealAmount(bsHelperFunctions.getAppealAmount(sections))
                     .approvedAppeal(bsHelperFunctions.getApprovedAppealAmount(sections));
         }
 
         return dto.build();
     }
-
 
     /* Private Helper Functions*/
     private BigDecimal getAmountApprovedFromLegacyBudget(BudgetLegacy legacy) {

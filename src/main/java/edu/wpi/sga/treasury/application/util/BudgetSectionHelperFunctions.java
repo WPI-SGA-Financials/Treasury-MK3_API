@@ -30,12 +30,6 @@ public class BudgetSectionHelperFunctions {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public BigDecimal getAmountRequestedFromSection(BudgetSection budgetSection) {
-        return budgetSection.getBudgetLineItems().stream()
-                .map(BudgetLineItem::getAmountRequest)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
     public BigDecimal getAmountProposed(List<BudgetSection> sections) {
         return sections
                 .stream()
@@ -43,18 +37,23 @@ public class BudgetSectionHelperFunctions {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public BigDecimal getAmountProposedFromSection(BudgetSection budgetSection) {
-        return budgetSection.getBudgetLineItems().stream()
-                .map(BudgetLineItem::getAmountProposed)
+    public boolean isAppealed(List<BudgetSection> sections) {
+        return sections
+                .stream()
+                .anyMatch(this::isAppealedFromSection);
+    }
+
+    public BigDecimal getAppealAmount(List<BudgetSection> sections) {
+        return sections
+                .stream()
+                .map(this::getAppealAmountFromSection)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public BigDecimal getApprovedAppealAmount(List<BudgetSection> sections) {
         return sections
                 .stream()
-                .map(budgetSection -> budgetSection.getBudgetLineItems().stream()
-                        .map(BudgetLineItem::getApprovedAppeal)
-                        .reduce(BigDecimal.ZERO, BigDecimal::add))
+                .map(this::getApprovedAppealAmountFromSection)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
@@ -72,7 +71,44 @@ public class BudgetSectionHelperFunctions {
         dto.setNumOfItems(budgetSection.getBudgetLineItems().size());
         dto.setAmountRequested(getAmountRequestedFromSection(budgetSection));
         dto.setAmountProposed(getAmountProposedFromSection(budgetSection));
+        dto.setAppealed(isAppealedFromSection(budgetSection));
+        dto.setAppealAmount(getAppealAmountFromSection(budgetSection));
+        dto.setApprovedAppeal(getApprovedAppealAmountFromSection(budgetSection));
+        dto.setAmountApproved(getAmountApprovedFromSection(budgetSection));
 
         return dto;
+    }
+
+    private BigDecimal getAmountRequestedFromSection(BudgetSection budgetSection) {
+        return budgetSection.getBudgetLineItems().stream()
+                .map(BudgetLineItem::getAmountRequest)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private BigDecimal getAmountProposedFromSection(BudgetSection budgetSection) {
+        return budgetSection.getBudgetLineItems().stream()
+                .map(BudgetLineItem::getAmountProposed)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private boolean isAppealedFromSection(BudgetSection budgetSection) {
+        return budgetSection.getBudgetLineItems().stream()
+                .anyMatch(BudgetLineItem::getAppealed);
+    }
+
+    private BigDecimal getAppealAmountFromSection(BudgetSection budgetSection) {
+        return budgetSection.getBudgetLineItems().stream()
+                .map(BudgetLineItem::getAppealAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private BigDecimal getApprovedAppealAmountFromSection(BudgetSection budgetSection) {
+        return budgetSection.getBudgetLineItems().stream()
+                .map(BudgetLineItem::getApprovedAppeal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private BigDecimal getAmountApprovedFromSection(BudgetSection section) {
+        return getAmountProposedFromSection(section).add(getApprovedAppealAmountFromSection(section));
     }
 }

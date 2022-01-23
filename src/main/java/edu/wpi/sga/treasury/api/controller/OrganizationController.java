@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 public class OrganizationController {
@@ -20,10 +18,10 @@ public class OrganizationController {
     private final OrganizationAccessor organizationAccessor;
 
     @PostMapping(value = "/organizations", produces = MediaType.APPLICATION_JSON_VALUE)
-    public PagedResponse<List<OrganizationDto>> getAllOrganizations(@RequestBody PagedRequest request) {
-        Page<OrganizationDto> data = organizationAccessor.getAllOrganizations(request);
+    public PagedResponse<OrganizationDto> getAllOrganizations(@RequestBody PagedRequest request) {
+        Page<OrganizationDto> data = organizationAccessor.getOrganizations(request);
 
-        return PagedResponse.<List<OrganizationDto>>builder()
+        return PagedResponse.<OrganizationDto>builder()
                 .data(data.getContent())
                 .maxResults(Math.toIntExact(data.getTotalElements()))
                 .pageNumber(request.getPage())

@@ -9,9 +9,12 @@ import edu.wpi.sga.treasury.domain.repository.BudgetRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -33,9 +36,13 @@ public class BudgetAccessorImpl implements BudgetAccessor {
 
     @Override
     public BudgetDetailedDto getBudgetById(Integer id) {
-        Budget budget = budgetRepository.getById(id);
+        Optional<Budget> budget = budgetRepository.findById(id);
 
-        return budgetHelperFunctions.translateBudgetToBudgetDetailedDto(budget);
+        if(budget.isPresent()) {
+            return budgetHelperFunctions.translateBudgetToBudgetDetailedDto(budget.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override

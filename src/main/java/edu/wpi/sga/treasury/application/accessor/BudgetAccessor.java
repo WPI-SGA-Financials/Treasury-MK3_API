@@ -17,15 +17,15 @@ public interface BudgetAccessor {
 
     /**
      *
-     * @param id
-     * @return
-     */
-    BudgetDetailedDto getBudgetById(Integer id);
-
-    /**
-     *
      * @param request
      * @return
      */
     Page<BudgetDto> getBudgets(PagedRequest request);
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    BudgetDetailedDto getBudgetById(Integer id);
 }

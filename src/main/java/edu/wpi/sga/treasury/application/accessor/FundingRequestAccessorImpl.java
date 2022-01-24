@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.cfg.NotYetImplementedException;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +40,10 @@ public class FundingRequestAccessorImpl implements FundingRequestAccessor {
     public FundingRequestDetailedDto getFundingRequestById(Integer id) {
         Optional<FundingRequest> request = fundingRequestRepository.findById(id);
 
-        return request.map(fundingRequestMapper::fundingRequestToFundingRequestDetailedDto).orElse(null);
-
+        if (request.isPresent()) {
+            return fundingRequestMapper.fundingRequestToFundingRequestDetailedDto(request.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 }

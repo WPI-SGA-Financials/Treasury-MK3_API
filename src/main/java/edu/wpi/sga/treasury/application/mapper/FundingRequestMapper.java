@@ -23,6 +23,7 @@ public interface FundingRequestMapper {
     FundingRequest fundingRequestDetailedDtoToFundingRequest(FundingRequestDetailedDto fundingRequestDetailedDto);
 
     @Mapping(source = "organization.name", target = "nameOfClub")
+    @Mapping(target = "hearingDate", source = "fundingDate")
     FundingRequestDetailedDto fundingRequestToFundingRequestDetailedDto(FundingRequest fundingRequest);
 
     @Mapping(source = "nameOfClub", target = "organization.name")

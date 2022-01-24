@@ -52,4 +52,7 @@ public class FundingRequest {
     @Column(name = "Timestamp", nullable = false)
     private Instant timestamp;
 
+    @OneToOne(mappedBy = "fundingRequest")
+    private FRAppeal frAppeal;
+
 }

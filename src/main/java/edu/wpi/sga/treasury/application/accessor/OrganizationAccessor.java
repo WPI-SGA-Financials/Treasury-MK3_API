@@ -17,5 +17,5 @@ public interface OrganizationAccessor {
      * @param organization
      * @return
      */
-    Object getOrganization(String organization);
+    OrganizationDto getOrganization(String organization);
 }

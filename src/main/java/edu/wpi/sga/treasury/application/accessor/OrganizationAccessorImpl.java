@@ -49,7 +49,7 @@ public class OrganizationAccessorImpl implements OrganizationAccessor {
     }
 
     @Override
-    public Object getOrganization(String organization) {
+    public OrganizationDto getOrganization(String organization) {
         throw new NotYetImplementedException();
     }
 }

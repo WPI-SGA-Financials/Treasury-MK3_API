@@ -1,13 +1,15 @@
 package edu.wpi.sga.treasury.api.controller;
 
+import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
+import edu.wpi.sga.treasury.api.contract.response.PagedResponse;
 import edu.wpi.sga.treasury.api.contract.response.Response;
 import edu.wpi.sga.treasury.application.accessor.BudgetAccessor;
 import edu.wpi.sga.treasury.application.dto.BudgetDetailedDto;
 import edu.wpi.sga.treasury.application.dto.BudgetDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,7 +18,20 @@ import java.util.List;
 public class BudgetController {
     private final BudgetAccessor budgetAccessor;
 
-    @GetMapping(value = "/organization/{name}/budgets")
+    @PostMapping(value = "/financials/budgets", produces = MediaType.APPLICATION_JSON_VALUE)
+    public PagedResponse<BudgetDto> getBudgets(@RequestBody PagedRequest request) {
+        Page<BudgetDto> data = budgetAccessor.getBudgets(request);
+
+        return PagedResponse.<BudgetDto>builder()
+                .data(data.getContent())
+                .maxResults(Math.toIntExact(data.getTotalElements()))
+                .pageNumber(request.getPage())
+                .resultsPerPage(request.getResultsPerPage())
+                .message("Successfully got " + data.getNumberOfElements() + " Budgets")
+                .build();
+    }
+
+    @GetMapping(value = "/organization/{name}/budgets", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<List<BudgetDto>> getOrganizationBudgets(@PathVariable String name) {
         List<BudgetDto> budgets = budgetAccessor.getBudgetsForOrganization(name);
 
@@ -26,7 +41,7 @@ public class BudgetController {
                 .build();
     }
 
-    @GetMapping(value = "/financials/budget/{id}")
+    @GetMapping(value = "/financials/budget/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<BudgetDetailedDto> getBudgetById(@PathVariable Integer id) {
         BudgetDetailedDto dto = budgetAccessor.getBudgetById(id);
 

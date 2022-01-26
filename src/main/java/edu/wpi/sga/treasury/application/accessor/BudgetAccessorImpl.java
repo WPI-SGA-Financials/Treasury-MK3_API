@@ -4,11 +4,12 @@ import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
 import edu.wpi.sga.treasury.application.dto.BudgetDetailedDto;
 import edu.wpi.sga.treasury.application.dto.BudgetDto;
 import edu.wpi.sga.treasury.application.util.BudgetHelperFunctions;
+import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.Budget;
 import edu.wpi.sga.treasury.domain.repository.BudgetRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.cfg.NotYetImplementedException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,6 +27,7 @@ public class BudgetAccessorImpl implements BudgetAccessor {
 
     // Util
     private final BudgetHelperFunctions budgetHelperFunctions;
+    private final GeneralHelperFunctions generalHelperFunctions;
 
     @Override
     public List<BudgetDto> getBudgetsForOrganization(String organization) {
@@ -47,6 +49,22 @@ public class BudgetAccessorImpl implements BudgetAccessor {
 
     @Override
     public Page<BudgetDto> getBudgets(PagedRequest request) {
-        throw new NotYetImplementedException();
+        Pageable pageable = generalHelperFunctions.generatePagedRequest(request);
+
+        Page<Budget> budgets;
+
+        request = generalHelperFunctions.cleanRequest(request);
+
+        if(generalHelperFunctions.determineFilterable(request)) {
+            budgets = budgetRepository.findBudgetsByFilters(request);
+        } else {
+            budgets = budgetRepository.findAll(pageable);
+        }
+
+        return null;
+
+        /*List<BudgetDto> dtos = bud.organizationsToOrganizationsDtos(budgets.getContent());
+
+        return new PageImpl<>(dtos, pageable, budgets.getTotalElements());*/
     }
 }

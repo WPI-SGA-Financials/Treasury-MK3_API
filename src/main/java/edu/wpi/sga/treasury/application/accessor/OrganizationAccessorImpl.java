@@ -12,9 +12,12 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +53,12 @@ public class OrganizationAccessorImpl implements OrganizationAccessor {
 
     @Override
     public OrganizationDto getOrganization(String organization) {
-        throw new NotYetImplementedException();
+        Optional<Organization> org = organizationRepository.findByName(organization);
+
+        if(org.isPresent()) {
+            return organizationMapper.organizationToOrganizationDto(org.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 }

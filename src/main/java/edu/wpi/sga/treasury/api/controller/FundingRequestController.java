@@ -4,7 +4,6 @@ import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
 import edu.wpi.sga.treasury.api.contract.response.PagedResponse;
 import edu.wpi.sga.treasury.api.contract.response.Response;
 import edu.wpi.sga.treasury.application.accessor.FundingRequestAccessor;
-import edu.wpi.sga.treasury.application.dto.BudgetDetailedDto;
 import edu.wpi.sga.treasury.application.dto.FundingRequestDetailedDto;
 import edu.wpi.sga.treasury.application.dto.FundingRequestDto;
 import lombok.RequiredArgsConstructor;

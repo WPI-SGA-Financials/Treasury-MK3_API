@@ -18,6 +18,7 @@ public class PagedRequest {
     private boolean includeInactive = false;
 
     private List<String> description = List.of();
+    private List<String> dotNumber = List.of();
     private List<String> fiscalClass = List.of();
     private List<String> fiscalYear = List.of();
     private Integer minimumRequestedAmount = 0;

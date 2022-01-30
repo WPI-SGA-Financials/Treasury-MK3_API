@@ -1,10 +1,7 @@
 package edu.wpi.sga.treasury.domain.repository.custom;
 
 import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
-import edu.wpi.sga.treasury.domain.model.Budget;
-import edu.wpi.sga.treasury.domain.model.Budget_;
-import edu.wpi.sga.treasury.domain.model.Organization;
-import edu.wpi.sga.treasury.domain.model.Organization_;
+import edu.wpi.sga.treasury.domain.model.*;
 import edu.wpi.sga.treasury.domain.repository.custom.util.RepositoryHelperFunctions;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -12,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
 import javax.persistence.criteria.*;
 import java.util.List;
 
@@ -31,7 +29,7 @@ public class BudgetRepositoryCustomImpl implements BudgetRepositoryCustom {
         orgJoin.alias("organizations");
 
         // Construct Filter
-        Predicate filter = getPredicate(request, cb, orgJoin);
+        Predicate filter = getPredicate(request, cb, budget, orgJoin);
 
         List<Order> order = List.of(
                 cb.asc(orgJoin.get(Organization_.NAME)),
@@ -69,9 +67,17 @@ public class BudgetRepositoryCustomImpl implements BudgetRepositoryCustom {
         return entityManager.createQuery(countQuery).getSingleResult();
     }
 
-    private Predicate getPredicate(PagedRequest request, CriteriaBuilder cb, Join<Budget, Organization> budgetOrg) {
-        RepositoryHelperFunctions helperFunctions = new RepositoryHelperFunctions();
+    private Predicate getPredicate(PagedRequest request, CriteriaBuilder cb, Root<Budget> budget, Join<Budget, Organization> budgetOrg) {
+        RepositoryHelperFunctions helperFunctions = new RepositoryHelperFunctions(cb);
 
-        return helperFunctions.getOrgBasedPredicate(request, cb, budgetOrg);
+        List<Predicate> predicates = helperFunctions.getOrgBasedPredicate(request, budgetOrg);
+
+        if(!request.getFiscalYear().isEmpty()) {
+            Path<String> path = budget.get(Budget_.FISCAL_YEAR);
+
+            predicates.add(helperFunctions.filterEqual(request.getFiscalYear(), path));
+        }
+
+        return predicates.stream().reduce(cb::and).orElse(cb.conjunction());
     }
 }

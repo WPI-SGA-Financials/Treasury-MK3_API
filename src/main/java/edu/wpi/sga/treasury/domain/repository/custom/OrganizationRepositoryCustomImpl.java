@@ -53,32 +53,32 @@ public class OrganizationRepositoryCustomImpl implements OrganizationRepositoryC
     }
 
     private Predicate getPredicate(PagedRequest request, CriteriaBuilder cb, Root<Organization> organization) {
-        RepositoryHelperFunctions helperFunctions = new RepositoryHelperFunctions();
+        RepositoryHelperFunctions helperFunctions = new RepositoryHelperFunctions(cb);
 
         List<Predicate> orgBasedPredicates = new ArrayList<>();
 
         if (!request.getName().isEmpty()) {
             Path<String> path = organization.get(Organization_.NAME);
 
-            helperFunctions.filterLike(request.getName(), cb, path, orgBasedPredicates);
+            orgBasedPredicates.add(helperFunctions.filterLike(request.getName(), path));
         }
 
         if (!request.getAcronym().isEmpty()) {
             Path<String> path = organization.get(Organization_.ACRONYM);
 
-            helperFunctions.filterLike(request.getAcronym(), cb, path, orgBasedPredicates);
+            orgBasedPredicates.add(helperFunctions.filterLike(request.getAcronym(), path));
         }
 
         if (!request.getClassification().isEmpty()) {
             Path<String> path = organization.get(Organization_.CLASSIFICATION);
 
-            helperFunctions.filterEqual(request.getClassification(), cb, path, orgBasedPredicates);
+            orgBasedPredicates.add(helperFunctions.filterEqual(request.getClassification(), path));
         }
 
         if (!request.getType().isEmpty()) {
             Path<String> path = organization.get(Organization_.TYPE_OF_CLUB);
 
-            helperFunctions.filterEqual(request.getType(), cb, path, orgBasedPredicates);
+            orgBasedPredicates.add(helperFunctions.filterEqual(request.getType(), path));
         }
 
         if(!request.isIncludeInactive()) {

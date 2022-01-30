@@ -19,7 +19,7 @@ public class BudgetHelperFunctions {
     private final BudgetSectionHelperFunctions bsHelperFunctions;
 
     public BudgetDto translateBudgetToBudgetDto(Budget budget) {
-        BudgetDtoBuilder dto = BudgetDto.builder().id(budget.getId()).fiscalYear(budget.getFiscalYear());
+        BudgetDtoBuilder dto = BudgetDto.builder().nameOfClub(budget.getOrganization().getName()).id(budget.getId()).fiscalYear(budget.getFiscalYear());
 
         if (budget.getBudgetLegacy() != null) {
             BudgetLegacy legacy = budget.getBudgetLegacy();

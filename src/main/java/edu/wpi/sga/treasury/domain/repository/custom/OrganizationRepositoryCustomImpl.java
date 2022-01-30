@@ -2,6 +2,8 @@ package edu.wpi.sga.treasury.domain.repository.custom;
 
 import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
 import edu.wpi.sga.treasury.domain.model.Organization;
+import edu.wpi.sga.treasury.domain.model.Organization_;
+import edu.wpi.sga.treasury.domain.repository.custom.util.RepositoryHelperFunctions;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -51,44 +53,38 @@ public class OrganizationRepositoryCustomImpl implements OrganizationRepositoryC
     }
 
     private Predicate getPredicate(PagedRequest request, CriteriaBuilder cb, Root<Organization> organization) {
-        Predicate filter = cb.conjunction();
+        RepositoryHelperFunctions helperFunctions = new RepositoryHelperFunctions();
+
+        List<Predicate> orgBasedPredicates = new ArrayList<>();
 
         if (!request.getName().isEmpty()) {
-            Path<String> path = organization.get("name");
+            Path<String> path = organization.get(Organization_.NAME);
 
-            List<Predicate> predicates = new ArrayList<>();
-            request.getName().forEach(s -> predicates.add(cb.like(cb.lower(path), "%" + s.toLowerCase() + "%")));
-            filter = cb.and(filter, cb.or(predicates.toArray(new Predicate[0])));
+            helperFunctions.filterLike(request.getName(), cb, path, orgBasedPredicates);
         }
 
         if (!request.getAcronym().isEmpty()) {
-            Path<String> path = organization.get("acronym");
+            Path<String> path = organization.get(Organization_.ACRONYM);
 
-            List<Predicate> predicates = new ArrayList<>();
-            request.getAcronym().forEach(s -> predicates.add(cb.like(cb.lower(path), "%" + s.toLowerCase() + "%")));
-            filter = cb.and(filter, cb.or(predicates.toArray(new Predicate[0])));
+            helperFunctions.filterLike(request.getAcronym(), cb, path, orgBasedPredicates);
         }
 
         if (!request.getClassification().isEmpty()) {
-            Path<String> path = organization.get("classification");
+            Path<String> path = organization.get(Organization_.CLASSIFICATION);
 
-            List<Predicate> predicates = new ArrayList<>();
-            request.getClassification().forEach(s -> predicates.add(cb.like(cb.lower(path), s.toLowerCase())));
-            filter = cb.and(filter, cb.or(predicates.toArray(new Predicate[0])));
+            helperFunctions.filterEqual(request.getClassification(), cb, path, orgBasedPredicates);
         }
 
         if (!request.getType().isEmpty()) {
-            Path<String> path = organization.get("typeOfClub");
+            Path<String> path = organization.get(Organization_.TYPE_OF_CLUB);
 
-            List<Predicate> predicates = new ArrayList<>();
-            request.getType().forEach(s -> predicates.add(cb.like(cb.lower(path), s.toLowerCase())));
-            filter = cb.and(filter, cb.or(predicates.toArray(new Predicate[0])));
+            helperFunctions.filterEqual(request.getType(), cb, path, orgBasedPredicates);
         }
 
         if(!request.isIncludeInactive()) {
-            filter = cb.and(filter, cb.isFalse(organization.get("inactive")));
+            orgBasedPredicates.add(cb.isFalse(organization.get(Organization_.INACTIVE)));
         }
 
-        return filter;
+        return orgBasedPredicates.stream().reduce(cb::and).orElse(cb.conjunction());
     }
 }

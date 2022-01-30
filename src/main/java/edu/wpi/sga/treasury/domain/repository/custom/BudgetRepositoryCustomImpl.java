@@ -2,7 +2,9 @@ package edu.wpi.sga.treasury.domain.repository.custom;
 
 import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
 import edu.wpi.sga.treasury.domain.model.Budget;
+import edu.wpi.sga.treasury.domain.model.Budget_;
 import edu.wpi.sga.treasury.domain.model.Organization;
+import edu.wpi.sga.treasury.domain.model.Organization_;
 import edu.wpi.sga.treasury.domain.repository.custom.util.RepositoryHelperFunctions;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,13 +23,22 @@ public class BudgetRepositoryCustomImpl implements BudgetRepositoryCustom {
     public Page<Budget> findBudgetsByFilters(PagedRequest request) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Budget> query = cb.createQuery(Budget.class);
+
         Root<Budget> budget = query.from(Budget.class);
-        Join<Budget, Organization> orgJoin = budget.join("organization");
+        Join<Budget, Organization> orgJoin = budget.join(Budget_.ORGANIZATION);
+
+        budget.alias("budgets");
+        orgJoin.alias("organizations");
 
         // Construct Filter
         Predicate filter = getPredicate(request, cb, orgJoin);
 
-        query.select(budget).where(filter);
+        List<Order> order = List.of(
+                cb.asc(orgJoin.get(Organization_.NAME)),
+                cb.desc(budget.get(Budget_.FISCAL_YEAR))
+        );
+
+        query.select(budget).where(filter).orderBy(order);
 
         int startPage = (request.getPage() * request.getResultsPerPage()) - request.getResultsPerPage();
 
@@ -39,25 +50,28 @@ public class BudgetRepositoryCustomImpl implements BudgetRepositoryCustom {
                 .getResultList();
 
         // Get total amount matching filter
-        Long count = getCount(cb, filter);
+        Long count = getCount(filter, cb);
 
         return new PageImpl<>(budgets, PageRequest.of(request.getPage() - 1, request.getResultsPerPage()), count);
     }
 
-    private Long getCount(CriteriaBuilder cb, Predicate filter) {
+    private Long getCount(Predicate filter, CriteriaBuilder cb) {
         CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
-        Root<Organization> organizationCount = countQuery.from(Organization.class);
-        countQuery.select(cb.count(organizationCount)).where(cb.and(filter));
+
+        Root<Budget> budgetRoot = countQuery.from(Budget.class);
+        Join<Budget, Organization> orgJoin = budgetRoot.join(Budget_.ORGANIZATION);
+
+        budgetRoot.alias("budgets");
+        orgJoin.alias("organizations");
+
+        countQuery.select(cb.count(orgJoin)).where(filter);
 
         return entityManager.createQuery(countQuery).getSingleResult();
     }
 
     private Predicate getPredicate(PagedRequest request, CriteriaBuilder cb, Join<Budget, Organization> budgetOrg) {
-        Predicate filter = cb.conjunction();
-
         RepositoryHelperFunctions helperFunctions = new RepositoryHelperFunctions();
-        filter = cb.and(filter, helperFunctions.getOrgBasedPredicate(request, cb, budgetOrg));
 
-        return filter;
+        return helperFunctions.getOrgBasedPredicate(request, cb, budgetOrg);
     }
 }

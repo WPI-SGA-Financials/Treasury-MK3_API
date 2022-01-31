@@ -1,28 +1,34 @@
 package edu.wpi.sga.treasury.application.accessor;
 
 import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
+import edu.wpi.sga.treasury.application.dto.ReallocationRequestDetailedDto;
+import edu.wpi.sga.treasury.application.dto.ReallocationRequestDto;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface ReallocationRequestAccessor {
     /**
+     * Get a list of Reallocation Requests for an Organization
      *
-     * @param organization
-     * @return
+     * @param organization Organization
+     * @return List of Reallocation Requests
      */
-    List<?> getReallocationRequestsForOrganization(String organization);
+    List<ReallocationRequestDto> getReallocationRequestsForOrganization(String organization);
 
     /**
+     * Get a filtered and paged list of Reallocation Requests
      *
-     * @param request
-     * @return
+     * @param request Paged Request
+     * @return Page of Reallocation Requests
      */
-    List<?> getReallocationRequest(PagedRequest request);
+    Page<ReallocationRequestDto> getReallocationRequests(PagedRequest request);
 
     /**
+     * Get Reallocation Request by ID
      *
-     * @param id
-     * @return
+     * @param id Reallocation ID
+     * @return Reallocation
      */
-    Object getReallocationRequestById(Integer id);
+    ReallocationRequestDetailedDto getReallocationRequestById(Integer id);
 }

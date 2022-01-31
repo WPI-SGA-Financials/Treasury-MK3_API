@@ -41,4 +41,7 @@ public class Organization {
     @OneToMany(mappedBy = "organization")
     private List<FundingRequest> fundingRequests = new ArrayList<>();
 
+    @OneToMany(mappedBy = "organization")
+    private List<ReallocationRequest> reallocationRequests = new ArrayList<>();
+
 }

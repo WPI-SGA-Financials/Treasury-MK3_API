@@ -8,7 +8,6 @@ import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.FundingRequest;
 import edu.wpi.sga.treasury.domain.repository.FundingRequestRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.cfg.NotYetImplementedException;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -35,7 +34,13 @@ public class FundingRequestAccessorImpl implements FundingRequestAccessor {
 
     @Override
     public List<FundingRequestDto> getFundingRequestsForOrganization(String organization) {
-        throw new NotYetImplementedException();
+        Optional<List<FundingRequest>> orgFrs = fundingRequestRepository.findAllByOrganizationNameOrderByFundingDateDesc(organization);
+
+        if(orgFrs.isPresent()) {
+            return orgFrs.get().stream().map(fundingRequestMapper::fundingRequestToFundingRequestDto).collect(Collectors.toList());
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @Override

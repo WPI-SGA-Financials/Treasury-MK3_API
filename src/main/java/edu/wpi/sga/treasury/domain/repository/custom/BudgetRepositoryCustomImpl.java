@@ -1,7 +1,10 @@
 package edu.wpi.sga.treasury.domain.repository.custom;
 
 import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
-import edu.wpi.sga.treasury.domain.model.*;
+import edu.wpi.sga.treasury.domain.model.Budget;
+import edu.wpi.sga.treasury.domain.model.Budget_;
+import edu.wpi.sga.treasury.domain.model.Organization;
+import edu.wpi.sga.treasury.domain.model.Organization_;
 import edu.wpi.sga.treasury.domain.repository.custom.util.RepositoryHelperFunctions;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -9,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.StoredProcedureQuery;
 import javax.persistence.criteria.*;
 import java.util.List;
 

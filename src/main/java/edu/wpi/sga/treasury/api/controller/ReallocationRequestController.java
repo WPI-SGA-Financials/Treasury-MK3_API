@@ -33,11 +33,11 @@ public class ReallocationRequestController {
 
     @GetMapping(value = "/organization/{name}/reallocs", produces = MediaType.APPLICATION_JSON_VALUE)
     public Response<List<ReallocationRequestDto>> getOrganizationReallocationRequests(@PathVariable String name) {
-        List<ReallocationRequestDto> fundingRequests = reallocationRequestAccessor.getReallocationRequestsForOrganization(name);
+        List<ReallocationRequestDto> reallocRequests = reallocationRequestAccessor.getReallocationRequestsForOrganization(name);
 
         return Response.<List<ReallocationRequestDto>>builder()
-                .data(fundingRequests)
-                .message("Successfully returned the organization's reallocation requests")
+                .data(reallocRequests)
+                .message("Successfully returned the Organization's Reallocation Requests")
                 .build();
     }
 
@@ -47,7 +47,7 @@ public class ReallocationRequestController {
 
         return Response.<ReallocationRequestDetailedDto>builder()
                 .data(dto)
-                .message("Successfully returned the reallocation request")
+                .message("Successfully returned the Reallocation Request")
                 .build();
     }
 }

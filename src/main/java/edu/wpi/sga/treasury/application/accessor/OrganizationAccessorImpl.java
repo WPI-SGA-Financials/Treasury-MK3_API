@@ -7,7 +7,6 @@ import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.Organization;
 import edu.wpi.sga.treasury.domain.repository.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.cfg.NotYetImplementedException;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -57,8 +56,8 @@ public class OrganizationAccessorImpl implements OrganizationAccessor {
 
         if(org.isPresent()) {
             return organizationMapper.organizationToOrganizationDto(org.get());
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 }

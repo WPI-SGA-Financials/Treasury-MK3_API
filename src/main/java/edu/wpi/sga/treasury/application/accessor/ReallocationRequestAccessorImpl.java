@@ -39,9 +39,9 @@ public class ReallocationRequestAccessorImpl implements ReallocationRequestAcces
 
         if(orgReallocs.isPresent()) {
             return orgReallocs.get().stream().map(reallocationRequestMapper::reallocationRequestToReallocationRequestDto).collect(Collectors.toList());
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     @Override
@@ -72,8 +72,8 @@ public class ReallocationRequestAccessorImpl implements ReallocationRequestAcces
 
         if(realloc.isPresent()) {
             return reallocationRequestMapper.reallocationRequestToReallocationRequestDetailedDto(realloc.get());
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 }

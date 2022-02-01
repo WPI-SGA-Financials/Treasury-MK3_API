@@ -32,9 +32,13 @@ public class BudgetAccessorImpl implements BudgetAccessor {
 
     @Override
     public List<BudgetDto> getBudgetsForOrganization(String organization) {
-        List<Budget> organizationBudgets = budgetRepository.findAllByOrganizationNameIsOrderByFiscalYearDesc(organization);
+        Optional<List<Budget>> organizationBudgets = budgetRepository.findAllByOrganizationNameIsOrderByFiscalYearDesc(organization);
 
-        return organizationBudgets.stream().map(budgetHelperFunctions::translateBudgetToBudgetDto).collect(Collectors.toList());
+        if(organizationBudgets.isPresent()) {
+            return organizationBudgets.get().stream().map(budgetHelperFunctions::translateBudgetToBudgetDto).collect(Collectors.toList());
+        }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     @Override
@@ -43,9 +47,9 @@ public class BudgetAccessorImpl implements BudgetAccessor {
 
         if(budget.isPresent()) {
             return budgetHelperFunctions.translateBudgetToBudgetDetailedDto(budget.get());
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     @Override

@@ -38,9 +38,9 @@ public class FundingRequestAccessorImpl implements FundingRequestAccessor {
 
         if(orgFrs.isPresent()) {
             return orgFrs.get().stream().map(fundingRequestMapper::fundingRequestToFundingRequestDto).collect(Collectors.toList());
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     @Override
@@ -68,8 +68,8 @@ public class FundingRequestAccessorImpl implements FundingRequestAccessor {
 
         if (request.isPresent()) {
             return fundingRequestMapper.fundingRequestToFundingRequestDetailedDto(request.get());
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 }

@@ -1,5 +1,6 @@
 package edu.wpi.sga.treasury.application.accessor;
 
+import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
 import edu.wpi.sga.treasury.application.dto.BudgetDetailedDto;
 import edu.wpi.sga.treasury.application.dto.BudgetDto;
 import edu.wpi.sga.treasury.application.util.BudgetHelperFunctions;
@@ -13,6 +14,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -130,14 +135,76 @@ class BudgetAccessorImplTest {
     }
 
     @Test
-    void getBudgets() {
+    @DisplayName("Get Paged and Filtered list of Budgets")
+    void getBudgetsFiltered() {
         // Arrange
+        Pageable pageable = PageRequest.of(0, 10);
 
+        when(generalHelperFunctions.generatePagedRequest(any())).thenReturn(pageable);
+
+        PagedRequest cleanedRequest = new PagedRequest();
+        cleanedRequest.setName(List.of("Cheese Club", "Student"));
+
+        when(generalHelperFunctions.cleanRequest(any())).thenReturn(cleanedRequest);
+        when(generalHelperFunctions.determineFilterable(any())).thenReturn(true);
+
+        Budget budget = createSimpleBudget();
+
+        when(budgetRepository.findBudgetsByFilters(any())).thenReturn(new PageImpl<>(List.of(budget)));
+
+        BudgetDto budgetDto = BudgetDto.builder()
+                .id(1)
+                .fiscalYear("FY 19")
+                .build();
+
+        when(budgetHelperFunctions.translateBudgetToBudgetDto(any())).thenReturn(budgetDto);
 
         // Act
+        PagedRequest request = new PagedRequest();
+        request.setName(List.of("Cheese Club", "Student", " "));
 
+        Page<BudgetDto> returnedData = accessor.getBudgets(request);
 
         // Assert
+        assertEquals(1L, returnedData.getTotalElements());
+        assertEquals(1, returnedData.getContent().get(0).getId());
+        assertEquals("FY 19", returnedData.getContent().get(0).getFiscalYear());
+    }
 
+    @Test
+    @DisplayName("Get Paged list of Budgets")
+    void getBudgets() {
+        // Arrange
+        Pageable pageable = PageRequest.of(0, 10);
+
+        when(generalHelperFunctions.generatePagedRequest(any())).thenReturn(pageable);
+
+        PagedRequest cleanedRequest = new PagedRequest();
+        cleanedRequest.setName(List.of("Cheese Club", "Student"));
+
+        when(generalHelperFunctions.cleanRequest(any())).thenReturn(cleanedRequest);
+        when(generalHelperFunctions.determineFilterable(any())).thenReturn(false);
+
+        Budget budget = createSimpleBudget();
+
+        when(budgetRepository.findAllByOrderByOrganizationAscFiscalYearDesc(any())).thenReturn(new PageImpl<>(List.of(budget, budget)));
+
+        BudgetDto budgetDto = BudgetDto.builder()
+                .id(1)
+                .fiscalYear("FY 19")
+                .build();
+
+        when(budgetHelperFunctions.translateBudgetToBudgetDto(any())).thenReturn(budgetDto);
+
+        // Act
+        PagedRequest request = new PagedRequest();
+        request.setName(List.of("Cheese Club", "Student", " "));
+
+        Page<BudgetDto> returnedData = accessor.getBudgets(request);
+
+        // Assert
+        assertEquals(2L, returnedData.getTotalElements());
+        assertEquals(1, returnedData.getContent().get(0).getId());
+        assertEquals("FY 19", returnedData.getContent().get(0).getFiscalYear());
     }
 }

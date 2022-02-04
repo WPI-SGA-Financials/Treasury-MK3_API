@@ -78,9 +78,9 @@ public class BudgetRepositoryCustomImpl implements BudgetRepositoryCustom {
         }
 
         if (!request.getFiscalClass().isEmpty()) {
-            Subquery<Integer> subqueryLegacy = getLegacyFiscalClassSubquery(request, cb, budget, query);
+            Subquery<Integer> subqueryLegacy = getLegacyFiscalClassSubquery(request.getFiscalClass(), cb, budget, query);
 
-            Subquery<Integer> subquerySections = getSectionFiscalClassSubquery(request, cb, budget, query);
+            Subquery<Integer> subquerySections = getSectionFiscalClassSubquery(request.getFiscalClass(), cb, budget, query);
 
             predicates.add(cb.or(cb.exists(subqueryLegacy), cb.exists(subquerySections)));
         }
@@ -88,7 +88,7 @@ public class BudgetRepositoryCustomImpl implements BudgetRepositoryCustom {
         return predicates.stream().reduce(cb::and).orElse(cb.conjunction());
     }
 
-    private Subquery<Integer> getLegacyFiscalClassSubquery(PagedRequest request, CriteriaBuilder cb, Root<Budget> budget, CriteriaQuery<Budget> query) {
+    private Subquery<Integer> getLegacyFiscalClassSubquery(List<String> fiscalClass, CriteriaBuilder cb, Root<Budget> budget, CriteriaQuery<Budget> query) {
         Subquery<Integer> subqueryLegacy = query.subquery(Integer.class);
 
         Root<BudgetLegacy> legacySubRoot = subqueryLegacy.from(BudgetLegacy.class);
@@ -101,14 +101,14 @@ public class BudgetRepositoryCustomImpl implements BudgetRepositoryCustom {
                                 String.class,
                                 legacySubRoot.get(BudgetLegacy_.AMOUNT_PROPOSED),
                                 legacySubRoot.get(BudgetLegacy_.APPROVED_APPEAL))
-                        .in(request.getFiscalClass()),
+                        .in(fiscalClass),
                 cb.equal(legacySubRoot.get(BudgetLegacy_.BUDGET).get(Budget_.ID), budget.get(Budget_.ID))
         ));
 
         return subqueryLegacy;
     }
 
-    private Subquery<Integer> getSectionFiscalClassSubquery(PagedRequest request, CriteriaBuilder cb, Root<Budget> budget, CriteriaQuery<Budget> query) {
+    private Subquery<Integer> getSectionFiscalClassSubquery(List<String> fiscalClass, CriteriaBuilder cb, Root<Budget> budget, CriteriaQuery<Budget> query) {
         Subquery<Integer> subquerySection = query.subquery(Integer.class);
 
         Root<BudgetSection> sectionSubRoot = subquerySection.from(BudgetSection.class);
@@ -125,7 +125,7 @@ public class BudgetRepositoryCustomImpl implements BudgetRepositoryCustom {
                         String.class,
                         cb.sum(lineItemJoin.get(BudgetLineItem_.AMOUNT_PROPOSED)),
                         cb.sum(lineItemJoin.get(BudgetLineItem_.APPROVED_APPEAL)))
-                .in(request.getFiscalClass()));
+                .in(fiscalClass));
 
         return subquerySection;
     }

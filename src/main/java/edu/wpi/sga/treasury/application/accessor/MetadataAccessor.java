@@ -1,25 +1,26 @@
 package edu.wpi.sga.treasury.application.accessor;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MetadataAccessor {
     /**
      *
      * @return
      */
-    List<?> getClassifications();
+    Map<Integer, String> getClassifications();
 
     /**
      *
      * @return
      */
-    List<?> getClubTypes();
+    Map<Integer, String> getClubTypes();
 
     /**
      *
      * @return
      */
-    List<?> getFiscalYears();
+    Map<Integer, String> getFiscalYears();
 
     /**
      *

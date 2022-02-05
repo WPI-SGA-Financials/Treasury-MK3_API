@@ -37,7 +37,7 @@ public class ReallocationRequestAccessorImpl implements ReallocationRequestAcces
     public List<ReallocationRequestDto> getReallocationRequestsForOrganization(String organization) {
         Optional<List<ReallocationRequest>> orgReallocs = reallocationRequestRepository.findAllByOrganizationNameOrderByHearingDateDesc(organization);
 
-        if(orgReallocs.isPresent()) {
+        if(orgReallocs.isPresent() && orgReallocs.get().size() > 0) {
             return orgReallocs.get().stream().map(reallocationRequestMapper::reallocationRequestToReallocationRequestDto).collect(Collectors.toList());
         }
 

@@ -1,5 +1,6 @@
 package edu.wpi.sga.treasury.application.accessor;
 
+import edu.wpi.sga.treasury.application.dto.AllMetadata;
 import edu.wpi.sga.treasury.application.enums.ClubClassification;
 import edu.wpi.sga.treasury.application.enums.ClubType;
 import edu.wpi.sga.treasury.application.enums.FiscalClass;
@@ -8,6 +9,7 @@ import edu.wpi.sga.treasury.domain.repository.StudentLifeFeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,6 +22,15 @@ public class MetadataAccessorImpl implements MetadataAccessor {
     // Repositories
     private final StudentLifeFeeRepository studentLifeFeeRepository;
 
+    @Override
+    public AllMetadata getAllMetadata() {
+        return AllMetadata.builder()
+                .clubClassifications(getClassifications())
+                .clubTypes(getClubTypes())
+                .fiscalClasses(getFiscalClasses())
+                .fiscalYears(getFiscalYears())
+                .build();
+    }
 
     @Override
     public Map<Integer, String> getClassifications() {

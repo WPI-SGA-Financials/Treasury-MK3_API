@@ -19,6 +19,7 @@ public class GeneralHelperFunctions {
         if (!request.getClassification().isEmpty()) return true;
         if (!request.getType().isEmpty()) return true;
         if (!request.getDescription().isEmpty()) return true;
+        if (!request.getDotNumber().isEmpty()) return true;
         if (!request.getFiscalClass().isEmpty()) return true;
         if (!request.getFiscalYear().isEmpty()) return true;
         return request.isIncludeInactive();
@@ -48,6 +49,11 @@ public class GeneralHelperFunctions {
         if (!request.getDescription().isEmpty()) {
             request.getDescription().replaceAll(String::trim);
             request.getDescription().removeAll(Arrays.asList("", null));
+        }
+
+        if (!request.getDotNumber().isEmpty()) {
+            request.getDotNumber().replaceAll(String::trim);
+            request.getDotNumber().removeAll(Arrays.asList("", null));
         }
 
         if (!request.getFiscalClass().isEmpty()) {

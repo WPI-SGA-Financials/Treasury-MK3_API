@@ -5,13 +5,12 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 public class ReallocationRequestDto {
     private Integer id;
-    private String organizationName;
+    private String nameOfClub;
     private LocalDate hearingDate;
     private String fiscalYear;
     private String dotNumber;

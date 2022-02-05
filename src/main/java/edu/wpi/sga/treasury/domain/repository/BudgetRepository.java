@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface BudgetRepository extends JpaRepository<Budget, Integer>, BudgetRepositoryCustom {
     Optional<List<Budget>> findAllByOrganizationNameIsOrderByFiscalYearDesc(String name);
 
-    Page<Budget> findAllByOrderByOrganizationAscFiscalYearDesc(Pageable pageable);
+    Page<Budget> findAllByOrganizationInactiveIsFalseOrderByOrganizationAscFiscalYearDesc(Pageable pageable);
 }

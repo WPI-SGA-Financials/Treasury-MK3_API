@@ -43,6 +43,7 @@ public class BudgetHelperFunctions {
 
         BudgetDetailedDto dto = BudgetDetailedDto.builder()
                 .id(budgetDto.getId())
+                .nameOfClub(budgetDto.getNameOfClub())
                 .fiscalYear(budget.getFiscalYear())
                 .numOfItems(budgetDto.getNumOfItems())
                 .amountRequested(budgetDto.getAmountRequested())

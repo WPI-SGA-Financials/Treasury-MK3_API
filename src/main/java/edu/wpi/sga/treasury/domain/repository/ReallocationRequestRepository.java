@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface ReallocationRequestRepository extends JpaRepository<ReallocationRequest, Integer>, ReallocationRequestRepositoryCustom {
     Optional<List<ReallocationRequest>> findAllByOrganizationNameOrderByHearingDateDesc(String organization);
 
-    Page<ReallocationRequest> findAllByOrderByHearingDateDescDotNumberDesc(Pageable pageable);
+    Page<ReallocationRequest> findAllByOrganizationInactiveIsFalseOrderByHearingDateDescDotNumberDesc(Pageable pageable);
 }

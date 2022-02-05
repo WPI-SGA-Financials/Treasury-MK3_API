@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Setter
 public class ReallocationRequestDetailedDto {
     private Integer id;
-    private String organizationName;
+    private String nameOfClub;
     private String description;
     private LocalDate hearingDate;
     private String fiscalYear;

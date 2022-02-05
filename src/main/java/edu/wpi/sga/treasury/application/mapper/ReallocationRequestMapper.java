@@ -7,23 +7,23 @@ import org.mapstruct.*;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface ReallocationRequestMapper {
-    @Mapping(source = "organizationName", target = "organization.name")
+    @Mapping(source = "nameOfClub", target = "organization.name")
     ReallocationRequest reallocationRequestDtoToReallocationRequest(ReallocationRequestDto reallocationRequestDto);
 
-    @Mapping(source = "organization.name", target = "organizationName")
+    @Mapping(source = "organization.name", target = "nameOfClub")
     ReallocationRequestDto reallocationRequestToReallocationRequestDto(ReallocationRequest reallocationRequest);
 
-    @Mapping(source = "organizationName", target = "organization.name")
+    @Mapping(source = "nameOfClub", target = "organization.name")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateReallocationRequestFromReallocationRequestDto(ReallocationRequestDto reallocationRequestDto, @MappingTarget ReallocationRequest reallocationRequest);
 
-    @Mapping(source = "organizationName", target = "organization.name")
+    @Mapping(source = "nameOfClub", target = "organization.name")
     ReallocationRequest reallocationRequestDetailedDtoToReallocationRequest(ReallocationRequestDetailedDto reallocationRequestDetailedDto);
 
-    @Mapping(source = "organization.name", target = "organizationName")
+    @Mapping(source = "organization.name", target = "nameOfClub")
     ReallocationRequestDetailedDto reallocationRequestToReallocationRequestDetailedDto(ReallocationRequest reallocationRequest);
 
-    @Mapping(source = "organizationName", target = "organization.name")
+    @Mapping(source = "nameOfClub", target = "organization.name")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateReallocationRequestFromReallocationRequestDetailedDto(ReallocationRequestDetailedDto reallocationRequestDetailedDto, @MappingTarget ReallocationRequest reallocationRequest);
 }

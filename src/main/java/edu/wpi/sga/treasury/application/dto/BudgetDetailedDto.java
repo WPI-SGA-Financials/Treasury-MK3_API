@@ -10,6 +10,7 @@ import java.util.List;
 @Builder
 public class BudgetDetailedDto {
     private Integer id;
+    private String nameOfClub;
     private String fiscalYear;
     private Integer numOfItems;
     private BigDecimal amountRequested;

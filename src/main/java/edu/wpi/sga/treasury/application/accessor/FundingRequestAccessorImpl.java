@@ -54,7 +54,7 @@ public class FundingRequestAccessorImpl implements FundingRequestAccessor {
         if (generalHelperFunctions.determineFilterable(request)) {
             fundingRequests = fundingRequestRepository.findFundingRequestsByFilters(request);
         } else {
-            fundingRequests = fundingRequestRepository.findAllByOrderByFundingDateDescDotNumberDesc(pageable);
+            fundingRequests = fundingRequestRepository.findAllByOrganizationInactiveIsFalseOrderByFundingDateDescDotNumberDesc(pageable);
         }
 
         List<FundingRequestDto> dtos = fundingRequests.getContent().stream().map(fundingRequestMapper::fundingRequestToFundingRequestDto).collect(Collectors.toList());

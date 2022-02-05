@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrganizationDto {
-    private String name;
+    private String nameOfClub;
     private String classification;
     private String typeOfClub;
     private String accountNumber;

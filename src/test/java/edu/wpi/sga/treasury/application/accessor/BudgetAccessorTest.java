@@ -187,7 +187,7 @@ class BudgetAccessorTest {
 
         Budget budget = createSimpleBudget();
 
-        when(budgetRepository.findAllByOrderByOrganizationAscFiscalYearDesc(any())).thenReturn(new PageImpl<>(List.of(budget, budget)));
+        when(budgetRepository.findAllByOrganizationInactiveIsFalseOrderByOrganizationAscFiscalYearDesc(any())).thenReturn(new PageImpl<>(List.of(budget, budget)));
 
         BudgetDto budgetDto = BudgetDto.builder()
                 .id(1)

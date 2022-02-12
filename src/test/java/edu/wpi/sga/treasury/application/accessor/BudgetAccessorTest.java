@@ -180,7 +180,7 @@ class BudgetAccessorTest {
         when(generalHelperFunctions.generatePagedRequest(any())).thenReturn(pageable);
 
         PagedRequest cleanedRequest = new PagedRequest();
-        cleanedRequest.setName(List.of("Cheese Club", "Student"));
+        cleanedRequest.setPage(1);
 
         when(generalHelperFunctions.cleanRequest(any())).thenReturn(cleanedRequest);
         when(generalHelperFunctions.determineFilterable(any())).thenReturn(false);
@@ -198,7 +198,7 @@ class BudgetAccessorTest {
 
         // Act
         PagedRequest request = new PagedRequest();
-        request.setName(List.of("Cheese Club", "Student", " "));
+        request.setPage(1);
 
         Page<BudgetDto> returnedData = accessor.getBudgets(request);
 

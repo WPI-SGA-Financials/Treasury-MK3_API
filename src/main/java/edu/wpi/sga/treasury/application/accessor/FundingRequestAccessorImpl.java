@@ -36,7 +36,7 @@ public class FundingRequestAccessorImpl implements FundingRequestAccessor {
     public List<FundingRequestDto> getFundingRequestsForOrganization(String organization) {
         Optional<List<FundingRequest>> orgFrs = fundingRequestRepository.findAllByOrganizationNameOrderByFundingDateDesc(organization);
 
-        if(orgFrs.isPresent() && orgFrs.get().size() > 0) {
+        if(orgFrs.isPresent() && !orgFrs.get().isEmpty()) {
             return orgFrs.get().stream().map(fundingRequestMapper::fundingRequestToFundingRequestDto).collect(Collectors.toList());
         }
 

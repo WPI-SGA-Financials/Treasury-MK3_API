@@ -3,12 +3,13 @@ create table if not exists organization
 (
     id             integer auto_increment primary key,
     name_of_club   varchar(255)                        not null,
-    classification varchar(100)                        null,
+    classification varchar(100)                        not null,
     type_of_club   varchar(100)                        null,
     account_number varchar(8)                          null,
     acronym        varchar(50)                         null,
     is_inactive    bit                                 not null,
-    last_modified  timestamp default CURRENT_TIMESTAMP not null
+    last_modified  timestamp default CURRENT_TIMESTAMP not null,
+    constraint unique name_of_club_unique (name_of_club)
 );
 
 create table if not exists `club_classification`

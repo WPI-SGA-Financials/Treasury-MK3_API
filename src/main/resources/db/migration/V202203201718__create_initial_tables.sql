@@ -393,136 +393,137 @@ create table if not exists student_organization_council
 );
 
 # Create Functions
-Create Function fnc_FiscalClass(amtProposed DECIMAL(10, 2), amtAppealApproved DECIMAL(10, 2))
+Create Function fnc_fiscal_class(amt_proposed DECIMAL(10, 2), amt_appeal_approved DECIMAL(10, 2))
     returns VARCHAR(15)
     DETERMINISTIC
 BEGIN
-    DECLARE Class varchar(15);
-    DECLARE amtApproved DECIMAL(10, 2);
-    Set amtApproved = amtProposed + amtAppealApproved;
+    DECLARE class varchar(15);
+    DECLARE amt_approved DECIMAL(10, 2);
+    Set amt_approved = amt_proposed + amt_appeal_approved;
 
-    if amtApproved > 0 and amtApproved < 1000 then # Between $0 and $1,000
-        Set Class = 'Class A';
-    elseif amtApproved >= 1000 and amtApproved < 5000 then # Between $1,000 and $5,000
-        Set Class = 'Class B';
-    elseif amtApproved >= 5000 and amtApproved < 10000 then # Between $5,000 and $10,000
-        Set Class = 'Class C';
-    elseif amtApproved >= 10000 and amtApproved < 50000 then # Between $10,000 and $50,000
-        Set Class = 'Class D';
-    elseif amtApproved >= 50000 and amtApproved < 100000 then # Between $50,000 and $100,000
-        Set Class = 'Class E';
-    elseif amtApproved >= 100000 then # Greater than $100,000
-        Set Class = 'Class F';
+    if amt_approved > 0 and amt_approved < 1000 then # Between $0 and $1,000
+        Set class = 'Class A';
+    elseif amt_approved >= 1000 and amt_approved < 5000 then # Between $1,000 and $5,000
+        Set class = 'Class B';
+    elseif amt_approved >= 5000 and amt_approved < 10000 then # Between $5,000 and $10,000
+        Set class = 'Class C';
+    elseif amt_approved >= 10000 and amt_approved < 50000 then # Between $10,000 and $50,000
+        Set class = 'Class D';
+    elseif amt_approved >= 50000 and amt_approved < 100000 then # Between $50,000 and $100,000
+        Set class = 'Class E';
+    elseif amt_approved >= 100000 then # Greater than $100,000
+        Set class = 'Class F';
     else
-        Set Class = 'Not Budgeted';
+        Set class = 'Not Budgeted';
     end if;
 
-    return Class;
+    return class;
 end;
 
-Create Function fnc_FEGrading(amtProposed DECIMAL(10, 2), amtAppealApproved DECIMAL(10, 2), amtSpent DECIMAL(10, 2))
+Create Function fnc_fiscal_expenditure_grading(amt_proposed DECIMAL(10, 2), amt_appeal_approved DECIMAL(10, 2),
+                                               amt_spent DECIMAL(10, 2))
     returns VARCHAR(8)
     DETERMINISTIC
 BEGIN
-    DECLARE Class varchar(15);
+    DECLARE class varchar(15);
     DECLARE ratio DECIMAL(10, 2);
-    DECLARE Grade varchar(8);
+    DECLARE grade varchar(8);
 
-    if amtProposed + amtAppealApproved = 0 Then
+    if amt_proposed + amt_appeal_approved = 0 Then
         Set ratio = 0;
     else
-        Set ratio = amtSpent / (amtProposed + amtAppealApproved);
+        Set ratio = amt_spent / (amt_proposed + amt_appeal_approved);
     end if;
 
-    Set Class = fnc_FiscalClass(amtProposed, amtAppealApproved);
+    Set class = fnc_fiscal_class(amt_proposed, amt_appeal_approved);
 
-    if Class = 'Class A' then
+    if class = 'Class A' then
         If ratio > 0.85 and ratio <= 1.0 Then
-            Set Grade = 'A';
+            Set grade = 'A';
         elseif ratio > 0.70 and ratio <= 0.85 Then
-            Set Grade = 'B';
+            Set grade = 'B';
         elseif ratio > 0.55 and ratio <= 0.70 Then
-            Set Grade = 'C';
+            Set grade = 'C';
         else
-            Set Grade = 'NR';
+            Set grade = 'NR';
         end if;
-    elseif Class = 'Class B' then
+    elseif class = 'Class B' then
         If ratio > 0.90 and ratio <= 1.0 Then
-            Set Grade = 'A';
+            Set grade = 'A';
         elseif ratio > 0.75 and ratio <= 0.90 Then
-            Set Grade = 'B';
+            Set grade = 'B';
         elseif ratio > 0.60 and ratio <= 0.75 Then
-            Set Grade = 'C';
+            Set grade = 'C';
         else
-            Set Grade = 'NR';
+            Set grade = 'NR';
         end if;
-    elseif Class = 'Class C' then
+    elseif class = 'Class C' then
         If ratio > 0.90 and ratio <= 1.0 Then
-            Set Grade = 'A';
+            Set grade = 'A';
         elseif ratio > 0.80 and ratio <= 0.90 Then
-            Set Grade = 'B';
+            Set grade = 'B';
         elseif ratio > 0.70 and ratio <= 0.80 Then
-            Set Grade = 'C';
+            Set grade = 'C';
         else
-            Set Grade = 'NR';
+            Set grade = 'NR';
         end if;
-    elseif Class = 'Class D' then
+    elseif class = 'Class D' then
         If ratio > 0.95 and ratio <= 1.0 Then
-            Set Grade = 'A';
+            Set grade = 'A';
         elseif ratio > 0.85 and ratio <= 0.95 Then
-            Set Grade = 'B';
+            Set grade = 'B';
         elseif ratio > 0.75 and ratio <= 0.85 Then
-            Set Grade = 'C';
+            Set grade = 'C';
         else
-            Set Grade = 'NR';
+            Set grade = 'NR';
         end if;
-    elseif Class = 'Class E' then
+    elseif class = 'Class E' then
         If ratio > 0.95 and ratio <= 1.0 Then
-            Set Grade = 'A';
+            Set grade = 'A';
         elseif ratio > 0.85 and ratio <= 0.95 Then
-            Set Grade = 'B';
+            Set grade = 'B';
         elseif ratio > 0.80 and ratio <= 0.85 Then
-            Set Grade = 'C';
+            Set grade = 'C';
         else
-            Set Grade = 'NR';
+            Set grade = 'NR';
         end if;
-    elseif Class = 'Class F' then
+    elseif class = 'Class F' then
         If ratio > 0.95 and ratio <= 1.0 Then
-            Set Grade = 'A';
+            Set grade = 'A';
         elseif ratio > 0.90 and ratio <= 0.95 Then
-            Set Grade = 'B';
+            Set grade = 'B';
         elseif ratio > 0.85 and ratio <= 0.90 Then
-            Set Grade = 'C';
+            Set grade = 'C';
         else
-            Set Grade = 'NR';
+            Set grade = 'NR';
         end if;
     else
-        Set Grade = 'No Grade';
+        Set grade = 'No Grade';
     end if;
 
-    return Grade;
+    return grade;
 end;
 
-Create Function fnc_FiscalYear(hearingDate DATE)
+Create Function fnc_fiscal_year(hearing_date DATE)
     returns VARCHAR(5)
     DETERMINISTIC
 BEGIN
-    DECLARE FiscalYear varchar(15);
+    DECLARE fiscal_year varchar(15);
 
-    if Month(hearingDate) < 7 then
-        Set FiscalYear = CONCAT('FY ', RIGHT(Year(hearingDate), 2));
+    if Month(hearing_date) < 7 then
+        Set fiscal_year = CONCAT('FY ', RIGHT(Year(hearing_date), 2));
     else
-        Set FiscalYear = Concat('FY ', RIGHT(Year(hearingDate), 2) + 1);
+        Set fiscal_year = Concat('FY ', RIGHT(Year(hearing_date), 2) + 1);
     end if;
 
-    return FiscalYear;
+    return fiscal_year;
 end;
 
-Create Function fnc_FindMonths(hearingDate DATE)
-    returns int(4)
+Create Function fnc_find_months(hearing_date DATE)
+    returns integer
     DETERMINISTIC
 BEGIN
-    return (Month(CURDATE()) - Month(hearingDate)) + (Year(CURDATE()) - Year(hearingDate)) * 12;
+    return (Month(CURDATE()) - Month(hearing_date)) + (Year(CURDATE()) - Year(hearing_date)) * 12;
 end;
 
 # Create Views
@@ -545,7 +546,7 @@ CREATE or replace VIEW complete_funding_request AS
 select fr.id,
        name_of_club,
        hearing_date,
-       `fnc_FiscalYear`(hearing_date)                         as fiscal_year,
+       fnc_fiscal_year(hearing_date)                          as fiscal_year,
        agenda_number,
        dot_number,
        fr.description,
@@ -604,7 +605,7 @@ union
 
 select name_of_club,
        hearing_date,
-       `fnc_FiscalYear`(hearing_date) AS fiscal_year,
+       fnc_fiscal_year(hearing_date) AS fiscal_year,
        agenda_number,
        dot_number,
        'Reclassification',
@@ -633,7 +634,7 @@ union
 
 select name_of_club,
        hearing_date,
-       `fnc_FiscalYear`(hearing_date),
+       fnc_fiscal_year(hearing_date),
        agenda_number,
        dot_number,
        concat('Reallocation: ', r.description),
@@ -765,17 +766,18 @@ where is_inactive = 0
 group by organization.name_of_club;
 
 CREATE or replace VIEW fiscal_expenditure_grades AS
-select b.id                                                                                       as budget_id,
+select b.id                                                         as budget_id,
        name_of_club,
        fiscal_year,
        type_of_club,
        classification,
-       fnc_FiscalClass(sum(amount_proposed), sum(approved_appeal))                                AS fiscal_class,
-       count(distinct section_name)                                                               AS number_of_sections,
-       count(section_name)                                                                        AS number_of_items,
-       sum((bli.approved_appeal + bli.amount_proposed))                                           AS amount_approved,
-       sum(bli.amount_spent)                                                                      AS amount_spent,
-       `fnc_FEGrading`(sum(bli.amount_proposed), sum(bli.approved_appeal), sum(bli.amount_spent)) AS grade
+       fnc_fiscal_class(sum(amount_proposed), sum(approved_appeal)) AS fiscal_class,
+       count(distinct section_name)                                 AS number_of_sections,
+       count(section_name)                                          AS number_of_items,
+       sum((bli.approved_appeal + bli.amount_proposed))             AS amount_approved,
+       sum(bli.amount_spent)                                        AS amount_spent,
+       fnc_fiscal_expenditure_grading(sum(bli.amount_proposed), sum(bli.approved_appeal),
+                                      sum(bli.amount_spent))        AS grade
 from budget b
          inner join organization o on b.organization_id = o.id
          inner join budget_section bs on b.id = bs.budget_id
@@ -820,7 +822,7 @@ from mandatory_transfer
          inner join operating_expense oe on mtli.id = oe.mandatory_transfer_line_item_id
 where fund_name = 'Operating Account'
   and name_of_club = 'Student Government Association'
-  and fiscal_year = `fnc_FiscalYear`(now())
+  and fiscal_year = fnc_fiscal_year(now())
 group by line_item_name;
 
 CREATE or replace VIEW total_life_fee_budget AS
@@ -864,7 +866,7 @@ from total_budget tb
 order by fiscal_year desc;
 
 CREATE or replace VIEW overall_numbers AS
-select 'Allocated Budget' AS `Title`, sum((`BLI`.`Amount_Proposed` + `BLI`.`Approved_Appeal`)) AS `Amount`
+select 'Allocated Budget' AS `Title`, sum((bli.amount_proposed + bli.approved_appeal)) AS `Amount`
 from budget b
          join budget_section bs on b.id = bs.budget_id
          join budget_line_item bli on bs.id = bli.budget_section_id
@@ -892,7 +894,7 @@ union
 select 'Inactive Clubs', sum(if(is_inactive = 1, 1, 0))
 from organization;
 
-CREATE or replace VIEW `Selection Options` AS
+CREATE or replace VIEW selection_options AS
 select ctb.fiscal_year,
        ctb.name_of_club,
        ctb.category,

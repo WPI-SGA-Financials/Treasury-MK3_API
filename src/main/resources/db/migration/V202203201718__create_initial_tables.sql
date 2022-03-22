@@ -1,15 +1,15 @@
 # Organization Tables
 create table if not exists organization
 (
-    id             integer auto_increment primary key,
-    name_of_club   varchar(255)                        not null,
-    classification varchar(100)                        not null,
-    type_of_club   varchar(100)                        null,
-    account_number varchar(8)                          null,
-    acronym        varchar(50)                         null,
-    is_inactive    bit                                 not null,
-    last_modified  timestamp default CURRENT_TIMESTAMP not null,
-    constraint unique name_of_club_unique (name_of_club)
+    id                integer auto_increment primary key,
+    organization_name varchar(255)            not null,
+    classification    varchar(100)            not null,
+    type_of_club      varchar(100)            null,
+    account_number    varchar(8)              null,
+    acronym           varchar(50)             null,
+    is_inactive       bit                     not null,
+    last_modified     timestamp default NOW() not null,
+    constraint unique organization_organization_name_unique (organization_name)
 );
 
 create table if not exists `club_classification`
@@ -25,9 +25,9 @@ create table if not exists `club_classification`
 create table if not exists techsync
 (
     id              integer auto_increment primary key,
-    organization_id integer                             not null,
-    techsync_name   varchar(255)                        null,
-    last_modified   timestamp default CURRENT_TIMESTAMP not null,
+    organization_id integer                 not null,
+    techsync_name   varchar(255)            null,
+    last_modified   timestamp default NOW() not null,
     constraint techsync_organization_id_fk
         foreign key (organization_id) references organization (id)
             on update cascade on delete cascade
@@ -36,10 +36,10 @@ create table if not exists techsync
 create table if not exists organization_comment
 (
     id              integer auto_increment primary key,
-    organization_id integer                             not null,
-    comment_date    date                                not null,
-    comment         varchar(255)                        not null,
-    last_modified   timestamp default CURRENT_TIMESTAMP not null,
+    organization_id integer                 not null,
+    comment_date    date                    not null,
+    comment         varchar(255)            not null,
+    last_modified   timestamp default NOW() not null,
     constraint organization_comment_organization_id_fk
         foreign key (organization_id) references organization (id)
             on update cascade on delete cascade
@@ -48,10 +48,10 @@ create table if not exists organization_comment
 create table if not exists organization_contact_info
 (
     id              integer auto_increment primary key,
-    organization_id integer                             not null,
-    president_email varchar(255)                        null,
-    treasure_email  varchar(255)                        null,
-    last_modified   timestamp default CURRENT_TIMESTAMP not null,
+    organization_id integer                 not null,
+    president_email varchar(255)            null,
+    treasurer_email varchar(255)            null,
+    last_modified   timestamp default NOW() not null,
     constraint organization_contact_info_organization_id_fk
         foreign key (organization_id) references organization (id)
             on update cascade on delete cascade
@@ -60,10 +60,10 @@ create table if not exists organization_contact_info
 create table if not exists organization_membership_number
 (
     id                  integer auto_increment primary key,
-    organization_id     integer                                not null,
-    fiscal_year         varchar(255)                           not null,
-    amount_member_count varchar(255) default 'Not Provided'    not null,
-    last_modified       timestamp    default CURRENT_TIMESTAMP not null,
+    organization_id     integer                             not null,
+    fiscal_year         varchar(255)                        not null,
+    amount_member_count varchar(255) default 'Not Provided' not null,
+    last_modified       timestamp    default NOW()          not null,
     constraint organization_membership_number_organization_id_fk
         foreign key (organization_id) references organization (id)
             on update cascade on delete cascade
@@ -73,10 +73,10 @@ create table if not exists organization_membership_number
 create table if not exists budget
 (
     id              integer auto_increment primary key,
-    organization_id integer                                not null,
-    fiscal_year     varchar(6)                             not null,
-    notes           varchar(255) default ''                null,
-    last_modified   timestamp    default CURRENT_TIMESTAMP not null,
+    organization_id integer                    not null,
+    fiscal_year     varchar(6)                 not null,
+    notes           varchar(255) default ''    null,
+    last_modified   timestamp    default NOW() not null,
     constraint budget_organization_id_fk
         foreign key (organization_id) references organization (id)
             on update cascade on delete cascade
@@ -85,15 +85,15 @@ create table if not exists budget
 create table if not exists budget_legacy
 (
     id               integer auto_increment primary key,
-    budget_id        integer                                  not null,
-    amount_requested decimal(10, 2)                           not null,
-    amount_proposed  decimal(10, 2)                           not null,
-    appealed         bit            default b'0'              not null,
-    amount_appealed  decimal(10, 2) default 0.00              not null,
-    appeal_decision  varchar(20)    default ''                not null,
-    approved_appeal  decimal(10, 2) default 0.00              not null,
-    amount_spent     decimal(10, 2) default 0.00              not null,
-    last_modified    timestamp      default CURRENT_TIMESTAMP not null,
+    budget_id        integer                      not null,
+    amount_requested decimal(10, 2)               not null,
+    amount_proposed  decimal(10, 2)               not null,
+    appealed         bit            default b'0'  not null,
+    amount_appealed  decimal(10, 2) default 0.00  not null,
+    appeal_decision  varchar(20)    default ''    not null,
+    approved_appeal  decimal(10, 2) default 0.00  not null,
+    amount_spent     decimal(10, 2) default 0.00  not null,
+    last_modified    timestamp      default NOW() not null,
     constraint budget_legacy_budget_id_fk
         foreign key (budget_id) references budget (id)
             on update cascade on delete cascade
@@ -102,9 +102,9 @@ create table if not exists budget_legacy
 create table if not exists budget_section
 (
     id            integer auto_increment primary key,
-    budget_id     integer                             not null,
-    section_name  varchar(255)                        not null,
-    last_modified timestamp default CURRENT_TIMESTAMP not null,
+    budget_id     integer                 not null,
+    section_name  varchar(255)            not null,
+    last_modified timestamp default NOW() not null,
     constraint budget_section_budget_id_fk
         foreign key (budget_id) references budget (id)
             on update cascade on delete cascade
@@ -113,17 +113,17 @@ create table if not exists budget_section
 create table if not exists budget_line_item
 (
     id                integer auto_increment primary key,
-    budget_section_id integer                                  not null,
-    line_item_name    varchar(255)                             not null,
-    amount_requested  decimal(10, 2)                           not null,
-    amount_proposed   decimal(10, 2)                           not null,
-    appealed          bit            default b'0'              not null,
-    amount_appealed   decimal(10, 2) default 0.00              not null,
-    appeal_decision   varchar(20)    default ''                not null,
-    approved_appeal   decimal(10, 2) default 0.00              not null,
-    amount_spent      decimal(10, 2) default 0.00              not null,
-    notes             varchar(255)   default ''                not null,
-    last_modified     timestamp      default CURRENT_TIMESTAMP not null,
+    budget_section_id integer                      not null,
+    line_item_name    varchar(255)                 not null,
+    amount_requested  decimal(10, 2)               not null,
+    amount_proposed   decimal(10, 2)               not null,
+    appealed          bit            default b'0'  not null,
+    amount_appealed   decimal(10, 2) default 0.00  not null,
+    appeal_decision   varchar(20)    default ''    not null,
+    approved_appeal   decimal(10, 2) default 0.00  not null,
+    amount_spent      decimal(10, 2) default 0.00  not null,
+    notes             varchar(255)   default ''    not null,
+    last_modified     timestamp      default NOW() not null,
     constraint budget_line_item_budget_section_id_fk
         foreign key (budget_section_id) references budget_section (id)
             on update cascade on delete cascade
@@ -133,17 +133,17 @@ create table if not exists budget_line_item
 create table if not exists funding_request
 (
     id               integer auto_increment primary key,
-    organization_id  integer                             not null,
-    description      varchar(255)                        null,
-    hearing_date     date                                not null,
-    fiscal_year      varchar(6)                          null,
-    date_of_event    date                                null,
-    dot_number       varchar(6)                          not null,
-    amount_requested decimal(10, 2)                      not null,
-    decision         varchar(20)                         not null,
-    amount_approved  decimal(10, 2)                      not null,
-    notes            varchar(512)                        null,
-    last_modified    timestamp default CURRENT_TIMESTAMP not null,
+    organization_id  integer                 not null,
+    description      varchar(255)            null,
+    hearing_date     date                    not null,
+    fiscal_year      varchar(6)              null,
+    date_of_event    date                    null,
+    dot_number       varchar(6)              not null,
+    amount_requested decimal(10, 2)          not null,
+    decision         varchar(20)             not null,
+    amount_approved  decimal(10, 2)          not null,
+    notes            varchar(512)            null,
+    last_modified    timestamp default NOW() not null,
     constraint funding_request_organization_id_fk
         foreign key (organization_id) references organization (id)
             on update cascade on delete cascade
@@ -152,16 +152,16 @@ create table if not exists funding_request
 create table if not exists fr_appeal
 (
     id                 integer auto_increment primary key,
-    funding_request_id integer                             not null,
-    new_dot_number     varchar(6)                          not null,
-    appeal_date        date                                not null,
-    description        varchar(255)                        null,
-    appeal_amount      decimal(10, 2)                      not null,
-    decision           varchar(20)                         not null,
-    approved_appeal    decimal(10, 2)                      not null,
-    notes              varchar(255)                        null,
-    minutes_link       varchar(255)                        null,
-    last_modified      timestamp default CURRENT_TIMESTAMP not null,
+    funding_request_id integer                 not null,
+    new_dot_number     varchar(6)              not null,
+    appeal_date        date                    not null,
+    description        varchar(255)            null,
+    appeal_amount      decimal(10, 2)          not null,
+    decision           varchar(20)             not null,
+    approved_appeal    decimal(10, 2)          not null,
+    notes              varchar(255)            null,
+    minutes_link       varchar(255)            null,
+    last_modified      timestamp default NOW() not null,
     constraint fr_appeal_funding_request_id_fk
         foreign key (funding_request_id) references funding_request (id)
             on update cascade on delete cascade
@@ -170,10 +170,10 @@ create table if not exists fr_appeal
 create table if not exists fr_minute
 (
     id                 integer auto_increment primary key,
-    funding_request_id integer                             not null,
-    agenda_number      varchar(9)                          not null,
-    minutes_link       varchar(255)                        null,
-    last_modified      timestamp default CURRENT_TIMESTAMP not null,
+    funding_request_id integer                 not null,
+    agenda_number      varchar(9)              not null,
+    minutes_link       varchar(255)            null,
+    last_modified      timestamp default NOW() not null,
     constraint funding_request_id_unique
         unique (funding_request_id),
     constraint fr_minute_funding_request_id_fk
@@ -184,13 +184,13 @@ create table if not exists fr_minute
 create table if not exists fr_report_form
 (
     id                 integer auto_increment primary key,
-    funding_request_id integer                             not null,
-    amount_spent       decimal(10, 2)                      null,
-    status             varchar(25)                         null,
-    amount_approved    decimal(10, 2)                      null,
-    approved_date      date                                null,
-    notes              varchar(255)                        null,
-    last_modified      timestamp default CURRENT_TIMESTAMP not null,
+    funding_request_id integer                 not null,
+    amount_spent       decimal(10, 2)          null,
+    status             varchar(25)             null,
+    amount_approved    decimal(10, 2)          null,
+    approved_date      date                    null,
+    notes              varchar(255)            null,
+    last_modified      timestamp default NOW() not null,
     constraint funding_request_id_unique
         unique (funding_request_id),
     constraint fr_report_form_funding_request_id_fk
@@ -201,14 +201,14 @@ create table if not exists fr_report_form
 create table if not exists fr_supplemental
 (
     id                 integer auto_increment primary key,
-    funding_request_id integer                             not null,
-    item_type          varchar(100)                        not null,
-    other_type         varchar(100)                        null,
-    amount_requested   decimal(10, 2)                      not null,
-    amended            bit                                 null,
-    amended_amount     decimal(10, 2)                      null,
-    notes              varchar(255)                        null,
-    last_modified      timestamp default CURRENT_TIMESTAMP null,
+    funding_request_id integer                 not null,
+    item_type          varchar(100)            not null,
+    other_type         varchar(100)            null,
+    amount_requested   decimal(10, 2)          not null,
+    amended            bit                     null,
+    amended_amount     decimal(10, 2)          null,
+    notes              varchar(255)            null,
+    last_modified      timestamp default NOW() null,
     constraint fr_supplemental_funding_request_id_fk
         foreign key (funding_request_id) references funding_request (id)
             on update cascade on delete cascade
@@ -217,11 +217,11 @@ create table if not exists fr_supplemental
 create table if not exists fr_workday_idt
 (
     id                    integer auto_increment primary key,
-    funding_request_id    integer                             not null,
-    idt_submitted         bit       default b'0'              null,
-    workday_approved      varchar(15)                         null,
-    workday_approval_date date                                null,
-    last_modified         timestamp default CURRENT_TIMESTAMP not null,
+    funding_request_id    integer                 not null,
+    idt_submitted         bit       default b'0'  null,
+    workday_approved      varchar(15)             null,
+    workday_approval_date date                    null,
+    last_modified         timestamp default NOW() not null,
     constraint funding_request_id_unique
         unique (funding_request_id),
     constraint fr_workday_idt_funding_request_id_fk
@@ -233,18 +233,18 @@ create table if not exists fr_workday_idt
 create table if not exists reallocation
 (
     id               int auto_increment primary key,
-    organization_id  integer                             not null,
-    description      varchar(255)                        not null,
-    hearing_date     date                                not null,
-    fiscal_year      varchar(6)                          not null,
-    dot_number       varchar(6)                          not null,
-    allocated_from   varchar(255)                        null,
-    allocated_to     varchar(255)                        null,
-    amount_allocated decimal(10, 2)                      not null,
-    decision         varchar(255)                        not null,
-    amount_approved  decimal(10, 2)                      not null,
-    notes            varchar(255)                        null,
-    last_modified    timestamp default CURRENT_TIMESTAMP not null,
+    organization_id  integer                 not null,
+    description      varchar(255)            not null,
+    hearing_date     date                    not null,
+    fiscal_year      varchar(6)              not null,
+    dot_number       varchar(6)              not null,
+    allocated_from   varchar(255)            null,
+    allocated_to     varchar(255)            null,
+    amount_allocated decimal(10, 2)          not null,
+    decision         varchar(255)            not null,
+    amount_approved  decimal(10, 2)          not null,
+    notes            varchar(255)            null,
+    last_modified    timestamp default NOW() not null,
     constraint reallocation_organization_id_fk
         foreign key (organization_id) references organization (id)
             on update cascade on delete cascade
@@ -253,10 +253,10 @@ create table if not exists reallocation
 create table if not exists reallocation_minute
 (
     id              int auto_increment primary key,
-    reallocation_id int                                 not null,
-    agenda_number   varchar(9)                          not null,
-    minutes_link    varchar(255)                        not null,
-    last_modified   timestamp default CURRENT_TIMESTAMP not null,
+    reallocation_id int                     not null,
+    agenda_number   varchar(9)              not null,
+    minutes_link    varchar(255)            not null,
+    last_modified   timestamp default NOW() not null,
     constraint reallocation_minute_reallocation_id_fk
         foreign key (reallocation_id) references reallocation (id)
             on update cascade on delete cascade
@@ -266,16 +266,16 @@ create table if not exists reallocation_minute
 create table if not exists reclassification
 (
     id              integer auto_increment primary key,
-    organization_id integer                             not null,
-    hearing_date    date                                not null,
-    fiscal_year     varchar(255)                        not null,
-    dot_number      varchar(255)                        not null,
-    original_class  varchar(255)                        not null,
-    requested_class varchar(255)                        not null,
-    decision        varchar(255)                        not null,
-    approved_class  varchar(255)                        not null,
-    notes           varchar(255)                        null,
-    last_modified   timestamp default CURRENT_TIMESTAMP not null,
+    organization_id integer                 not null,
+    hearing_date    date                    not null,
+    fiscal_year     varchar(255)            not null,
+    dot_number      varchar(255)            not null,
+    original_class  varchar(255)            not null,
+    requested_class varchar(255)            not null,
+    decision        varchar(255)            not null,
+    approved_class  varchar(255)            not null,
+    notes           varchar(255)            null,
+    last_modified   timestamp default NOW() not null,
     constraint reclassification_organization_id_fk
         foreign key (organization_id) references organization (id)
             on update cascade on delete cascade
@@ -284,10 +284,10 @@ create table if not exists reclassification
 create table if not exists reclassification_minute
 (
     id                  integer auto_increment primary key,
-    reclassification_id integer                             not null,
-    agenda_number       varchar(9)                          not null,
-    minutes_link        varchar(255)                        not null,
-    last_modified       timestamp default CURRENT_TIMESTAMP null,
+    reclassification_id integer                 not null,
+    agenda_number       varchar(9)              not null,
+    minutes_link        varchar(255)            not null,
+    last_modified       timestamp default NOW() null,
     constraint reclassification_minute_reclassification_id_fk
         foreign key (reclassification_id) references reclassification (id)
             on update cascade on delete cascade
@@ -297,15 +297,15 @@ create table if not exists reclassification_minute
 create table if not exists mandatory_transfer
 (
     id               integer auto_increment primary key,
-    organization_id  integer                             not null,
-    fund_name        varchar(255)                        not null,
-    fiscal_year      varchar(255)                        not null,
-    worktag          varchar(255)                        not null,
-    amount_requested decimal(10, 2)                      not null,
-    amount_proposed  decimal(10, 2)                      not null,
-    amount_approved  decimal(10, 2)                      not null,
-    notes            varchar(255)                        null,
-    last_modified    timestamp default CURRENT_TIMESTAMP not null,
+    organization_id  integer                 not null,
+    fund_name        varchar(255)            not null,
+    fiscal_year      varchar(255)            not null,
+    worktag          varchar(255)            not null,
+    amount_requested decimal(10, 2)          not null,
+    amount_proposed  decimal(10, 2)          not null,
+    amount_approved  decimal(10, 2)          not null,
+    notes            varchar(255)            null,
+    last_modified    timestamp default NOW() not null,
     constraint mandatory_transfer_organization_id_fk
         foreign key (organization_id) references organization (id)
 );
@@ -313,11 +313,11 @@ create table if not exists mandatory_transfer
 create table if not exists mandatory_transfer_line_item
 (
     id                    integer auto_increment primary key,
-    mandatory_transfer_id integer                             not null,
-    line_item_name        varchar(255)                        not null,
-    amount                decimal(10, 2)                      not null,
-    notes                 varchar(255)                        null,
-    last_modified         timestamp default CURRENT_TIMESTAMP not null,
+    mandatory_transfer_id integer                 not null,
+    line_item_name        varchar(255)            not null,
+    amount                decimal(10, 2)          not null,
+    notes                 varchar(255)            null,
+    last_modified         timestamp default NOW() not null,
     constraint mandatory_transfer_line_item_mandatory_transfer_id_fk
         foreign key (mandatory_transfer_id) references mandatory_transfer (id)
             on update cascade on delete cascade
@@ -326,15 +326,15 @@ create table if not exists mandatory_transfer_line_item
 create table if not exists operating_expense
 (
     id                              integer auto_increment primary key,
-    mandatory_transfer_line_item_id integer                             not null,
-    amount_spent                    decimal(10, 2)                      not null,
-    person                          varchar(100)                        not null,
-    description                     varchar(255)                        not null,
-    payment_type                    varchar(20)                         not null,
-    workday_approved                bit                                 null,
-    workday_approval_date           date                                null,
-    notes                           varchar(255)                        null,
-    last_modified                   timestamp default CURRENT_TIMESTAMP not null,
+    mandatory_transfer_line_item_id integer                 not null,
+    amount_spent                    decimal(10, 2)          not null,
+    person                          varchar(100)            not null,
+    description                     varchar(255)            not null,
+    payment_type                    varchar(20)             not null,
+    workday_approved                bit                     null,
+    workday_approval_date           date                    null,
+    notes                           varchar(255)            null,
+    last_modified                   timestamp default NOW() not null,
     constraint operating_expense_mandatory_transfer_line_item_id_fk
         foreign key (mandatory_transfer_line_item_id) references mandatory_transfer_line_item (id)
             on update cascade on delete cascade
@@ -344,24 +344,24 @@ create table if not exists operating_expense
 create table if not exists funding_account
 (
     id              integer auto_increment primary key,
-    account_name    varchar(255)                        not null,
-    fiscal_year     varchar(255)                        not null,
-    fall_transfer   decimal(10, 2)                      null,
-    spring_transfer decimal(10, 2)                      null,
-    worktag         varchar(8)                          not null,
-    last_modified   timestamp default CURRENT_TIMESTAMP not null
+    account_name    varchar(255)            not null,
+    fiscal_year     varchar(255)            not null,
+    fall_transfer   decimal(10, 2)          null,
+    spring_transfer decimal(10, 2)          null,
+    worktag         varchar(8)              not null,
+    last_modified   timestamp default NOW() not null
 );
 
 create table if not exists transfer
 (
     id                   integer auto_increment primary key,
-    fiscal_year          varchar(255)                        not null,
-    funding_account_from integer                             not null,
-    funding_account_to   integer                             not null,
-    amount               decimal(10, 2)                      null,
-    transfer_date        date                                not null,
-    notes                varchar(255)                        null,
-    last_modified        timestamp default CURRENT_TIMESTAMP not null,
+    fiscal_year          varchar(255)            not null,
+    funding_account_from integer                 not null,
+    funding_account_to   integer                 not null,
+    amount               decimal(10, 2)          null,
+    transfer_date        date                    not null,
+    notes                varchar(255)            null,
+    last_modified        timestamp default NOW() not null,
     constraint transfer_funding_account_from_fk
         foreign key (funding_account_from) references funding_account (id),
     constraint transfer_funding_account_to_fk
@@ -370,27 +370,30 @@ create table if not exists transfer
 
 create table if not exists student_life_fee
 (
-    id                      int auto_increment primary key,
-    fiscal_year             varchar(6)                          not null,
-    student_life_fee_amount decimal(10, 2)                      not null,
-    fall_student_amount     int                                 null,
-    last_modified           timestamp default CURRENT_TIMESTAMP not null
+    id                      integer auto_increment primary key,
+    fiscal_year             varchar(6)              not null,
+    student_life_fee_amount decimal(10, 2)          not null,
+    fall_student_amount     integer                 null,
+    last_modified           timestamp default NOW() not null
 );
 
 create table if not exists student_organization_council
 (
-    id                       int auto_increment primary key,
-    name_of_club             varchar(255)                        not null,
-    acronym                  varchar(255)                        null,
-    hearing_date             date                                not null,
-    fiscal_year              varchar(255)                        not null,
-    type_of_name             varchar(255)                        not null,
-    president_email          varchar(255)                        null,
-    treasurer_email          varchar(255)                        null,
-    projected_active_members int                                 null,
-    decision                 varchar(255)                        not null,
-    notes                    varchar(255)                        null,
-    last_modified            timestamp default CURRENT_TIMESTAMP not null
+    id                       integer auto_increment primary key,
+    name_of_club             varchar(255)            not null,
+    acronym                  varchar(255)            null,
+    hearing_date             date                    not null,
+    fiscal_year              varchar(255)            not null,
+    type_of_club             varchar(255)            not null,
+    president_email          varchar(255)            null,
+    treasurer_email          varchar(255)            null,
+    projected_active_members integer                 null,
+    decision                 varchar(255)            not null,
+    notes                    varchar(255)            null,
+    organization_id          integer                 null,
+    last_modified            timestamp default NOW() not null,
+    constraint soc_organization_id
+        foreign key (organization_id) references organization (id)
 );
 
 # Create Functions
@@ -545,7 +548,7 @@ order by fiscal_year desc;
 
 CREATE or replace VIEW complete_funding_request AS
 select fr.id,
-       name_of_club,
+       organization_name,
        hearing_date,
        fnc_fiscal_year(hearing_date)                          as fiscal_year,
        agenda_number,
@@ -577,7 +580,7 @@ from funding_request fr
 order by hearing_date desc, dot_number desc;
 
 CREATE or replace VIEW all_requests AS
-select name_of_club,
+select organization_name,
        hearing_date,
        fiscal_year,
        agenda_number,
@@ -604,7 +607,7 @@ from complete_funding_request
 
 union
 
-select name_of_club,
+select organization_name,
        hearing_date,
        fnc_fiscal_year(hearing_date) AS fiscal_year,
        agenda_number,
@@ -633,7 +636,7 @@ from reclassification r
 
 union
 
-select name_of_club,
+select organization_name,
        hearing_date,
        fnc_fiscal_year(hearing_date),
        agenda_number,
@@ -663,7 +666,7 @@ order by hearing_date desc, dot_number desc;
 
 CREATE or replace VIEW budget_by_section AS
 select organization_id,
-       name_of_club,
+       organization_name,
        fiscal_year,
        section_name,
        count(line_item_name) AS `num_of_items`,
@@ -675,12 +678,12 @@ from budget b
          inner join organization o on b.organization_id = o.id
          inner join budget_section bs on b.id = bs.budget_id
          inner join budget_line_item bli on bs.id = bli.budget_section_id
-group by name_of_club, fiscal_year, section_name
-order by name_of_club, fiscal_year;
+group by organization_name, fiscal_year, section_name
+order by organization_name, fiscal_year;
 
 CREATE or replace VIEW budget_by_fy AS
 select organization_id,
-       name_of_club,
+       organization_name,
        fiscal_year,
        sum(num_of_items)                      AS num_of_items,
        sum(amount_requested)                  AS amount_requested,
@@ -689,12 +692,12 @@ select organization_id,
        sum(approved_appeal + amount_proposed) AS amount_approved,
        sum(amount_spent)                      AS amount_spent
 from budget_by_section
-group by budget_by_section.name_of_club, budget_by_section.fiscal_year
+group by budget_by_section.organization_name, budget_by_section.fiscal_year
 
 union
 
 select organization_id,
-       name_of_club,
+       organization_name,
        fiscal_year,
        -1,
        amount_requested,
@@ -705,11 +708,11 @@ select organization_id,
 from budget b
          inner join budget_legacy bl on b.id = bl.budget_id
          inner join organization o on b.organization_id = o.id
-group by name_of_club, fiscal_year
-order by name_of_club, fiscal_year;
+group by organization_name, fiscal_year
+order by organization_name, fiscal_year;
 
 CREATE or replace VIEW budget_line_item_readable AS
-select name_of_club,
+select organization_name,
        fiscal_year,
        section_name,
        line_item_name,
@@ -721,8 +724,8 @@ from budget b
          inner join organization o on b.organization_id = o.id
          inner join budget_section bs on b.id = bs.budget_id
          inner join budget_line_item bli on bs.id = bli.budget_section_id
-group by name_of_club, fiscal_year, section_name, line_item_name
-order by name_of_club, fiscal_year;
+group by organization_name, fiscal_year, section_name, line_item_name
+order by organization_name, fiscal_year;
 
 CREATE or replace VIEW `categories_club_membership` AS
 select fiscal_year,
@@ -734,13 +737,13 @@ order by fiscal_year desc;
 
 CREATE or replace VIEW club_total_budget AS
 select fiscal_year,
-       name_of_club,
+       organization_name,
        category,
        amount_approved
 from budget_by_fy
          left join club_classification cc on budget_by_fy.organization_id = cc.organization_id
-group by name_of_club, fiscal_year
-order by name_of_club, fiscal_year desc;
+group by organization_name, fiscal_year
+order by organization_name, fiscal_year desc;
 
 CREATE or replace VIEW categories_total_budget AS
 select fiscal_year,
@@ -751,7 +754,7 @@ group by fiscal_year, category
 order by fiscal_year;
 
 CREATE or replace VIEW financial_transparency AS
-select organization.name_of_club,
+select organization.organization_name,
        classification,
        if((isnull(amount_member_count) or amount_member_count = ''), 'Not Provided',
           amount_member_count)                                         as active_members,
@@ -764,11 +767,11 @@ from organization
          left join funding_request fr on organization.id = fr.organization_id and fr.fiscal_year = 'FY 20'
 where is_inactive = 0
   and organization.classification not in ('Department', 'Graduate', 'Mandatory Transfer')
-group by organization.name_of_club;
+group by organization.organization_name;
 
 CREATE or replace VIEW fiscal_expenditure_grades AS
 select b.id                                                         as budget_id,
-       name_of_club,
+       organization_name,
        fiscal_year,
        type_of_club,
        classification,
@@ -783,8 +786,8 @@ from budget b
          inner join organization o on b.organization_id = o.id
          inner join budget_section bs on b.id = bs.budget_id
          inner join budget_line_item bli on bs.id = bli.budget_section_id
-group by name_of_club, fiscal_year
-order by name_of_club, fiscal_year;
+group by organization_name, fiscal_year
+order by organization_name, fiscal_year;
 
 CREATE or replace VIEW `liability` AS
 select fiscal_year,
@@ -803,7 +806,7 @@ group by fiscal_year;
 
 CREATE or replace VIEW mandatory_transfer_total_budget AS
 select fiscal_year,
-       name_of_club,
+       organization_name,
        fund_name,
        amount_approved
 from mandatory_transfer
@@ -822,7 +825,7 @@ from mandatory_transfer
          inner join mandatory_transfer_line_item mtli on mandatory_transfer.id = mtli.mandatory_transfer_id
          inner join operating_expense oe on mtli.id = oe.mandatory_transfer_line_item_id
 where fund_name = 'Operating Account'
-  and name_of_club = 'Student Government Association'
+  and organization_name = 'Student Government Association'
   and fiscal_year = fnc_fiscal_year(now())
 group by line_item_name;
 
@@ -897,12 +900,12 @@ from organization;
 
 CREATE or replace VIEW selection_options AS
 select ctb.fiscal_year,
-       ctb.name_of_club,
+       ctb.organization_name,
        ctb.category,
        ctb.amount_approved,
        omn.amount_member_count
 from club_total_budget ctb
-         inner join organization o on ctb.name_of_club = o.name_of_club
+         inner join organization o on ctb.organization_name = o.organization_name
          inner join organization_membership_number omn on o.id = omn.organization_id and
                                                           ctb.fiscal_year = omn.fiscal_year
 order by category;

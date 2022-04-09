@@ -1,15 +1,15 @@
 # Organization Tables
 create table if not exists organization
 (
-    id                integer auto_increment primary key,
-    organization_name varchar(255)            not null,
-    classification    varchar(100)            not null,
-    type_of_club      varchar(100)            null,
-    account_number    varchar(8)              null,
-    acronym           varchar(50)             null,
-    is_inactive       bit                     not null,
-    last_modified     timestamp default NOW() not null,
-    constraint unique organization_organization_name_unique (organization_name)
+    id             integer auto_increment primary key,
+    name           varchar(255)            not null,
+    classification varchar(100)            not null,
+    type_of_club   varchar(100)            null,
+    account_number varchar(8)              null,
+    acronym        varchar(50)             null,
+    is_inactive    bit                     not null,
+    last_modified  timestamp default NOW() not null,
+    constraint unique organization_organization_name_unique (name)
 );
 
 create table if not exists `club_classification`
@@ -548,7 +548,7 @@ order by fiscal_year desc;
 
 CREATE or replace VIEW complete_funding_request AS
 select fr.id,
-       organization_name,
+       name,
        hearing_date,
        fnc_fiscal_year(hearing_date)                          as fiscal_year,
        agenda_number,
@@ -580,7 +580,7 @@ from funding_request fr
 order by hearing_date desc, dot_number desc;
 
 CREATE or replace VIEW all_requests AS
-select organization_name,
+select name,
        hearing_date,
        fiscal_year,
        agenda_number,
@@ -607,7 +607,7 @@ from complete_funding_request
 
 union
 
-select organization_name,
+select name,
        hearing_date,
        fnc_fiscal_year(hearing_date) AS fiscal_year,
        agenda_number,
@@ -636,7 +636,7 @@ from reclassification r
 
 union
 
-select organization_name,
+select name,
        hearing_date,
        fnc_fiscal_year(hearing_date),
        agenda_number,
@@ -666,7 +666,7 @@ order by hearing_date desc, dot_number desc;
 
 CREATE or replace VIEW budget_by_section AS
 select organization_id,
-       organization_name,
+       name,
        fiscal_year,
        section_name,
        count(line_item_name) AS `num_of_items`,
@@ -678,12 +678,12 @@ from budget b
          inner join organization o on b.organization_id = o.id
          inner join budget_section bs on b.id = bs.budget_id
          inner join budget_line_item bli on bs.id = bli.budget_section_id
-group by organization_name, fiscal_year, section_name
-order by organization_name, fiscal_year;
+group by name, fiscal_year, section_name
+order by name, fiscal_year;
 
 CREATE or replace VIEW budget_by_fy AS
 select organization_id,
-       organization_name,
+       name,
        fiscal_year,
        sum(num_of_items)                      AS num_of_items,
        sum(amount_requested)                  AS amount_requested,
@@ -692,12 +692,12 @@ select organization_id,
        sum(approved_appeal + amount_proposed) AS amount_approved,
        sum(amount_spent)                      AS amount_spent
 from budget_by_section
-group by budget_by_section.organization_name, budget_by_section.fiscal_year
+group by budget_by_section.name, budget_by_section.fiscal_year
 
 union
 
 select organization_id,
-       organization_name,
+       name,
        fiscal_year,
        -1,
        amount_requested,
@@ -708,11 +708,11 @@ select organization_id,
 from budget b
          inner join budget_legacy bl on b.id = bl.budget_id
          inner join organization o on b.organization_id = o.id
-group by organization_name, fiscal_year
-order by organization_name, fiscal_year;
+group by name, fiscal_year
+order by name, fiscal_year;
 
 CREATE or replace VIEW budget_line_item_readable AS
-select organization_name,
+select name,
        fiscal_year,
        section_name,
        line_item_name,
@@ -724,8 +724,8 @@ from budget b
          inner join organization o on b.organization_id = o.id
          inner join budget_section bs on b.id = bs.budget_id
          inner join budget_line_item bli on bs.id = bli.budget_section_id
-group by organization_name, fiscal_year, section_name, line_item_name
-order by organization_name, fiscal_year;
+group by name, fiscal_year, section_name, line_item_name
+order by name, fiscal_year;
 
 CREATE or replace VIEW `categories_club_membership` AS
 select fiscal_year,
@@ -737,13 +737,13 @@ order by fiscal_year desc;
 
 CREATE or replace VIEW club_total_budget AS
 select fiscal_year,
-       organization_name,
+       name,
        category,
        amount_approved
 from budget_by_fy
          left join club_classification cc on budget_by_fy.organization_id = cc.organization_id
-group by organization_name, fiscal_year
-order by organization_name, fiscal_year desc;
+group by name, fiscal_year
+order by name, fiscal_year desc;
 
 CREATE or replace VIEW categories_total_budget AS
 select fiscal_year,
@@ -754,7 +754,7 @@ group by fiscal_year, category
 order by fiscal_year;
 
 CREATE or replace VIEW financial_transparency AS
-select organization.organization_name,
+select organization.name,
        classification,
        if((isnull(amount_member_count) or amount_member_count = ''), 'Not Provided',
           amount_member_count)                                         as active_members,
@@ -767,11 +767,11 @@ from organization
          left join funding_request fr on organization.id = fr.organization_id and fr.fiscal_year = 'FY 20'
 where is_inactive = 0
   and organization.classification not in ('Department', 'Graduate', 'Mandatory Transfer')
-group by organization.organization_name;
+group by organization.name;
 
 CREATE or replace VIEW fiscal_expenditure_grades AS
 select b.id                                                         as budget_id,
-       organization_name,
+       name,
        fiscal_year,
        type_of_club,
        classification,
@@ -786,8 +786,8 @@ from budget b
          inner join organization o on b.organization_id = o.id
          inner join budget_section bs on b.id = bs.budget_id
          inner join budget_line_item bli on bs.id = bli.budget_section_id
-group by organization_name, fiscal_year
-order by organization_name, fiscal_year;
+group by name, fiscal_year
+order by name, fiscal_year;
 
 CREATE or replace VIEW `liability` AS
 select fiscal_year,
@@ -806,7 +806,7 @@ group by fiscal_year;
 
 CREATE or replace VIEW mandatory_transfer_total_budget AS
 select fiscal_year,
-       organization_name,
+       name,
        fund_name,
        amount_approved
 from mandatory_transfer
@@ -825,7 +825,7 @@ from mandatory_transfer
          inner join mandatory_transfer_line_item mtli on mandatory_transfer.id = mtli.mandatory_transfer_id
          inner join operating_expense oe on mtli.id = oe.mandatory_transfer_line_item_id
 where fund_name = 'Operating Account'
-  and organization_name = 'Student Government Association'
+  and name = 'Student Government Association'
   and fiscal_year = fnc_fiscal_year(now())
 group by line_item_name;
 
@@ -900,12 +900,12 @@ from organization;
 
 CREATE or replace VIEW selection_options AS
 select ctb.fiscal_year,
-       ctb.organization_name,
+       ctb.name,
        ctb.category,
        ctb.amount_approved,
        omn.amount_member_count
 from club_total_budget ctb
-         inner join organization o on ctb.organization_name = o.organization_name
+         inner join organization o on ctb.name = o.name
          inner join organization_membership_number omn on o.id = omn.organization_id and
                                                           ctb.fiscal_year = omn.fiscal_year
 order by category;

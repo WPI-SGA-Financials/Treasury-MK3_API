@@ -55,7 +55,7 @@ public class ReallocationRequestAccessorImpl implements ReallocationRequestAcces
         if(generalHelperFunctions.determineFilterable(request)) {
             reallocs = reallocationRequestRepository.findReallocsByFilters(request);
         } else {
-            reallocs = reallocationRequestRepository.findAllByOrganizationInactiveIsFalseOrderByHearingDateDescDotNumberDesc(pageable);
+            reallocs = reallocationRequestRepository.findAllByOrganizationIsInactiveIsFalseOrderByHearingDateDescDotNumberDesc(pageable);
         }
 
         List<ReallocationRequestDto> dtos = reallocs.getContent()

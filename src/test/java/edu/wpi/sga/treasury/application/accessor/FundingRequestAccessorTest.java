@@ -53,7 +53,7 @@ class FundingRequestAccessorTest {
         // Arrange
         FundingRequest fr = createSimpleFundingRequest("Cheese Club", 1);
 
-        when(fundingRequestRepository.findAllByOrganizationNameOrderByFundingDateDesc(any()))
+        when(fundingRequestRepository.findAllByOrganizationNameOrderByHearingDateDesc(any()))
                 .thenReturn(Optional.of(List.of(fr)));
 
         // Act
@@ -69,7 +69,7 @@ class FundingRequestAccessorTest {
     @DisplayName("Get Funding Requests for Organization not found")
     void getFundingRequestsForOrganizationNotFound() {
         // Arrange
-        when(fundingRequestRepository.findAllByOrganizationNameOrderByFundingDateDesc(any()))
+        when(fundingRequestRepository.findAllByOrganizationNameOrderByHearingDateDesc(any()))
                 .thenReturn(Optional.empty());
 
         // Act
@@ -151,7 +151,7 @@ class FundingRequestAccessorTest {
         FundingRequest fr100 = createSimpleFundingRequest("Student Government Association", 2);
         fr100.setDotNumber("F.100");
 
-        when(fundingRequestRepository.findAllByOrganizationInactiveIsFalseOrderByFundingDateDescDotNumberDesc(any()))
+        when(fundingRequestRepository.findAllByOrganizationIsInactiveIsFalseOrderByHearingDateDescDotNumberDesc(any()))
                 .thenReturn(new PageImpl<>(List.of(fr100, fr101)));
 
         // Act

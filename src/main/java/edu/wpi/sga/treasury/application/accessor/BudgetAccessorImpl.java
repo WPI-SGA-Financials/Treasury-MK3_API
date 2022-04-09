@@ -63,7 +63,7 @@ public class BudgetAccessorImpl implements BudgetAccessor {
         if(generalHelperFunctions.determineFilterable(request)) {
             budgets = budgetRepository.findBudgetsByFilters(request);
         } else {
-            budgets = budgetRepository.findAllByOrganizationInactiveIsFalseOrderByOrganizationAscFiscalYearDesc(pageable);
+            budgets = budgetRepository.findAllByOrganizationIsInactiveIsFalseOrderByOrganizationAscFiscalYearDesc(pageable);
         }
 
         List<BudgetDto> dtos = budgets.getContent().stream().map(budgetHelperFunctions::translateBudgetToBudgetDto).collect(Collectors.toList());

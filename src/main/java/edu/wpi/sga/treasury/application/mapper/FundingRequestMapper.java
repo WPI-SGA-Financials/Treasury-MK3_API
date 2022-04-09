@@ -8,7 +8,7 @@ import org.mapstruct.*;
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface FundingRequestMapper {
     @Mapping(source = "nameOfClub", target = "organization.name")
-    @Mapping(source = "hearingDate", target = "fundingDate")
+    @Mapping(source = "hearingDate", target = "hearingDate")
     FundingRequest fundingRequestDtoToFundingRequest(FundingRequestDto fundingRequestDto);
 
     @InheritInverseConfiguration(name = "fundingRequestDtoToFundingRequest")
@@ -19,11 +19,11 @@ public interface FundingRequestMapper {
     void updateFundingRequestFromFundingRequestDto(FundingRequestDto fundingRequestDto, @MappingTarget FundingRequest fundingRequest);
 
     @Mapping(source = "nameOfClub", target = "organization.name")
-    @Mapping(source = "hearingDate", target = "fundingDate")
+    @Mapping(source = "hearingDate", target = "hearingDate")
     FundingRequest fundingRequestDetailedDtoToFundingRequest(FundingRequestDetailedDto fundingRequestDetailedDto);
 
     @Mapping(source = "organization.name", target = "nameOfClub")
-    @Mapping(target = "hearingDate", source = "fundingDate")
+    @Mapping(target = "hearingDate", source = "hearingDate")
     FundingRequestDetailedDto fundingRequestToFundingRequestDetailedDto(FundingRequest fundingRequest);
 
     @Mapping(source = "nameOfClub", target = "organization.name")

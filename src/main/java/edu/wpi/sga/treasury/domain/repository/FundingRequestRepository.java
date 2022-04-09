@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FundingRequestRepository extends JpaRepository<FundingRequest, Integer>, FundingRequestRepositoryCustom {
-    Page<FundingRequest> findAllByOrganizationInactiveIsFalseOrderByFundingDateDescDotNumberDesc(Pageable pageable);
+    Page<FundingRequest> findAllByOrganizationIsInactiveIsFalseOrderByHearingDateDescDotNumberDesc(Pageable pageable);
 
-    Optional<List<FundingRequest>> findAllByOrganizationNameOrderByFundingDateDesc(String organization);
+    Optional<List<FundingRequest>> findAllByOrganizationNameOrderByHearingDateDesc(String organization);
 }

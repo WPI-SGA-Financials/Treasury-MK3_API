@@ -10,23 +10,23 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "`Student Life Fee`")
+@Table(name = "student_life_fee")
 public class StudentLifeFee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "`Fiscal Year`", nullable = false, length = 6)
+    @Column(name = "fiscal_year", nullable = false, length = 6)
     private String fiscalYear;
 
-    @Column(name = "`SLF Amount`", nullable = false, precision = 10, scale = 2)
-    private BigDecimal slfAmount;
+    @Column(name = "student_life_fee_amount", nullable = false, precision = 10, scale = 2)
+    private BigDecimal studentLifeFeeAmount;
 
-    @Column(name = "`Fall Student Amount`")
+    @Column(name = "fall_student_amount")
     private Integer fallStudentAmount;
 
-    @Column(name = "Timestamp", nullable = false)
-    private LocalDateTime timestamp;
+    @Column(name = "last_modified", nullable = false)
+    private LocalDateTime lastModified;
 
 }

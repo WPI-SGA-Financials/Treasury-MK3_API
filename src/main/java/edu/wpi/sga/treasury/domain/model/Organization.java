@@ -9,31 +9,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Organizations")
+@Table(name = "organization")
 @Getter
 @Setter
 public class Organization {
+
     @Id
-    @Column(name = "`Name of Club`", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "Classification", length = 100)
+    @Column(name = "classification", length = 100)
     private String classification;
 
-    @Column(name = "`Type of Club`", length = 100)
+    @Column(name = "type_of_club", length = 100)
     private String typeOfClub;
 
-    @Column(name = "`Account Number`", length = 8)
+    @Column(name = "account_number", length = 8)
     private String accountNumber;
 
-    @Column(name = "`Acronym 1`", length = 50)
+    @Column(name = "acronym", length = 50)
     private String acronym;
 
-    @Column(name = "`Inactive?`", nullable = false)
-    private Boolean inactive = false;
+    @Column(name = "is_inactive", nullable = false)
+    private Boolean isInactive = false;
 
-    @Column(name = "Timestamp", nullable = false)
-    private LocalDateTime timestamp;
+    @Column(name = "last_modified", nullable = false)
+    private LocalDateTime lastModified;
 
     @OneToMany(mappedBy = "organization")
     private List<Budget> budgets = new ArrayList<>();

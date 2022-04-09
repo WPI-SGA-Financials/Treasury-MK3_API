@@ -42,7 +42,7 @@ public class OrganizationAccessorImpl implements OrganizationAccessor {
         if (generalHelperFunctions.determineFilterable(request)) {
             organizations = organizationRepository.findOrganizationsByFilters(request);
         } else {
-            organizations = organizationRepository.findAllByInactiveIsFalse(pageable);
+            organizations = organizationRepository.findAllByIsInactiveIsFalse(pageable);
         }
 
         List<OrganizationDto> dtos = organizationMapper.organizationsToOrganizationsDtos(organizations.getContent());

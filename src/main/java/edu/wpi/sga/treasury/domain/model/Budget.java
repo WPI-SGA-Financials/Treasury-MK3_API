@@ -9,27 +9,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Budget")
+@Table(name = "budget")
 @Getter
 @Setter
 public class Budget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "`Name of Club`", nullable = false)
+    @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
-    @Column(name = "`Fiscal Year`", nullable = false, length = 6)
+    @Column(name = "fiscal_year", nullable = false, length = 6)
     private String fiscalYear;
 
-    @Column(name = "Notes")
+    @Column(name = "notes")
     private String notes;
 
-    @Column(name = "Timestamp", nullable = false)
-    private LocalDateTime timestamp;
+    @Column(name = "last_modified", nullable = false)
+    private LocalDateTime lastModified;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "budget")
     private BudgetLegacy budgetLegacy;

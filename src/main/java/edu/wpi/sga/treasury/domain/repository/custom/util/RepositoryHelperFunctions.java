@@ -43,7 +43,7 @@ public class RepositoryHelperFunctions {
         }
 
         if (!request.isIncludeInactive()) {
-            orgBasedPredicates.add(cb.isFalse(root.get(Organization_.INACTIVE)));
+            orgBasedPredicates.add(cb.isFalse(root.get(Organization_.IS_INACTIVE)));
         }
 
         return orgBasedPredicates;

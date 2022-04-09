@@ -39,7 +39,7 @@ public class OrganizationAccessorImpl implements OrganizationAccessor {
 
         request = generalHelperFunctions.cleanRequest(request);
 
-        if(generalHelperFunctions.determineFilterable(request)) {
+        if (generalHelperFunctions.determineFilterable(request)) {
             organizations = organizationRepository.findOrganizationsByFilters(request);
         } else {
             organizations = organizationRepository.findAllByInactiveIsFalse(pageable);
@@ -52,12 +52,9 @@ public class OrganizationAccessorImpl implements OrganizationAccessor {
 
     @Override
     public OrganizationDto getOrganization(String organization) {
-        Optional<Organization> org = organizationRepository.findByName(organization);
+        Optional<Organization> optionalOrg = organizationRepository.findByName(organization);
 
-        if(org.isPresent()) {
-            return organizationMapper.organizationToOrganizationDto(org.get());
-        }
-
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return optionalOrg.map(organizationMapper::organizationToOrganizationDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

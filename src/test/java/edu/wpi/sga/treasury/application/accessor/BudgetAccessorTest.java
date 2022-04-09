@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static edu.wpi.sga.treasury.application.accessor.test_utils.BudgetAccessorTestUtils.createSimpleBudget;
+import static edu.wpi.sga.treasury.application.accessor.test_utils.GeneralTestUtils.mockBasicFiltering;
+import static edu.wpi.sga.treasury.application.accessor.test_utils.GeneralTestUtils.mockBasicPagedRequest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -138,15 +140,7 @@ class BudgetAccessorTest {
     @DisplayName("Get Paged and Filtered list of Budgets")
     void getBudgetsFiltered() {
         // Arrange
-        Pageable pageable = PageRequest.of(0, 10);
-
-        when(generalHelperFunctions.generatePagedRequest(any())).thenReturn(pageable);
-
-        PagedRequest cleanedRequest = new PagedRequest();
-        cleanedRequest.setName(List.of("Cheese Club", "Student"));
-
-        when(generalHelperFunctions.cleanRequest(any())).thenReturn(cleanedRequest);
-        when(generalHelperFunctions.determineFilterable(any())).thenReturn(true);
+        mockBasicFiltering(generalHelperFunctions);
 
         Budget budget = createSimpleBudget();
 
@@ -175,15 +169,7 @@ class BudgetAccessorTest {
     @DisplayName("Get Paged list of Budgets")
     void getBudgets() {
         // Arrange
-        Pageable pageable = PageRequest.of(0, 10);
-
-        when(generalHelperFunctions.generatePagedRequest(any())).thenReturn(pageable);
-
-        PagedRequest cleanedRequest = new PagedRequest();
-        cleanedRequest.setName(List.of("Cheese Club", "Student"));
-
-        when(generalHelperFunctions.cleanRequest(any())).thenReturn(cleanedRequest);
-        when(generalHelperFunctions.determineFilterable(any())).thenReturn(false);
+        mockBasicPagedRequest(generalHelperFunctions);
 
         Budget budget = createSimpleBudget();
 
@@ -198,7 +184,7 @@ class BudgetAccessorTest {
 
         // Act
         PagedRequest request = new PagedRequest();
-        request.setName(List.of("Cheese Club", "Student", " "));
+        request.setPage(1);
 
         Page<BudgetDto> returnedData = accessor.getBudgets(request);
 

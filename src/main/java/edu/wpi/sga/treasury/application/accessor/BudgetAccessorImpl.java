@@ -34,7 +34,7 @@ public class BudgetAccessorImpl implements BudgetAccessor {
     public List<BudgetDto> getBudgetsForOrganization(String organization) {
         Optional<List<Budget>> organizationBudgets = budgetRepository.findAllByOrganizationNameIsOrderByFiscalYearDesc(organization);
 
-        if(organizationBudgets.isPresent() && organizationBudgets.get().size() > 0) {
+        if(organizationBudgets.isPresent() && !organizationBudgets.get().isEmpty()) {
             return organizationBudgets.get().stream().map(budgetHelperFunctions::translateBudgetToBudgetDto).collect(Collectors.toList());
         }
 

@@ -4,7 +4,7 @@
     sgadb_new - New DB
 */
 
-insert into sgadb_new.organization (organization_name, classification, type_of_club, account_number, acronym,
+insert into sgadb_new.organization (name, classification, type_of_club, account_number, acronym,
                                     is_inactive,
                                     last_modified)
 select `Name of Club`, Classification, `Type of Club`, `Account Number`, `Acronym 1`, `Inactive?`, Timestamp
@@ -13,14 +13,14 @@ from sgadb.Organizations;
 insert into sgadb_new.club_classification (organization_id, category)
 select (select sgadb_new.organization.id
         from sgadb_new.organization
-        where sgadb.`Club Classifications`.Name = sgadb_new.organization.organization_name) as organization_id,
+        where sgadb.`Club Classifications`.Name = sgadb_new.organization.name) as organization_id,
        Category
 from sgadb.`Club Classifications`;
 
 insert into sgadb_new.techsync (organization_id, techsync_name, last_modified)
 select (select sgadb_new.organization.id
         from sgadb_new.organization
-        where sgadb.`Techsync Names`.`Name of Club` = sgadb_new.organization.organization_name) as organization_id,
+        where sgadb.`Techsync Names`.`Name of Club` = sgadb_new.organization.name) as organization_id,
        `Techsync Name`,
        Timestamp
 from sgadb.`Techsync Names`;
@@ -30,7 +30,7 @@ select ID,
        (select sgadb_new.organization.id
         from sgadb_new.organization
         where sgadb.`Organization Comments`.`Name of Club` =
-              sgadb_new.organization.organization_name) as organization_id,
+              sgadb_new.organization.name) as organization_id,
        `Comment Date`,
        Comment,
        Timestamp
@@ -40,7 +40,7 @@ insert into sgadb_new.organization_contact_info (organization_id, president_emai
 select (select sgadb_new.organization.id
         from sgadb_new.organization
         where sgadb.`Organizations Contact Info`.`Name of Club` =
-              sgadb_new.organization.organization_name) as organization_id,
+              sgadb_new.organization.name) as organization_id,
        `President Email`,
        `Treasurer Email`,
        Timestamp
@@ -50,7 +50,7 @@ insert into sgadb_new.organization_membership_number (organization_id, fiscal_ye
 select (select sgadb_new.organization.id
         from sgadb_new.organization
         where sgadb.`Organization Membership Numbers`.`Name of Organization` =
-              sgadb_new.organization.organization_name) as organization_id,
+              sgadb_new.organization.name) as organization_id,
        `Fiscal Year`,
        `Active Members`,
        Timestamp
@@ -60,7 +60,7 @@ insert into sgadb_new.budget (id, organization_id, fiscal_year, notes, last_modi
 select ID,
        (select sgadb_new.organization.id
         from sgadb_new.organization
-        where sgadb.Budget.`Name of Club` = sgadb_new.organization.organization_name) as organization_id,
+        where sgadb.Budget.`Name of Club` = sgadb_new.organization.name) as organization_id,
        `Fiscal Year`,
        Notes,
        Timestamp
@@ -115,7 +115,7 @@ insert into sgadb_new.funding_request (id, organization_id, description, hearing
 select ID,
        (select sgadb_new.organization.id
         from sgadb_new.organization
-        where sgadb.`Funding Requests`.`Name of Club` = sgadb_new.organization.organization_name) as organization_id,
+        where sgadb.`Funding Requests`.`Name of Club` = sgadb_new.organization.name) as organization_id,
        Description,
        `Funding Date`,
        `Fiscal Year`,
@@ -202,7 +202,7 @@ insert into sgadb_new.reallocation (id, organization_id, description, hearing_da
 select ID,
        (select sgadb_new.organization.id
         from sgadb_new.organization
-        where sgadb.Reallocations.`Name of Club` = sgadb_new.organization.organization_name) as organization_id,
+        where sgadb.Reallocations.`Name of Club` = sgadb_new.organization.name) as organization_id,
        Description,
        `Hearing Date`,
        `Fiscal Year`,
@@ -231,7 +231,7 @@ insert into sgadb_new.reclassification (id, organization_id, hearing_date, fisca
 select ID,
        (select sgadb_new.organization.id
         from sgadb_new.organization
-        where sgadb.Reclassifications.`Name of Club` = sgadb_new.organization.organization_name) as organization_id,
+        where sgadb.Reclassifications.`Name of Club` = sgadb_new.organization.name) as organization_id,
        `Hearing Date`,
        `Fiscal Year`,
        `Dot Number`,
@@ -259,7 +259,7 @@ select ID,
        (select sgadb_new.organization.id
         from sgadb_new.organization
         where sgadb.`Mandatory Transfers`.`Parent Organization` =
-              sgadb_new.organization.organization_name) as organization_id,
+              sgadb_new.organization.name) as organization_id,
        `Fund Name`,
        `Fiscal Year`,
        Worktag,
@@ -350,6 +350,6 @@ select ID,
        Notes,
        (select sgadb_new.organization.id
         from sgadb_new.organization
-        where sgadb.SOC.`Name of Club` = sgadb_new.organization.organization_name) as organization_id,
+        where sgadb.SOC.`Name of Club` = sgadb_new.organization.name) as organization_id,
        Timestamp
 from sgadb.SOC;

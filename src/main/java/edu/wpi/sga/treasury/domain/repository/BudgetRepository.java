@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BudgetRepository extends JpaRepository<Budget, Integer>, BudgetRepositoryCustom {
-    Optional<List<Budget>> findAllByOrganizationNameIsOrderByFiscalYearDesc(String name);
+    List<Budget> findAllByOrganizationNameIsOrderByFiscalYearDesc(String name);
 
     Page<Budget> findAllByOrganizationIsInactiveIsFalseOrderByOrganizationAscFiscalYearDesc(Pageable pageable);
 }

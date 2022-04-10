@@ -60,7 +60,7 @@ class BudgetAccessorTest {
         budget.setOrganization(org);
 
         when(budgetRepository.findAllByOrganizationNameIsOrderByFiscalYearDesc(any()))
-                .thenReturn(Optional.of(List.of(budget)));
+                .thenReturn(List.of(budget));
 
         BudgetDto budgetDto = BudgetDto.builder()
                 .id(1)
@@ -85,12 +85,10 @@ class BudgetAccessorTest {
     void getBudgetsForOrganizationNotFound() {
         // Arrange
         when(budgetRepository.findAllByOrganizationNameIsOrderByFiscalYearDesc(any()))
-                .thenReturn(Optional.empty());
+                .thenReturn(List.of());
 
         // Act
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            accessor.getBudgetsForOrganization("Cheese Club");
-        });
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> accessor.getBudgetsForOrganization("Cheese Club"));
 
         // Assert
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
@@ -126,9 +124,7 @@ class BudgetAccessorTest {
         when(budgetRepository.findById(any())).thenReturn(Optional.empty());
 
         // Act
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            accessor.getBudgetById(1);
-        });
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> accessor.getBudgetById(1));
 
         // Assert
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());

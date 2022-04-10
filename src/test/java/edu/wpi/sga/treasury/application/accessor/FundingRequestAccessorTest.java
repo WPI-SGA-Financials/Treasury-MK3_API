@@ -54,7 +54,7 @@ class FundingRequestAccessorTest {
         FundingRequest fr = createSimpleFundingRequest("Cheese Club", 1);
 
         when(fundingRequestRepository.findAllByOrganizationNameOrderByHearingDateDesc(any()))
-                .thenReturn(Optional.of(List.of(fr)));
+                .thenReturn(List.of(fr));
 
         // Act
         List<FundingRequestDto> returnedData = accessor.getFundingRequestsForOrganization("Cheese Club");
@@ -70,12 +70,10 @@ class FundingRequestAccessorTest {
     void getFundingRequestsForOrganizationNotFound() {
         // Arrange
         when(fundingRequestRepository.findAllByOrganizationNameOrderByHearingDateDesc(any()))
-                .thenReturn(Optional.empty());
+                .thenReturn(List.of());
 
         // Act
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            accessor.getFundingRequestsForOrganization("Cheese");
-        });
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> accessor.getFundingRequestsForOrganization("Cheese"));
 
         // Assert
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
@@ -105,9 +103,7 @@ class FundingRequestAccessorTest {
         when(fundingRequestRepository.findById(any())).thenReturn(Optional.empty());
 
         // Act
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            accessor.getFundingRequestById(1);
-        });
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> accessor.getFundingRequestById(1));
 
         // Assert
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());

@@ -32,10 +32,10 @@ public class BudgetAccessorImpl implements BudgetAccessor {
 
     @Override
     public List<BudgetDto> getBudgetsForOrganization(String organization) {
-        Optional<List<Budget>> organizationBudgets = budgetRepository.findAllByOrganizationNameIsOrderByFiscalYearDesc(organization);
+        List<Budget> organizationBudgets = budgetRepository.findAllByOrganizationNameIsOrderByFiscalYearDesc(organization);
 
-        if(organizationBudgets.isPresent() && !organizationBudgets.get().isEmpty()) {
-            return organizationBudgets.get().stream().map(budgetHelperFunctions::translateBudgetToBudgetDto).collect(Collectors.toList());
+        if (!organizationBudgets.isEmpty()) {
+            return organizationBudgets.stream().map(budgetHelperFunctions::translateBudgetToBudgetDto).collect(Collectors.toList());
         }
 
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -43,13 +43,10 @@ public class BudgetAccessorImpl implements BudgetAccessor {
 
     @Override
     public BudgetDetailedDto getBudgetById(Integer id) {
-        Optional<Budget> budget = budgetRepository.findById(id);
+        Optional<Budget> optionalBudget = budgetRepository.findById(id);
 
-        if(budget.isPresent()) {
-            return budgetHelperFunctions.translateBudgetToBudgetDetailedDto(budget.get());
-        }
-
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return optionalBudget.map(budgetHelperFunctions::translateBudgetToBudgetDetailedDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @Override
@@ -60,7 +57,7 @@ public class BudgetAccessorImpl implements BudgetAccessor {
 
         request = generalHelperFunctions.cleanRequest(request);
 
-        if(generalHelperFunctions.determineFilterable(request)) {
+        if (generalHelperFunctions.determineFilterable(request)) {
             budgets = budgetRepository.findBudgetsByFilters(request);
         } else {
             budgets = budgetRepository.findAllByOrganizationIsInactiveIsFalseOrderByOrganizationAscFiscalYearDesc(pageable);

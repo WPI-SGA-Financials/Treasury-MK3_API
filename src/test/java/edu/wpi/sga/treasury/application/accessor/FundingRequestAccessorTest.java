@@ -53,8 +53,8 @@ class FundingRequestAccessorTest {
         // Arrange
         FundingRequest fr = createSimpleFundingRequest("Cheese Club", 1);
 
-        when(fundingRequestRepository.findAllByOrganizationNameOrderByFundingDateDesc(any()))
-                .thenReturn(Optional.of(List.of(fr)));
+        when(fundingRequestRepository.findAllByOrganizationNameOrderByHearingDateDesc(any()))
+                .thenReturn(List.of(fr));
 
         // Act
         List<FundingRequestDto> returnedData = accessor.getFundingRequestsForOrganization("Cheese Club");
@@ -69,13 +69,11 @@ class FundingRequestAccessorTest {
     @DisplayName("Get Funding Requests for Organization not found")
     void getFundingRequestsForOrganizationNotFound() {
         // Arrange
-        when(fundingRequestRepository.findAllByOrganizationNameOrderByFundingDateDesc(any()))
-                .thenReturn(Optional.empty());
+        when(fundingRequestRepository.findAllByOrganizationNameOrderByHearingDateDesc(any()))
+                .thenReturn(List.of());
 
         // Act
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            accessor.getFundingRequestsForOrganization("Cheese");
-        });
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> accessor.getFundingRequestsForOrganization("Cheese"));
 
         // Assert
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
@@ -105,9 +103,7 @@ class FundingRequestAccessorTest {
         when(fundingRequestRepository.findById(any())).thenReturn(Optional.empty());
 
         // Act
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-            accessor.getFundingRequestById(1);
-        });
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> accessor.getFundingRequestById(1));
 
         // Assert
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
@@ -151,7 +147,7 @@ class FundingRequestAccessorTest {
         FundingRequest fr100 = createSimpleFundingRequest("Student Government Association", 2);
         fr100.setDotNumber("F.100");
 
-        when(fundingRequestRepository.findAllByOrganizationInactiveIsFalseOrderByFundingDateDescDotNumberDesc(any()))
+        when(fundingRequestRepository.findAllByOrganizationIsInactiveIsFalseOrderByHearingDateDescDotNumberDesc(any()))
                 .thenReturn(new PageImpl<>(List.of(fr100, fr101)));
 
         // Act

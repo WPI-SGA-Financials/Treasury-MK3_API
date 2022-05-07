@@ -10,45 +10,45 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "BudgetLineItem")
+@Table(name = "budget_line_item")
 public class BudgetLineItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "BS_ID", nullable = false)
+    @JoinColumn(name = "budget_section_id", nullable = false)
     private BudgetSection budgetSection;
 
-    @Column(name = "Line_Item_Name", nullable = false)
+    @Column(name = "line_item_name", nullable = false)
     private String lineItemName;
 
-    @Column(name = "Amount_Request", nullable = false, precision = 10, scale = 2)
+    @Column(name = "amount_requested", nullable = false, precision = 10, scale = 2)
     private BigDecimal amountRequest;
 
-    @Column(name = "Amount_Proposed", nullable = false, precision = 10, scale = 2)
+    @Column(name = "amount_proposed", nullable = false, precision = 10, scale = 2)
     private BigDecimal amountProposed;
 
-    @Column(name = "Appealed", nullable = false)
+    @Column(name = "appealed", nullable = false)
     private Boolean appealed = false;
 
-    @Column(name = "Appeal_Amount", nullable = false, precision = 10, scale = 2)
-    private BigDecimal appealAmount;
+    @Column(name = "amount_appealed", nullable = false, precision = 10, scale = 2)
+    private BigDecimal amountAppealed;
 
-    @Column(name = "Appeal_Decision", nullable = false, length = 20)
+    @Column(name = "appeal_decision", nullable = false, length = 20)
     private String appealDecision;
 
-    @Column(name = "Approved_Appeal", nullable = false, precision = 10, scale = 2)
+    @Column(name = "approved_appeal", nullable = false, precision = 10, scale = 2)
     private BigDecimal approvedAppeal;
 
-    @Column(name = "Notes", nullable = false)
+    @Column(name = "notes", nullable = false)
     private String notes;
 
-    @Column(name = "Amount_Spent", nullable = false, precision = 10, scale = 2)
+    @Column(name = "amount_spent", nullable = false, precision = 10, scale = 2)
     private BigDecimal amountSpent;
 
-    @Column(name = "Timestamp", nullable = false)
-    private LocalDateTime timestamp;
+    @Column(name = "last_modified", nullable = false)
+    private LocalDateTime lastModified;
 
 }

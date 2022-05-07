@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReallocationRequestRepository extends JpaRepository<ReallocationRequest, Integer>, ReallocationRequestRepositoryCustom {
-    Optional<List<ReallocationRequest>> findAllByOrganizationNameOrderByHearingDateDesc(String organization);
+    List<ReallocationRequest> findAllByOrganizationNameOrderByHearingDateDesc(String organization);
 
-    Page<ReallocationRequest> findAllByOrganizationInactiveIsFalseOrderByHearingDateDescDotNumberDesc(Pageable pageable);
+    Page<ReallocationRequest> findAllByOrganizationIsInactiveIsFalseOrderByHearingDateDescDotNumberDesc(Pageable pageable);
 }

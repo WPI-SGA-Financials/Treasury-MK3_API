@@ -34,10 +34,10 @@ public class FundingRequestAccessorImpl implements FundingRequestAccessor {
 
     @Override
     public List<FundingRequestDto> getFundingRequestsForOrganization(String organization) {
-        Optional<List<FundingRequest>> orgFrs = fundingRequestRepository.findAllByOrganizationNameOrderByFundingDateDesc(organization);
+        List<FundingRequest> orgFrs = fundingRequestRepository.findAllByOrganizationNameOrderByHearingDateDesc(organization);
 
-        if(orgFrs.isPresent() && !orgFrs.get().isEmpty()) {
-            return orgFrs.get().stream().map(fundingRequestMapper::fundingRequestToFundingRequestDto).collect(Collectors.toList());
+        if (!orgFrs.isEmpty()) {
+            return orgFrs.stream().map(fundingRequestMapper::fundingRequestToFundingRequestDto).collect(Collectors.toList());
         }
 
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -54,7 +54,7 @@ public class FundingRequestAccessorImpl implements FundingRequestAccessor {
         if (generalHelperFunctions.determineFilterable(request)) {
             fundingRequests = fundingRequestRepository.findFundingRequestsByFilters(request);
         } else {
-            fundingRequests = fundingRequestRepository.findAllByOrganizationInactiveIsFalseOrderByFundingDateDescDotNumberDesc(pageable);
+            fundingRequests = fundingRequestRepository.findAllByOrganizationIsInactiveIsFalseOrderByHearingDateDescDotNumberDesc(pageable);
         }
 
         List<FundingRequestDto> dtos = fundingRequests.getContent().stream().map(fundingRequestMapper::fundingRequestToFundingRequestDto).collect(Collectors.toList());

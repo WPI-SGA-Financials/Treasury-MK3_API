@@ -33,7 +33,7 @@ public class FundingRequestRepositoryCustomImpl implements FundingRequestReposit
         Predicate filter = getPredicate(request, cb, fr, orgJoin);
 
         List<Order> order = List.of(
-                cb.desc(fr.get(FundingRequest_.FUNDING_DATE)),
+                cb.desc(fr.get(FundingRequest_.HEARING_DATE)),
                 cb.desc(fr.get(FundingRequest_.DOT_NUMBER))
         );
 

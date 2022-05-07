@@ -5,54 +5,53 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "`Funding Requests`")
+@Table(name = "funding_request")
 public class FundingRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "`Name of Club`", nullable = false)
+    @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
-    @Column(name = "Description")
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "`Funding Date`", nullable = false)
-    private LocalDate fundingDate;
+    @Column(name = "hearing_date", nullable = false)
+    private LocalDate hearingDate;
 
-    @Column(name = "`Fiscal Year`", length = 6)
+    @Column(name = "fiscal_year", length = 6)
     private String fiscalYear;
 
-    @Column(name = "`Date of Event`")
+    @Column(name = "date_of_event")
     private LocalDate dateOfEvent;
 
-    @Column(name = "`Dot Number`", nullable = false, length = 6)
+    @Column(name = "dot_number", nullable = false, length = 6)
     private String dotNumber;
 
-    @Column(name = "`Amount Requested`", nullable = false, precision = 10, scale = 2)
+    @Column(name = "amount_requested", nullable = false, precision = 10, scale = 2)
     private BigDecimal amountRequested;
 
-    @Column(name = "Decision", nullable = false, length = 20)
+    @Column(name = "decision", nullable = false, length = 20)
     private String decision;
 
-    @Column(name = "`Amount Approved`", nullable = false, precision = 10, scale = 2)
+    @Column(name = "amount_approved", nullable = false, precision = 10, scale = 2)
     private BigDecimal amountApproved;
 
-    @Column(name = "Notes", length = 512)
+    @Column(name = "notes", length = 512)
     private String notes;
 
-    @Column(name = "Timestamp", nullable = false)
-    private Instant timestamp;
+    @Column(name = "last_modified", nullable = false)
+    private LocalDateTime lastModified;
 
-    @OneToOne(mappedBy = "fundingRequest")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "fundingRequest")
     private FRAppeal frAppeal;
-
 }

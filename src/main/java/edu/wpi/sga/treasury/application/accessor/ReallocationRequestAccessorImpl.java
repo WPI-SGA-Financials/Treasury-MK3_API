@@ -35,10 +35,10 @@ public class ReallocationRequestAccessorImpl implements ReallocationRequestAcces
 
     @Override
     public List<ReallocationRequestDto> getReallocationRequestsForOrganization(String organization) {
-        Optional<List<ReallocationRequest>> orgReallocs = reallocationRequestRepository.findAllByOrganizationNameOrderByHearingDateDesc(organization);
+        List<ReallocationRequest> orgReallocs = reallocationRequestRepository.findAllByOrganizationNameOrderByHearingDateDesc(organization);
 
-        if(orgReallocs.isPresent() && orgReallocs.get().size() > 0) {
-            return orgReallocs.get().stream().map(reallocationRequestMapper::reallocationRequestToReallocationRequestDto).collect(Collectors.toList());
+        if (!orgReallocs.isEmpty()) {
+            return orgReallocs.stream().map(reallocationRequestMapper::reallocationRequestToReallocationRequestDto).collect(Collectors.toList());
         }
 
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -52,10 +52,10 @@ public class ReallocationRequestAccessorImpl implements ReallocationRequestAcces
 
         request = generalHelperFunctions.cleanRequest(request);
 
-        if(generalHelperFunctions.determineFilterable(request)) {
+        if (generalHelperFunctions.determineFilterable(request)) {
             reallocs = reallocationRequestRepository.findReallocsByFilters(request);
         } else {
-            reallocs = reallocationRequestRepository.findAllByOrganizationInactiveIsFalseOrderByHearingDateDescDotNumberDesc(pageable);
+            reallocs = reallocationRequestRepository.findAllByOrganizationIsInactiveIsFalseOrderByHearingDateDescDotNumberDesc(pageable);
         }
 
         List<ReallocationRequestDto> dtos = reallocs.getContent()
@@ -68,12 +68,9 @@ public class ReallocationRequestAccessorImpl implements ReallocationRequestAcces
 
     @Override
     public ReallocationRequestDetailedDto getReallocationRequestById(Integer id) {
-        Optional<ReallocationRequest> realloc = reallocationRequestRepository.findById(id);
+        Optional<ReallocationRequest> optionalRealloc = reallocationRequestRepository.findById(id);
 
-        if(realloc.isPresent()) {
-            return reallocationRequestMapper.reallocationRequestToReallocationRequestDetailedDto(realloc.get());
-        }
-
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return optionalRealloc.map(reallocationRequestMapper::reallocationRequestToReallocationRequestDetailedDto)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

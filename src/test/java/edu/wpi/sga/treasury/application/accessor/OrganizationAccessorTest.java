@@ -77,7 +77,7 @@ class OrganizationAccessorTest {
         org.setAcronym("Cheese");
         org.setClassification("Class 1 - Special Interest");
 
-        when(organizationRepository.findAllByInactiveIsFalse(any())).thenReturn(new PageImpl<>(List.of(org, org)));
+        when(organizationRepository.findAllByIsInactiveIsFalse(any())).thenReturn(new PageImpl<>(List.of(org, org)));
 
         // Act
         PagedRequest request = new PagedRequest();

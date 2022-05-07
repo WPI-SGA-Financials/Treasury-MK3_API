@@ -112,7 +112,7 @@ public class BudgetSectionHelperFunctions {
 
     private BigDecimal getAppealAmountFromSection(BudgetSection budgetSection) {
         return budgetSection.getBudgetLineItems().stream()
-                .map(BudgetLineItem::getAppealAmount)
+                .map(BudgetLineItem::getAmountAppealed)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

@@ -97,7 +97,7 @@ public class BudgetRepositoryCustomImpl implements BudgetRepositoryCustom {
         subqueryLegacy.select(legacySubRoot.get(BudgetLegacy_.BUDGET).get(Budget_.ID));
 
         subqueryLegacy.where(cb.and(
-                cb.function("fnc_FiscalClass",
+                cb.function("fnc_fiscal_class",
                                 String.class,
                                 legacySubRoot.get(BudgetLegacy_.AMOUNT_PROPOSED),
                                 legacySubRoot.get(BudgetLegacy_.APPROVED_APPEAL))
@@ -121,7 +121,7 @@ public class BudgetRepositoryCustomImpl implements BudgetRepositoryCustom {
 
         subquerySection.groupBy(sectionSubRoot.get(BudgetSection_.BUDGET));
 
-        subquerySection.having(cb.function("fnc_FiscalClass",
+        subquerySection.having(cb.function("fnc_fiscal_class",
                         String.class,
                         cb.sum(lineItemJoin.get(BudgetLineItem_.AMOUNT_PROPOSED)),
                         cb.sum(lineItemJoin.get(BudgetLineItem_.APPROVED_APPEAL)))

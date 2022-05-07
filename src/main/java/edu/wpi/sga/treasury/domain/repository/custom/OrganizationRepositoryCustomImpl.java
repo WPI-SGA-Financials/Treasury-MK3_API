@@ -82,7 +82,7 @@ public class OrganizationRepositoryCustomImpl implements OrganizationRepositoryC
         }
 
         if(!request.isIncludeInactive()) {
-            orgBasedPredicates.add(cb.isFalse(organization.get(Organization_.INACTIVE)));
+            orgBasedPredicates.add(cb.isFalse(organization.get(Organization_.IS_INACTIVE)));
         }
 
         return orgBasedPredicates.stream().reduce(cb::and).orElse(cb.conjunction());

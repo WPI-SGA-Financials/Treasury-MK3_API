@@ -11,22 +11,22 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "BudgetSection")
+@Table(name = "budget_section")
 public class BudgetSection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "B_ID", nullable = false)
+    @JoinColumn(name = "budget_id", nullable = false)
     private Budget budget;
 
-    @Column(name = "Section_Name", nullable = false)
+    @Column(name = "section_name", nullable = false)
     private String sectionName;
 
-    @Column(name = "Timestamp", nullable = false)
-    private Instant timestamp;
+    @Column(name = "last_modified", nullable = false)
+    private Instant lastModified;
 
     @OneToMany(mappedBy = "budgetSection")
     private List<BudgetLineItem> budgetLineItems = new ArrayList<>();

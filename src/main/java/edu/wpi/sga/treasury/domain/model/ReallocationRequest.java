@@ -11,48 +11,48 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "Reallocations")
+@Table(name = "reallocation")
 public class ReallocationRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "`Name of Club`", nullable = false)
+    @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
 
-    @Column(name = "Description", nullable = false)
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "`Hearing Date`", nullable = false)
+    @Column(name = "hearing_date", nullable = false)
     private LocalDate hearingDate;
 
-    @Column(name = "`Fiscal Year`", nullable = false)
+    @Column(name = "fiscal_year", nullable = false)
     private String fiscalYear;
 
-    @Column(name = "`Dot Number`", nullable = false)
+    @Column(name = "dot_number", nullable = false)
     private String dotNumber;
 
-    @Column(name = "`Allocated From`")
+    @Column(name = "allocated_from")
     private String allocatedFrom;
 
-    @Column(name = "`Allocated To`")
+    @Column(name = "allocated_to")
     private String allocatedTo;
 
-    @Column(name = "`Allocation Amount`", nullable = false, precision = 10, scale = 2)
-    private BigDecimal allocationAmount;
+    @Column(name = "amount_allocated", nullable = false, precision = 10, scale = 2)
+    private BigDecimal amountAllocated;
 
-    @Column(name = "Decision", nullable = false)
+    @Column(name = "decision", nullable = false)
     private String decision;
 
-    @Column(name = "`Amount Approved`", nullable = false, precision = 10, scale = 2)
+    @Column(name = "amount_approved", nullable = false, precision = 10, scale = 2)
     private BigDecimal amountApproved;
 
-    @Column(name = "Notes")
+    @Column(name = "notes")
     private String notes;
 
-    @Column(name = "Timestamp", nullable = false)
-    private LocalDateTime timestamp;
+    @Column(name = "last_modified", nullable = false)
+    private LocalDateTime lastModified;
 
 }

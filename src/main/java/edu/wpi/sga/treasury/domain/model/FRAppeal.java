@@ -11,42 +11,42 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@Table(name = "FRAppeals")
+@Table(name = "fr_appeal")
 public class FRAppeal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
     @OneToOne(optional = false)
-    @JoinColumn(name = "FR_ID", nullable = false)
+    @JoinColumn(name = "funding_request_id", nullable = false)
     private FundingRequest fundingRequest;
 
-    @Column(name = "`New Dot Number`", nullable = false, length = 6)
+    @Column(name = "new_dot_number", nullable = false, length = 6)
     private String newDotNumber;
 
-    @Column(name = "`Appeal Date`", nullable = false)
+    @Column(name = "appeal_date", nullable = false)
     private LocalDate appealDate;
 
-    @Column(name = "Description")
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "`Appeal Amount`", nullable = false, precision = 10, scale = 2)
+    @Column(name = "appeal_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal appealAmount;
 
-    @Column(name = "Decision", nullable = false, length = 20)
+    @Column(name = "decision", nullable = false, length = 20)
     private String decision;
 
-    @Column(name = "`Approved Appeal`", nullable = false, precision = 10, scale = 2)
+    @Column(name = "approved_appeal", nullable = false, precision = 10, scale = 2)
     private BigDecimal approvedAppeal;
 
-    @Column(name = "Notes")
+    @Column(name = "notes")
     private String notes;
 
-    @Column(name = "`Minutes Link`")
+    @Column(name = "minutes_link")
     private String minutesLink;
 
-    @Column(name = "Timestamp", nullable = false)
-    private LocalDateTime timestamp;
+    @Column(name = "last_modified", nullable = false)
+    private LocalDateTime lastModified;
 
 }

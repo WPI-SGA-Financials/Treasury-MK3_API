@@ -6,4 +6,14 @@
     <option name="isLombokGetterAndSetter" value="true" />
     <option name="scaffoldingLanguage" />
   </component>
+  <component name="ReverseEngineeringSettings">
+    <database-infos>
+      <database-info dbms-id="mysql">
+        <mapping-types>
+          <mapping-type sql-type="DATETIME" java-class="java.time.LocalDateTime" />
+          <mapping-type sql-type="TIMESTAMP" java-class="java.time.LocalDateTime" />
+        </mapping-types>
+      </database-info>
+    </database-infos>
+  </component>
 </project>

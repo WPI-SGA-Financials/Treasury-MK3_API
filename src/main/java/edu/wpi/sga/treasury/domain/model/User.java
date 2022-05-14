@@ -1,5 +1,7 @@
 package edu.wpi.sga.treasury.domain.model;
 
+import edu.wpi.sga.treasury.application.enums.Role;
+import edu.wpi.sga.treasury.application.enums.WorkingLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,8 +25,13 @@ public class User {
     @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
 
-    @Column(name = "role", nullable = false, length = 10)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "working_level", nullable = false)
+    private WorkingLevel workingLevel;
 
     @Column(name = "msal_id", nullable = false)
     private String msalId;

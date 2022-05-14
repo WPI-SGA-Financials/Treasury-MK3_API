@@ -1,10 +1,11 @@
 create table user
 (
-    id         int auto_increment primary key,
-    first_name varchar(100) not null,
-    last_name  varchar(100) not null,
-    role       varchar(10)  not null,
-    msal_id    varchar(255) not null,
+    id            int auto_increment primary key,
+    first_name    varchar(100) not null,
+    last_name     varchar(100) not null,
+    role          varchar(10)  not null,
+    working_level varchar(10)  not null,
+    msal_id       varchar(255) not null,
     constraint user_msal_id_uq unique (msal_id)
 );
 

@@ -1,6 +1,6 @@
 package edu.wpi.sga.treasury.application.accessor;
 
-import edu.wpi.sga.treasury.application.dto.AllMetadata;
+import edu.wpi.sga.treasury.application.dto.misc.AllMetadata;
 import edu.wpi.sga.treasury.application.enums.ClubClassification;
 import edu.wpi.sga.treasury.application.enums.ClubType;
 import edu.wpi.sga.treasury.application.enums.FiscalClass;
@@ -9,7 +9,6 @@ import edu.wpi.sga.treasury.domain.repository.StudentLifeFeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;

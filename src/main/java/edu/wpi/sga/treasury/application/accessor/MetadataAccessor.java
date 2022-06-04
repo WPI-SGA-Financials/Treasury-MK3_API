@@ -1,6 +1,6 @@
 package edu.wpi.sga.treasury.application.accessor;
 
-import edu.wpi.sga.treasury.application.dto.AllMetadata;
+import edu.wpi.sga.treasury.application.dto.misc.AllMetadata;
 
 import java.util.List;
 import java.util.Map;

@@ -1,8 +1,8 @@
 package edu.wpi.sga.treasury.application.accessor;
 
 import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
-import edu.wpi.sga.treasury.application.dto.FundingRequestDetailedDto;
-import edu.wpi.sga.treasury.application.dto.FundingRequestDto;
+import edu.wpi.sga.treasury.application.dto.funding_request.FundingRequestDetailedDto;
+import edu.wpi.sga.treasury.application.dto.funding_request.FundingRequestDto;
 import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.funding_request.FundingRequest;
 import edu.wpi.sga.treasury.domain.repository.FundingRequestRepository;

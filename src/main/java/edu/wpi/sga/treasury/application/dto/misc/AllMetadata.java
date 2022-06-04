@@ -1,4 +1,4 @@
-package edu.wpi.sga.treasury.application.dto;
+package edu.wpi.sga.treasury.application.dto.misc;
 
 
 import lombok.Builder;

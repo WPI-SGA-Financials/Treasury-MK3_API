@@ -1,11 +1,11 @@
 package edu.wpi.sga.treasury.application.accessor;
 
+import edu.wpi.sga.treasury.application.dto.misc.ListResponse;
+import edu.wpi.sga.treasury.application.dto.misc.Response;
 import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
 import edu.wpi.sga.treasury.application.dto.ReallocationRequestDetailedDto;
 import edu.wpi.sga.treasury.application.dto.ReallocationRequestDto;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedResponse;
 
 public interface ReallocationRequestAccessor {
     /**
@@ -14,7 +14,7 @@ public interface ReallocationRequestAccessor {
      * @param organization Organization
      * @return List of Reallocation Requests
      */
-    List<ReallocationRequestDto> getReallocationRequestsForOrganization(String organization);
+    ListResponse<ReallocationRequestDto> getReallocationRequestsForOrganization(String organization);
 
     /**
      * Get a filtered and paged list of Reallocation Requests
@@ -22,7 +22,7 @@ public interface ReallocationRequestAccessor {
      * @param request Paged Request
      * @return Page of Reallocation Requests
      */
-    Page<ReallocationRequestDto> getReallocationRequests(PagedRequest request);
+    PagedResponse<ReallocationRequestDto> getReallocationRequests(PagedRequest request);
 
     /**
      * Get Reallocation Request by ID
@@ -30,5 +30,5 @@ public interface ReallocationRequestAccessor {
      * @param id Reallocation ID
      * @return Reallocation
      */
-    ReallocationRequestDetailedDto getReallocationRequestById(Integer id);
+    Response<ReallocationRequestDetailedDto> getReallocationRequestById(Integer id);
 }

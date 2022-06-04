@@ -2,7 +2,7 @@ package edu.wpi.sga.treasury.api.controller;
 
 import edu.wpi.sga.treasury.application.dto.misc.Response;
 import edu.wpi.sga.treasury.application.accessor.MetadataAccessor;
-import edu.wpi.sga.treasury.application.dto.AllMetadata;
+import edu.wpi.sga.treasury.application.dto.misc.AllMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

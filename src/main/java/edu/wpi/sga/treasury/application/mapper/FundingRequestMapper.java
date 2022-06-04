@@ -1,7 +1,7 @@
 package edu.wpi.sga.treasury.application.mapper;
 
-import edu.wpi.sga.treasury.application.dto.FundingRequestDetailedDto;
-import edu.wpi.sga.treasury.application.dto.FundingRequestDto;
+import edu.wpi.sga.treasury.application.dto.funding_request.FundingRequestDetailedDto;
+import edu.wpi.sga.treasury.application.dto.funding_request.FundingRequestDto;
 import edu.wpi.sga.treasury.domain.model.funding_request.FundingRequest;
 import org.mapstruct.*;
 

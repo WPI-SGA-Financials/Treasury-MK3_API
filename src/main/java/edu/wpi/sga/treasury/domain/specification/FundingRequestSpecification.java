@@ -2,8 +2,8 @@ package edu.wpi.sga.treasury.domain.specification;
 
 import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
 import edu.wpi.sga.treasury.domain.model.funding_request.FundingRequest;
-import edu.wpi.sga.treasury.domain.model.FundingRequest_;
 import edu.wpi.sga.treasury.domain.model.Organization;
+import edu.wpi.sga.treasury.domain.model.funding_request.FundingRequest_;
 import edu.wpi.sga.treasury.domain.specification.util.SpecificationUtil;
 import lombok.Builder;
 import org.springframework.data.jpa.domain.Specification;

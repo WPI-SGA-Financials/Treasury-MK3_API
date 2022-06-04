@@ -1,8 +1,12 @@
 package edu.wpi.sga.treasury.application.accessor;
 
+import edu.wpi.sga.treasury.application.dto.misc.ListResponse;
+import edu.wpi.sga.treasury.application.dto.misc.Response;
 import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
 import edu.wpi.sga.treasury.application.dto.budget.BudgetDetailedDto;
 import edu.wpi.sga.treasury.application.dto.budget.BudgetDto;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedResponse;
+import edu.wpi.sga.treasury.application.mapper.custom.BudgetMapperCustom;
 import edu.wpi.sga.treasury.application.util.PagedHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.budget.Budget;
 import edu.wpi.sga.treasury.domain.model.Organization;
@@ -15,6 +19,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -39,13 +45,13 @@ class BudgetAccessorTest {
 
     // Util
     @Mock
-    private BudgetHelperFunctions budgetHelperFunctions;
+    private BudgetMapperCustom budgetMapperCustom;
     @Mock
     private PagedHelperFunctions pagedHelperFunctions;
 
     @BeforeEach
     void setUp() {
-        accessor = new BudgetAccessorImpl(budgetRepository, budgetHelperFunctions, pagedHelperFunctions);
+        accessor = new BudgetAccessorImpl(budgetRepository, budgetMapperCustom, pagedHelperFunctions);
     }
 
     @Test
@@ -67,30 +73,16 @@ class BudgetAccessorTest {
                 .nameOfClub("Student Government Association")
                 .build();
 
-        when(budgetHelperFunctions.translateBudgetToBudgetDto(any()))
-                .thenReturn(budgetDto);
+        when(budgetMapperCustom.toBudgetDtos(any()))
+                .thenReturn(List.of(budgetDto));
 
         // Act
-        List<BudgetDto> returnedData = accessor.getBudgetsForOrganization("Student Government Association");
+        ListResponse<BudgetDto> returnedData = accessor.getBudgetsForOrganization("Student Government Association");
 
         // Assert
-        assertEquals(1, returnedData.get(0).getId());
-        assertEquals("FY 19", returnedData.get(0).getFiscalYear());
-        assertEquals("Student Government Association", returnedData.get(0).getNameOfClub());
-    }
-
-    @Test
-    @DisplayName("Get Budgets for Organization not found")
-    void getBudgetsForOrganizationNotFound() {
-        // Arrange
-        when(budgetRepository.findAllByOrganizationNameIsOrderByFiscalYearDesc(any()))
-                .thenReturn(List.of());
-
-        // Act
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> accessor.getBudgetsForOrganization("Cheese Club"));
-
-        // Assert
-        assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
+        assertEquals(1, returnedData.getData().get(0).getId());
+        assertEquals("FY 19", returnedData.getData().get(0).getFiscalYear());
+        assertEquals("Student Government Association", returnedData.getData().get(0).getNameOfClub());
     }
 
     @Test
@@ -106,14 +98,14 @@ class BudgetAccessorTest {
                 .fiscalYear("FY 19")
                 .build();
 
-        when(budgetHelperFunctions.translateBudgetToBudgetDetailedDto(any())).thenReturn(detailedDto);
+        when(budgetMapperCustom.toBudgetDetailedDto(any())).thenReturn(detailedDto);
 
         // Act
-        BudgetDetailedDto returnedData = accessor.getBudgetById(1);
+        Response<BudgetDetailedDto> returnedData = accessor.getBudgetById(1);
 
         // Assert
-        assertEquals(1, returnedData.getId());
-        assertEquals("FY 19", returnedData.getFiscalYear());
+        assertEquals(1, returnedData.getData().getId());
+        assertEquals("FY 19", returnedData.getData().getFiscalYear());
     }
 
     @Test
@@ -137,53 +129,24 @@ class BudgetAccessorTest {
 
         Budget budget = createSimpleBudget();
 
-        when(budgetRepository.findBudgetsByFilters(any())).thenReturn(new PageImpl<>(List.of(budget)));
+        when(budgetRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(new PageImpl<>(List.of(budget)));
 
         BudgetDto budgetDto = BudgetDto.builder()
                 .id(1)
                 .fiscalYear("FY 19")
                 .build();
 
-        when(budgetHelperFunctions.translateBudgetToBudgetDto(any())).thenReturn(budgetDto);
+        when(budgetMapperCustom.toBudgetDtos(any())).thenReturn(List.of(budgetDto));
 
         // Act
         PagedRequest request = new PagedRequest();
         request.setName(List.of("Cheese Club", "Student", " "));
 
-        Page<BudgetDto> returnedData = accessor.getBudgets(request);
+        PagedResponse<BudgetDto> returnedData = accessor.getBudgets(request);
 
         // Assert
-        assertEquals(1L, returnedData.getTotalElements());
-        assertEquals(1, returnedData.getContent().get(0).getId());
-        assertEquals("FY 19", returnedData.getContent().get(0).getFiscalYear());
-    }
-
-    @Test
-    @DisplayName("Get Paged list of Budgets")
-    void getBudgets() {
-        // Arrange
-        mockBasicPagedRequest(pagedHelperFunctions);
-
-        Budget budget = createSimpleBudget();
-
-        when(budgetRepository.findAllByOrganizationIsInactiveIsFalseOrderByOrganizationAscFiscalYearDesc(any())).thenReturn(new PageImpl<>(List.of(budget, budget)));
-
-        BudgetDto budgetDto = BudgetDto.builder()
-                .id(1)
-                .fiscalYear("FY 19")
-                .build();
-
-        when(budgetHelperFunctions.translateBudgetToBudgetDto(any())).thenReturn(budgetDto);
-
-        // Act
-        PagedRequest request = new PagedRequest();
-        request.setPage(1);
-
-        Page<BudgetDto> returnedData = accessor.getBudgets(request);
-
-        // Assert
-        assertEquals(2L, returnedData.getTotalElements());
-        assertEquals(1, returnedData.getContent().get(0).getId());
-        assertEquals("FY 19", returnedData.getContent().get(0).getFiscalYear());
+        assertEquals(1L, returnedData.getMaxResults());
+        assertEquals(1, returnedData.getData().get(0).getId());
+        assertEquals("FY 19", returnedData.getData().get(0).getFiscalYear());
     }
 }

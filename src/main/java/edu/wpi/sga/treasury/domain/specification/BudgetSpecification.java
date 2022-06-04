@@ -2,10 +2,7 @@ package edu.wpi.sga.treasury.domain.specification;
 
 import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
 import edu.wpi.sga.treasury.domain.model.*;
-import edu.wpi.sga.treasury.domain.model.budget.Budget;
-import edu.wpi.sga.treasury.domain.model.budget.BudgetLegacy;
-import edu.wpi.sga.treasury.domain.model.budget.BudgetLineItem;
-import edu.wpi.sga.treasury.domain.model.budget.BudgetSection;
+import edu.wpi.sga.treasury.domain.model.budget.*;
 import edu.wpi.sga.treasury.domain.specification.util.SpecificationUtil;
 import lombok.Builder;
 import org.springframework.data.jpa.domain.Specification;

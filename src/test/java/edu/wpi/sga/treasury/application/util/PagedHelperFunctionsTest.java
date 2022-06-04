@@ -16,10 +16,6 @@ class PagedHelperFunctionsTest {
     }
 
     @Test
-    void determineFilterable() {
-    }
-
-    @Test
     void cleanRequest() {
     }
 }

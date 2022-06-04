@@ -20,7 +20,6 @@ public class GeneralTestUtils {
         cleanedRequest.setName(List.of("Cheese Club", "Student"));
 
         when(pagedHelperFunctions.cleanRequest(any())).thenReturn(cleanedRequest);
-        when(pagedHelperFunctions.determineFilterable(any())).thenReturn(true);
     }
 
     public static void mockBasicPagedRequest(PagedHelperFunctions pagedHelperFunctions) {
@@ -32,6 +31,5 @@ public class GeneralTestUtils {
         cleanedRequest.setPage(1);
 
         when(pagedHelperFunctions.cleanRequest(any())).thenReturn(cleanedRequest);
-        when(pagedHelperFunctions.determineFilterable(any())).thenReturn(false);
     }
 }

@@ -1,11 +1,10 @@
 package edu.wpi.sga.treasury.application.accessor;
 
-import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
-import edu.wpi.sga.treasury.application.dto.BudgetDetailedDto;
-import edu.wpi.sga.treasury.application.dto.BudgetDto;
-import edu.wpi.sga.treasury.application.util.BudgetHelperFunctions;
-import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
-import edu.wpi.sga.treasury.domain.model.Budget;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
+import edu.wpi.sga.treasury.application.dto.budget.BudgetDetailedDto;
+import edu.wpi.sga.treasury.application.dto.budget.BudgetDto;
+import edu.wpi.sga.treasury.application.util.PagedHelperFunctions;
+import edu.wpi.sga.treasury.domain.model.budget.Budget;
 import edu.wpi.sga.treasury.domain.model.Organization;
 import edu.wpi.sga.treasury.domain.repository.BudgetRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,11 +41,11 @@ class BudgetAccessorTest {
     @Mock
     private BudgetHelperFunctions budgetHelperFunctions;
     @Mock
-    private GeneralHelperFunctions generalHelperFunctions;
+    private PagedHelperFunctions pagedHelperFunctions;
 
     @BeforeEach
     void setUp() {
-        accessor = new BudgetAccessorImpl(budgetRepository, budgetHelperFunctions, generalHelperFunctions);
+        accessor = new BudgetAccessorImpl(budgetRepository, budgetHelperFunctions, pagedHelperFunctions);
     }
 
     @Test
@@ -134,7 +133,7 @@ class BudgetAccessorTest {
     @DisplayName("Get Paged and Filtered list of Budgets")
     void getBudgetsFiltered() {
         // Arrange
-        mockBasicFiltering(generalHelperFunctions);
+        mockBasicFiltering(pagedHelperFunctions);
 
         Budget budget = createSimpleBudget();
 
@@ -163,7 +162,7 @@ class BudgetAccessorTest {
     @DisplayName("Get Paged list of Budgets")
     void getBudgets() {
         // Arrange
-        mockBasicPagedRequest(generalHelperFunctions);
+        mockBasicPagedRequest(pagedHelperFunctions);
 
         Budget budget = createSimpleBudget();
 

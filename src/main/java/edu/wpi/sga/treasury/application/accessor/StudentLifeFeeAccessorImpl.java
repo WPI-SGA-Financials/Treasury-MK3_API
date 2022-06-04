@@ -1,6 +1,8 @@
 package edu.wpi.sga.treasury.application.accessor;
 
 import edu.wpi.sga.treasury.application.dto.StudentLifeFeeDto;
+import edu.wpi.sga.treasury.application.dto.misc.ListResponse;
+import edu.wpi.sga.treasury.application.dto.misc.Response;
 import edu.wpi.sga.treasury.application.mapper.StudentLifeFeeMapper;
 import edu.wpi.sga.treasury.domain.model.StudentLifeFee;
 import edu.wpi.sga.treasury.domain.repository.StudentLifeFeeRepository;
@@ -12,7 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,18 +26,17 @@ public class StudentLifeFeeAccessorImpl implements StudentLifeFeeAccessor {
     private final StudentLifeFeeMapper studentLifeFeeMapper = Mappers.getMapper(StudentLifeFeeMapper.class);
 
     @Override
-    public List<StudentLifeFeeDto> getStudentLifeFees() {
-        return studentLifeFeeRepository.findAll().stream().map(studentLifeFeeMapper::studentLifeFeeToStudentLifeFeeDto).collect(Collectors.toList());
+    public ListResponse<StudentLifeFeeDto> getStudentLifeFees() {
+        List<StudentLifeFee> lifeFees = studentLifeFeeRepository.findAll();
+
+        return new ListResponse<>(lifeFees, studentLifeFeeMapper::toSlfDtos);
     }
 
     @Override
-    public StudentLifeFeeDto getStudentLifeFeeByFy(String fy) {
-        Optional<StudentLifeFee> studentLifeFee = studentLifeFeeRepository.findByFiscalYear(fy);
+    public Response<StudentLifeFeeDto> getStudentLifeFeeByFy(String fy) {
+        Optional<StudentLifeFee> optionalSlf = studentLifeFeeRepository.findByFiscalYear(fy);
 
-        if (studentLifeFee.isPresent()) {
-            return studentLifeFeeMapper.studentLifeFeeToStudentLifeFeeDto(studentLifeFee.get());
-        }
-
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return optionalSlf.map(o -> new Response<>(o, studentLifeFeeMapper::studentLifeFeeToStudentLifeFeeDto))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

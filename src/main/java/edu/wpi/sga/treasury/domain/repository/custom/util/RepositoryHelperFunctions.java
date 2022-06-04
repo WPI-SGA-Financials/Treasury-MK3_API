@@ -1,6 +1,6 @@
 package edu.wpi.sga.treasury.domain.repository.custom.util;
 
-import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
 import edu.wpi.sga.treasury.domain.model.Organization_;
 import lombok.RequiredArgsConstructor;
 

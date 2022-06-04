@@ -1,6 +1,6 @@
 package edu.wpi.sga.treasury.application.util;
 
-import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;

@@ -2,6 +2,7 @@ package edu.wpi.sga.treasury.application.accessor;
 
 import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.Organization;
+import edu.wpi.sga.treasury.domain.model.ReallocationRequest;
 import edu.wpi.sga.treasury.domain.repository.ReallocationRequestRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +31,12 @@ class ReallocationRequestAccessorTest {
     void getReallocationRequestsForOrganization() {
         // Arrange
         Organization org = new Organization();
+        org.setId(1);
         org.setName("Cheese Club");
+
+        ReallocationRequest request = new ReallocationRequest();
+        request.setId(1);
+        request.setOrganization(org);
 
         // Act
 

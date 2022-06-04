@@ -1,8 +1,8 @@
 package edu.wpi.sga.treasury.api.controller;
 
-import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
-import edu.wpi.sga.treasury.api.contract.response.PagedResponse;
-import edu.wpi.sga.treasury.api.contract.response.Response;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedResponse;
+import edu.wpi.sga.treasury.application.dto.misc.Response;
 import edu.wpi.sga.treasury.application.accessor.FundingRequestAccessor;
 import edu.wpi.sga.treasury.application.dto.FundingRequestDetailedDto;
 import edu.wpi.sga.treasury.application.dto.FundingRequestDto;

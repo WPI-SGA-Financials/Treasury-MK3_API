@@ -1,6 +1,6 @@
 package edu.wpi.sga.treasury.domain.repository.custom;
 
-import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
 import edu.wpi.sga.treasury.domain.model.FundingRequest;
 import edu.wpi.sga.treasury.domain.model.FundingRequest_;
 import edu.wpi.sga.treasury.domain.model.Organization;

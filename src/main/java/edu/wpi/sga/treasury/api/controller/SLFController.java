@@ -1,6 +1,6 @@
 package edu.wpi.sga.treasury.api.controller;
 
-import edu.wpi.sga.treasury.api.contract.response.Response;
+import edu.wpi.sga.treasury.application.dto.misc.Response;
 import edu.wpi.sga.treasury.application.accessor.StudentLifeFeeAccessor;
 import edu.wpi.sga.treasury.application.dto.StudentLifeFeeDto;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package edu.wpi.sga.treasury.api.contract.request;
+package edu.wpi.sga.treasury.application.dto.pagination;
 
 import lombok.Getter;
 import lombok.Setter;

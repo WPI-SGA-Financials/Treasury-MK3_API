@@ -1,21 +1,23 @@
 package edu.wpi.sga.treasury.application.accessor;
 
-import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
+import edu.wpi.sga.treasury.application.dto.misc.Response;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
 import edu.wpi.sga.treasury.application.dto.OrganizationDto;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedResponse;
 import edu.wpi.sga.treasury.application.mapper.OrganizationMapper;
 import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.Organization;
 import edu.wpi.sga.treasury.domain.repository.OrganizationRepository;
+import edu.wpi.sga.treasury.domain.specification.OrganizationSpecification;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,29 +34,23 @@ public class OrganizationAccessorImpl implements OrganizationAccessor {
     private final GeneralHelperFunctions generalHelperFunctions;
 
     @Override
-    public Page<OrganizationDto> getOrganizations(PagedRequest request) {
+    public PagedResponse<OrganizationDto> getOrganizations(PagedRequest request) {
         Pageable pageable = generalHelperFunctions.generatePagedRequest(request);
-
-        Page<Organization> organizations;
 
         request = generalHelperFunctions.cleanRequest(request);
 
-        if (generalHelperFunctions.determineFilterable(request)) {
-            organizations = organizationRepository.findOrganizationsByFilters(request);
-        } else {
-            organizations = organizationRepository.findAllByIsInactiveIsFalse(pageable);
-        }
+        Specification<Organization> orgSpec = OrganizationSpecification.builder().request(request).build();
 
-        List<OrganizationDto> dtos = organizationMapper.organizationsToOrganizationsDtos(organizations.getContent());
+        Page<Organization> organizations = organizationRepository.findAll(orgSpec, pageable);
 
-        return new PageImpl<>(dtos, pageable, organizations.getTotalElements());
+        return new PagedResponse<>(organizations, organizationMapper::organizationsToOrganizationsDtos);
     }
 
     @Override
-    public OrganizationDto getOrganization(String organization) {
+    public Response<OrganizationDto> getOrganization(String organization) {
         Optional<Organization> optionalOrg = organizationRepository.findByName(organization);
 
-        return optionalOrg.map(organizationMapper::organizationToOrganizationDto)
+        return optionalOrg.map(o -> new Response<>(o, organizationMapper::organizationToOrganizationDto))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

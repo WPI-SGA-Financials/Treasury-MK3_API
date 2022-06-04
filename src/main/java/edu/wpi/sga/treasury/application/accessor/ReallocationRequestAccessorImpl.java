@@ -1,6 +1,6 @@
 package edu.wpi.sga.treasury.application.accessor;
 
-import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
 import edu.wpi.sga.treasury.application.dto.ReallocationRequestDetailedDto;
 import edu.wpi.sga.treasury.application.dto.ReallocationRequestDto;
 import edu.wpi.sga.treasury.application.mapper.ReallocationRequestMapper;

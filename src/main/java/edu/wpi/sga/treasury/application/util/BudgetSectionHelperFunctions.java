@@ -1,8 +1,8 @@
 package edu.wpi.sga.treasury.application.util;
 
 import edu.wpi.sga.treasury.application.dto.budget.BudgetSectionDto;
-import edu.wpi.sga.treasury.domain.model.BudgetLineItem;
-import edu.wpi.sga.treasury.domain.model.BudgetSection;
+import edu.wpi.sga.treasury.domain.model.budget.BudgetLineItem;
+import edu.wpi.sga.treasury.domain.model.budget.BudgetSection;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

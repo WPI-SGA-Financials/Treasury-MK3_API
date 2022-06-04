@@ -4,7 +4,7 @@ import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
 import edu.wpi.sga.treasury.application.dto.FundingRequestDetailedDto;
 import edu.wpi.sga.treasury.application.dto.FundingRequestDto;
 import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
-import edu.wpi.sga.treasury.domain.model.FundingRequest;
+import edu.wpi.sga.treasury.domain.model.funding_request.FundingRequest;
 import edu.wpi.sga.treasury.domain.repository.FundingRequestRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -8,7 +8,7 @@ import edu.wpi.sga.treasury.application.dto.FundingRequestDto;
 import edu.wpi.sga.treasury.application.dto.pagination.PagedResponse;
 import edu.wpi.sga.treasury.application.mapper.FundingRequestMapper;
 import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
-import edu.wpi.sga.treasury.domain.model.FundingRequest;
+import edu.wpi.sga.treasury.domain.model.funding_request.FundingRequest;
 import edu.wpi.sga.treasury.domain.repository.FundingRequestRepository;
 import edu.wpi.sga.treasury.domain.specification.FundingRequestSpecification;
 import lombok.RequiredArgsConstructor;

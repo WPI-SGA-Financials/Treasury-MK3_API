@@ -1,25 +1,31 @@
-package edu.wpi.sga.treasury.application.util;
+package edu.wpi.sga.treasury.application.mapper.custom;
 
 import edu.wpi.sga.treasury.application.dto.budget.BudgetDetailedDto;
 import edu.wpi.sga.treasury.application.dto.budget.BudgetDto;
-import edu.wpi.sga.treasury.application.dto.budget.BudgetDto.BudgetDtoBuilder;
-import edu.wpi.sga.treasury.domain.model.Budget;
-import edu.wpi.sga.treasury.domain.model.BudgetLegacy;
-import edu.wpi.sga.treasury.domain.model.BudgetSection;
+import edu.wpi.sga.treasury.application.util.BudgetSectionHelperFunctions;
+import edu.wpi.sga.treasury.domain.model.budget.Budget;
+import edu.wpi.sga.treasury.domain.model.budget.BudgetLegacy;
+import edu.wpi.sga.treasury.domain.model.budget.BudgetSection;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Component
+@Service
 @RequiredArgsConstructor
-public class BudgetHelperFunctions {
-    // Utils
+public class BudgetMapperCustomImpl implements BudgetMapperCustom {
     private final BudgetSectionHelperFunctions bsHelperFunctions;
 
-    public BudgetDto translateBudgetToBudgetDto(Budget budget) {
-        BudgetDtoBuilder dto = BudgetDto.builder().nameOfClub(budget.getOrganization().getName()).id(budget.getId()).fiscalYear(budget.getFiscalYear());
+    @Override
+    public List<BudgetDto> toBudgetDtos(List<Budget> budgets) {
+        return budgets.stream().map(this::toBudgetDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public BudgetDto toBudgetDto(Budget budget) {
+        BudgetDto.BudgetDtoBuilder dto = BudgetDto.builder().nameOfClub(budget.getOrganization().getName()).id(budget.getId()).fiscalYear(budget.getFiscalYear());
 
         if (budget.getBudgetLegacy() != null) {
             BudgetLegacy legacy = budget.getBudgetLegacy();
@@ -38,8 +44,9 @@ public class BudgetHelperFunctions {
         return dto.build();
     }
 
-    public BudgetDetailedDto translateBudgetToBudgetDetailedDto(Budget budget) {
-        BudgetDto budgetDto = translateBudgetToBudgetDto(budget);
+    @Override
+    public BudgetDetailedDto toBudgetDetailedDto(Budget budget) {
+        BudgetDto budgetDto = toBudgetDto(budget);
 
         BudgetDetailedDto dto = BudgetDetailedDto.builder()
                 .id(budgetDto.getId())
@@ -69,8 +76,8 @@ public class BudgetHelperFunctions {
         return dto;
     }
 
-    /* Private Helper Functions*/
     private BigDecimal getAmountApprovedFromLegacyBudget(BudgetLegacy legacy) {
         return legacy.getAmountProposed().add(legacy.getApprovedAppeal());
     }
+
 }

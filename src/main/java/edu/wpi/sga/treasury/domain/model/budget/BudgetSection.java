@@ -1,4 +1,4 @@
-package edu.wpi.sga.treasury.domain.model;
+package edu.wpi.sga.treasury.domain.model.budget;
 
 import lombok.Getter;
 import lombok.Setter;

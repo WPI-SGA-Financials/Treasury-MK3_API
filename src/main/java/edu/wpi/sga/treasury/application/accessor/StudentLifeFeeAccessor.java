@@ -1,8 +1,8 @@
 package edu.wpi.sga.treasury.application.accessor;
 
 import edu.wpi.sga.treasury.application.dto.StudentLifeFeeDto;
-
-import java.util.List;
+import edu.wpi.sga.treasury.application.dto.misc.ListResponse;
+import edu.wpi.sga.treasury.application.dto.misc.Response;
 
 public interface StudentLifeFeeAccessor {
     /**
@@ -10,7 +10,7 @@ public interface StudentLifeFeeAccessor {
      *
      * @return List of Student Life Fees
      */
-    List<StudentLifeFeeDto> getStudentLifeFees();
+    ListResponse<StudentLifeFeeDto> getStudentLifeFees();
 
     /**
      * Get a Student Life Fee by Fiscal Year
@@ -18,5 +18,5 @@ public interface StudentLifeFeeAccessor {
      * @param fy Fiscal Year
      * @return Student Life Fee for the Fiscal Year
      */
-    StudentLifeFeeDto getStudentLifeFeeByFy(String fy);
+    Response<StudentLifeFeeDto> getStudentLifeFeeByFy(String fy);
 }

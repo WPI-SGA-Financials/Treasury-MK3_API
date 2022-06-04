@@ -22,4 +22,8 @@ public class Response<T> {
         this.timestamp = LocalDateTime.now();
         this.data = mapper.apply(data);
     }
+
+    public Response(@NonNull final T data) {
+        this.data = data;
+    }
 }

@@ -21,4 +21,8 @@ public class ListResponse<T> {
         this.timestamp = LocalDateTime.now();
         this.data = mapper.apply(data);
     }
+
+    public ListResponse(@NonNull final List<T> data) {
+        this.data = data;
+    }
 }

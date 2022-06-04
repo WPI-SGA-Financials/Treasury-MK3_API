@@ -2,7 +2,7 @@ package edu.wpi.sga.treasury.application.accessor;
 
 import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
 import edu.wpi.sga.treasury.application.dto.OrganizationDto;
-import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
+import edu.wpi.sga.treasury.application.util.PagedHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.Organization;
 import edu.wpi.sga.treasury.domain.repository.OrganizationRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,18 +34,18 @@ class OrganizationAccessorTest {
     @Mock
     private OrganizationRepository organizationRepository;
     @Mock
-    private GeneralHelperFunctions generalHelperFunctions;
+    private PagedHelperFunctions pagedHelperFunctions;
 
     @BeforeEach
     void setUp() {
-        accessor = new OrganizationAccessorImpl(organizationRepository, generalHelperFunctions);
+        accessor = new OrganizationAccessorImpl(organizationRepository, pagedHelperFunctions);
     }
 
     @Test
     @DisplayName("Get Paged and Filtered list of Organizations")
     void getOrganizationsFiltered() {
         // Arrange
-        mockBasicFiltering(generalHelperFunctions);
+        mockBasicFiltering(pagedHelperFunctions);
 
         Organization org = new Organization();
         org.setName("Cheese Club");
@@ -70,7 +70,7 @@ class OrganizationAccessorTest {
     @DisplayName("Get Paged list of Organizations")
     void getOrganizations() {
         // Arrange
-        mockBasicPagedRequest(generalHelperFunctions);
+        mockBasicPagedRequest(pagedHelperFunctions);
 
         Organization org = new Organization();
         org.setName("Cheese Club");

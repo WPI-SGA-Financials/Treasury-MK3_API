@@ -8,21 +8,9 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 @Component
-public class GeneralHelperFunctions {
+public class PagedHelperFunctions {
     public Pageable generatePagedRequest(PagedRequest request) {
         return PageRequest.of(request.getPage() - 1, request.getResultsPerPage());
-    }
-
-    public boolean determineFilterable(PagedRequest request) {
-        if (!request.getName().isEmpty()) return true;
-        if (!request.getAcronym().isEmpty()) return true;
-        if (!request.getClassification().isEmpty()) return true;
-        if (!request.getType().isEmpty()) return true;
-        if (!request.getDescription().isEmpty()) return true;
-        if (!request.getDotNumber().isEmpty()) return true;
-        if (!request.getFiscalClass().isEmpty()) return true;
-        if (!request.getFiscalYear().isEmpty()) return true;
-        return request.isIncludeInactive();
     }
 
     public PagedRequest cleanRequest(PagedRequest request) {

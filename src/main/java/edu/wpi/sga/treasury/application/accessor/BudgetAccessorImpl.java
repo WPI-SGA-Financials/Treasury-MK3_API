@@ -7,7 +7,7 @@ import edu.wpi.sga.treasury.application.dto.budget.BudgetDetailedDto;
 import edu.wpi.sga.treasury.application.dto.budget.BudgetDto;
 import edu.wpi.sga.treasury.application.dto.pagination.PagedResponse;
 import edu.wpi.sga.treasury.application.mapper.custom.BudgetMapperCustom;
-import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
+import edu.wpi.sga.treasury.application.util.PagedHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.budget.Budget;
 import edu.wpi.sga.treasury.domain.repository.BudgetRepository;
 import edu.wpi.sga.treasury.domain.specification.BudgetSpecification;
@@ -33,7 +33,7 @@ public class BudgetAccessorImpl implements BudgetAccessor {
     private final BudgetMapperCustom budgetMapperCustom;
 
     // Util
-    private final GeneralHelperFunctions generalHelperFunctions;
+    private final PagedHelperFunctions pagedHelperFunctions;
 
     @Override
     public ListResponse<BudgetDto> getBudgetsForOrganization(String organization) {
@@ -44,9 +44,9 @@ public class BudgetAccessorImpl implements BudgetAccessor {
 
     @Override
     public PagedResponse<BudgetDto> getBudgets(PagedRequest request) {
-        Pageable pageable = generalHelperFunctions.generatePagedRequest(request);
+        Pageable pageable = pagedHelperFunctions.generatePagedRequest(request);
 
-        request = generalHelperFunctions.cleanRequest(request);
+        request = pagedHelperFunctions.cleanRequest(request);
 
         Specification<Budget> specification = BudgetSpecification.builder().request(request).build();
 

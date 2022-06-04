@@ -7,7 +7,7 @@ import edu.wpi.sga.treasury.application.dto.funding_request.FundingRequestDetail
 import edu.wpi.sga.treasury.application.dto.funding_request.FundingRequestDto;
 import edu.wpi.sga.treasury.application.dto.pagination.PagedResponse;
 import edu.wpi.sga.treasury.application.mapper.FundingRequestMapper;
-import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
+import edu.wpi.sga.treasury.application.util.PagedHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.funding_request.FundingRequest;
 import edu.wpi.sga.treasury.domain.repository.FundingRequestRepository;
 import edu.wpi.sga.treasury.domain.specification.FundingRequestSpecification;
@@ -33,7 +33,7 @@ public class FundingRequestAccessorImpl implements FundingRequestAccessor {
     private final FundingRequestMapper fundingRequestMapper = Mappers.getMapper(FundingRequestMapper.class);
 
     // Util
-    private final GeneralHelperFunctions generalHelperFunctions;
+    private final PagedHelperFunctions pagedHelperFunctions;
 
     @Override
     public ListResponse<FundingRequestDto> getFundingRequestsForOrganization(String organization) {
@@ -44,9 +44,9 @@ public class FundingRequestAccessorImpl implements FundingRequestAccessor {
 
     @Override
     public PagedResponse<FundingRequestDto> getFundingRequests(PagedRequest request) {
-        Pageable pageable = generalHelperFunctions.generatePagedRequest(request);
+        Pageable pageable = pagedHelperFunctions.generatePagedRequest(request);
 
-        request = generalHelperFunctions.cleanRequest(request);
+        request = pagedHelperFunctions.cleanRequest(request);
 
         Specification<FundingRequest> fundingRequestSpecification = FundingRequestSpecification.builder().request(request).build();
 

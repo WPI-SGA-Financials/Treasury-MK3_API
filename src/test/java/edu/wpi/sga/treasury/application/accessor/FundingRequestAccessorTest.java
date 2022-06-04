@@ -3,7 +3,7 @@ package edu.wpi.sga.treasury.application.accessor;
 import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
 import edu.wpi.sga.treasury.application.dto.funding_request.FundingRequestDetailedDto;
 import edu.wpi.sga.treasury.application.dto.funding_request.FundingRequestDto;
-import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
+import edu.wpi.sga.treasury.application.util.PagedHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.funding_request.FundingRequest;
 import edu.wpi.sga.treasury.domain.repository.FundingRequestRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,11 +40,11 @@ class FundingRequestAccessorTest {
 
     // Util
     @Mock
-    private GeneralHelperFunctions generalHelperFunctions;
+    private PagedHelperFunctions pagedHelperFunctions;
 
     @BeforeEach
     void setUp() {
-        accessor = new FundingRequestAccessorImpl(fundingRequestRepository, generalHelperFunctions);
+        accessor = new FundingRequestAccessorImpl(fundingRequestRepository, pagedHelperFunctions);
     }
 
     @Test
@@ -113,7 +113,7 @@ class FundingRequestAccessorTest {
     @DisplayName("Get Paged and Filtered list of Funding Requests")
     void getFundingRequestsFiltered() {
         // Arrange
-        mockBasicFiltering(generalHelperFunctions);
+        mockBasicFiltering(pagedHelperFunctions);
 
         FundingRequest cheeseFR = createSimpleFundingRequest("Cheese Club", 1);
         FundingRequest studentFR = createSimpleFundingRequest("Student Government Association", 2);
@@ -139,7 +139,7 @@ class FundingRequestAccessorTest {
     @DisplayName("Get Paged list of Funding Requests")
     void getFundingRequests() {
         // Arrange
-        mockBasicPagedRequest(generalHelperFunctions);
+        mockBasicPagedRequest(pagedHelperFunctions);
 
         FundingRequest fr101 = createSimpleFundingRequest("Cheese Club", 1);
         fr101.setDotNumber("F.101");

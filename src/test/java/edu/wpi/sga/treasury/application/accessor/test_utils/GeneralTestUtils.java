@@ -1,7 +1,7 @@
 package edu.wpi.sga.treasury.application.accessor.test_utils;
 
 import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
-import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
+import edu.wpi.sga.treasury.application.util.PagedHelperFunctions;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
@@ -11,27 +11,27 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class GeneralTestUtils {
-    public static void mockBasicFiltering(GeneralHelperFunctions generalHelperFunctions){
+    public static void mockBasicFiltering(PagedHelperFunctions pagedHelperFunctions){
         Pageable pageable = PageRequest.of(0, 10);
 
-        when(generalHelperFunctions.generatePagedRequest(any())).thenReturn(pageable);
+        when(pagedHelperFunctions.generatePagedRequest(any())).thenReturn(pageable);
 
         PagedRequest cleanedRequest = new PagedRequest();
         cleanedRequest.setName(List.of("Cheese Club", "Student"));
 
-        when(generalHelperFunctions.cleanRequest(any())).thenReturn(cleanedRequest);
-        when(generalHelperFunctions.determineFilterable(any())).thenReturn(true);
+        when(pagedHelperFunctions.cleanRequest(any())).thenReturn(cleanedRequest);
+        when(pagedHelperFunctions.determineFilterable(any())).thenReturn(true);
     }
 
-    public static void mockBasicPagedRequest(GeneralHelperFunctions generalHelperFunctions) {
+    public static void mockBasicPagedRequest(PagedHelperFunctions pagedHelperFunctions) {
         Pageable pageable = PageRequest.of(0, 10);
 
-        when(generalHelperFunctions.generatePagedRequest(any())).thenReturn(pageable);
+        when(pagedHelperFunctions.generatePagedRequest(any())).thenReturn(pageable);
 
         PagedRequest cleanedRequest = new PagedRequest();
         cleanedRequest.setPage(1);
 
-        when(generalHelperFunctions.cleanRequest(any())).thenReturn(cleanedRequest);
-        when(generalHelperFunctions.determineFilterable(any())).thenReturn(false);
+        when(pagedHelperFunctions.cleanRequest(any())).thenReturn(cleanedRequest);
+        when(pagedHelperFunctions.determineFilterable(any())).thenReturn(false);
     }
 }

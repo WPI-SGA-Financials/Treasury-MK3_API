@@ -7,7 +7,7 @@ import edu.wpi.sga.treasury.application.dto.ReallocationRequestDetailedDto;
 import edu.wpi.sga.treasury.application.dto.ReallocationRequestDto;
 import edu.wpi.sga.treasury.application.dto.pagination.PagedResponse;
 import edu.wpi.sga.treasury.application.mapper.ReallocationRequestMapper;
-import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
+import edu.wpi.sga.treasury.application.util.PagedHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.ReallocationRequest;
 import edu.wpi.sga.treasury.domain.repository.ReallocationRequestRepository;
 import edu.wpi.sga.treasury.domain.specification.ReallocationSpecification;
@@ -22,7 +22,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +34,7 @@ public class ReallocationRequestAccessorImpl implements ReallocationRequestAcces
     private final ReallocationRequestMapper reallocationRequestMapper = Mappers.getMapper(ReallocationRequestMapper.class);
 
     // Utils
-    private final GeneralHelperFunctions generalHelperFunctions;
+    private final PagedHelperFunctions pagedHelperFunctions;
 
     @Override
     public ListResponse<ReallocationRequestDto> getReallocationRequestsForOrganization(String organization) {
@@ -46,9 +45,9 @@ public class ReallocationRequestAccessorImpl implements ReallocationRequestAcces
 
     @Override
     public PagedResponse<ReallocationRequestDto> getReallocationRequests(PagedRequest request) {
-        Pageable pageable = generalHelperFunctions.generatePagedRequest(request);
+        Pageable pageable = pagedHelperFunctions.generatePagedRequest(request);
 
-        request = generalHelperFunctions.cleanRequest(request);
+        request = pagedHelperFunctions.cleanRequest(request);
 
         Specification<ReallocationRequest> specification = ReallocationSpecification.builder().request(request).build();
 

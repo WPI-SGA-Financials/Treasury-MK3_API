@@ -1,6 +1,6 @@
 package edu.wpi.sga.treasury.application.accessor;
 
-import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
+import edu.wpi.sga.treasury.application.util.PagedHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.Organization;
 import edu.wpi.sga.treasury.domain.model.ReallocationRequest;
 import edu.wpi.sga.treasury.domain.repository.ReallocationRequestRepository;
@@ -19,11 +19,11 @@ class ReallocationRequestAccessorTest {
     @Mock
     private ReallocationRequestRepository reallocationRequestRepository;
     @Mock
-    private GeneralHelperFunctions generalHelperFunctions;
+    private PagedHelperFunctions pagedHelperFunctions;
 
     @BeforeEach
     void setUp() {
-        accessor = new ReallocationRequestAccessorImpl(reallocationRequestRepository, generalHelperFunctions);
+        accessor = new ReallocationRequestAccessorImpl(reallocationRequestRepository, pagedHelperFunctions);
     }
 
     @Test

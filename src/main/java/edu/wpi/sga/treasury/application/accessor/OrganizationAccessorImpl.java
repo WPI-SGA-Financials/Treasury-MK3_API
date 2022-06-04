@@ -5,7 +5,7 @@ import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
 import edu.wpi.sga.treasury.application.dto.OrganizationDto;
 import edu.wpi.sga.treasury.application.dto.pagination.PagedResponse;
 import edu.wpi.sga.treasury.application.mapper.OrganizationMapper;
-import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
+import edu.wpi.sga.treasury.application.util.PagedHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.Organization;
 import edu.wpi.sga.treasury.domain.repository.OrganizationRepository;
 import edu.wpi.sga.treasury.domain.specification.OrganizationSpecification;
@@ -31,13 +31,13 @@ public class OrganizationAccessorImpl implements OrganizationAccessor {
     private final OrganizationMapper organizationMapper = Mappers.getMapper(OrganizationMapper.class);
 
     // Helpers
-    private final GeneralHelperFunctions generalHelperFunctions;
+    private final PagedHelperFunctions pagedHelperFunctions;
 
     @Override
     public PagedResponse<OrganizationDto> getOrganizations(PagedRequest request) {
-        Pageable pageable = generalHelperFunctions.generatePagedRequest(request);
+        Pageable pageable = pagedHelperFunctions.generatePagedRequest(request);
 
-        request = generalHelperFunctions.cleanRequest(request);
+        request = pagedHelperFunctions.cleanRequest(request);
 
         Specification<Organization> orgSpec = OrganizationSpecification.builder().request(request).build();
 

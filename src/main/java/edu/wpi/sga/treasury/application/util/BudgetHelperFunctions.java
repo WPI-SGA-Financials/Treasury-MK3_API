@@ -1,8 +1,8 @@
 package edu.wpi.sga.treasury.application.util;
 
-import edu.wpi.sga.treasury.application.dto.BudgetDetailedDto;
-import edu.wpi.sga.treasury.application.dto.BudgetDto;
-import edu.wpi.sga.treasury.application.dto.BudgetDto.BudgetDtoBuilder;
+import edu.wpi.sga.treasury.application.dto.budget.BudgetDetailedDto;
+import edu.wpi.sga.treasury.application.dto.budget.BudgetDto;
+import edu.wpi.sga.treasury.application.dto.budget.BudgetDto.BudgetDtoBuilder;
 import edu.wpi.sga.treasury.domain.model.Budget;
 import edu.wpi.sga.treasury.domain.model.BudgetLegacy;
 import edu.wpi.sga.treasury.domain.model.BudgetSection;

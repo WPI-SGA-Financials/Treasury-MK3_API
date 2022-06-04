@@ -14,11 +14,11 @@ import java.util.List;
 @Builder
 public class OrganizationSpecification implements Specification<Organization> {
 
-    private PagedRequest request;
+    private final PagedRequest request;
 
     @Override
     public Predicate toPredicate(Root<Organization> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-        SpecificationUtil util = new SpecificationUtil(cb);
+        SpecificationUtil<Organization> util = new SpecificationUtil<>(cb);
 
         List<Predicate> predicates = new ArrayList<>();
 

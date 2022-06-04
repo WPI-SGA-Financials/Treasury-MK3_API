@@ -1,8 +1,8 @@
 package edu.wpi.sga.treasury.application.accessor;
 
 import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
-import edu.wpi.sga.treasury.application.dto.BudgetDetailedDto;
-import edu.wpi.sga.treasury.application.dto.BudgetDto;
+import edu.wpi.sga.treasury.application.dto.budget.BudgetDetailedDto;
+import edu.wpi.sga.treasury.application.dto.budget.BudgetDto;
 import edu.wpi.sga.treasury.application.util.BudgetHelperFunctions;
 import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.Budget;

@@ -1,23 +1,22 @@
-package edu.wpi.sga.treasury.application.dto;
+package edu.wpi.sga.treasury.application.dto.budget;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Getter
 @Setter
 @Builder
-public class BudgetDetailedDto {
+public class BudgetSectionDto {
     private Integer id;
-    private String nameOfClub;
-    private String fiscalYear;
+    private String sectionName;
     private Integer numOfItems;
     private BigDecimal amountRequested;
     private BigDecimal amountProposed;
     private BigDecimal amountApproved;
 
-    private List<BudgetSectionDto> sections;
     private boolean appealed;
     private BigDecimal appealAmount;
     private String appealDecision;

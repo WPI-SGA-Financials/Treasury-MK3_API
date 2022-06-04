@@ -1,24 +1,27 @@
 package edu.wpi.sga.treasury.application.accessor;
 
+import edu.wpi.sga.treasury.application.dto.misc.ListResponse;
+import edu.wpi.sga.treasury.application.dto.misc.Response;
 import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
 import edu.wpi.sga.treasury.application.dto.FundingRequestDetailedDto;
 import edu.wpi.sga.treasury.application.dto.FundingRequestDto;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedResponse;
 import edu.wpi.sga.treasury.application.mapper.FundingRequestMapper;
 import edu.wpi.sga.treasury.application.util.GeneralHelperFunctions;
 import edu.wpi.sga.treasury.domain.model.FundingRequest;
 import edu.wpi.sga.treasury.domain.repository.FundingRequestRepository;
+import edu.wpi.sga.treasury.domain.specification.FundingRequestSpecification;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,43 +36,31 @@ public class FundingRequestAccessorImpl implements FundingRequestAccessor {
     private final GeneralHelperFunctions generalHelperFunctions;
 
     @Override
-    public List<FundingRequestDto> getFundingRequestsForOrganization(String organization) {
+    public ListResponse<FundingRequestDto> getFundingRequestsForOrganization(String organization) {
         List<FundingRequest> orgFrs = fundingRequestRepository.findAllByOrganizationNameOrderByHearingDateDesc(organization);
 
-        if (!orgFrs.isEmpty()) {
-            return orgFrs.stream().map(fundingRequestMapper::fundingRequestToFundingRequestDto).collect(Collectors.toList());
-        }
-
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        return new ListResponse<>(orgFrs, fundingRequestMapper::toFundingRequestDtos);
     }
 
     @Override
-    public Page<FundingRequestDto> getFundingRequests(PagedRequest request) {
+    public PagedResponse<FundingRequestDto> getFundingRequests(PagedRequest request) {
         Pageable pageable = generalHelperFunctions.generatePagedRequest(request);
-
-        Page<FundingRequest> fundingRequests;
 
         request = generalHelperFunctions.cleanRequest(request);
 
-        if (generalHelperFunctions.determineFilterable(request)) {
-            fundingRequests = fundingRequestRepository.findFundingRequestsByFilters(request);
-        } else {
-            fundingRequests = fundingRequestRepository.findAllByOrganizationIsInactiveIsFalseOrderByHearingDateDescDotNumberDesc(pageable);
-        }
+        Specification<FundingRequest> fundingRequestSpecification = FundingRequestSpecification.builder().request(request).build();
 
-        List<FundingRequestDto> dtos = fundingRequests.getContent().stream().map(fundingRequestMapper::fundingRequestToFundingRequestDto).collect(Collectors.toList());
+        Page<FundingRequest> fundingRequests = fundingRequestRepository.findAll(fundingRequestSpecification, pageable);
 
-        return new PageImpl<>(dtos, pageable, fundingRequests.getTotalElements());
+        return new PagedResponse<>(fundingRequests, fundingRequestMapper::toFundingRequestDtos);
     }
 
     @Override
-    public FundingRequestDetailedDto getFundingRequestById(Integer id) {
-        Optional<FundingRequest> request = fundingRequestRepository.findById(id);
+    public Response<FundingRequestDetailedDto> getFundingRequestById(Integer id) {
+        Optional<FundingRequest> optionalFundingRequest = fundingRequestRepository.findById(id);
 
-        if (request.isPresent()) {
-            return fundingRequestMapper.fundingRequestToFundingRequestDetailedDto(request.get());
-        }
+        return optionalFundingRequest.map(o -> new Response<>(o, fundingRequestMapper::fundingRequestToFundingRequestDetailedDto))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 }

@@ -1,6 +1,6 @@
 package edu.wpi.sga.treasury.application.util;
 
-import edu.wpi.sga.treasury.application.dto.BudgetSectionDto;
+import edu.wpi.sga.treasury.application.dto.budget.BudgetSectionDto;
 import edu.wpi.sga.treasury.domain.model.BudgetLineItem;
 import edu.wpi.sga.treasury.domain.model.BudgetSection;
 import org.springframework.stereotype.Component;

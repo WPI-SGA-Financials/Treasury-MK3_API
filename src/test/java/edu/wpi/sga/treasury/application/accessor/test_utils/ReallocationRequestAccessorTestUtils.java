@@ -1,6 +1,5 @@
 package edu.wpi.sga.treasury.application.accessor.test_utils;
 
-import edu.wpi.sga.treasury.domain.model.FundingRequest;
 import edu.wpi.sga.treasury.domain.model.Organization;
 import edu.wpi.sga.treasury.domain.model.ReallocationRequest;
 

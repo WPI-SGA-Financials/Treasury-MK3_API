@@ -10,7 +10,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class GeneralTestUtils {
+public class PagedTestUtils {
     public static void mockBasicFiltering(PagedHelperFunctions pagedHelperFunctions){
         Pageable pageable = PageRequest.of(0, 10);
 

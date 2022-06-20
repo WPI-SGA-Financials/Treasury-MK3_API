@@ -40,7 +40,7 @@ public class ReallocationRequestAccessorImpl implements ReallocationRequestAcces
     public ListResponse<ReallocationRequestDto> getReallocationRequestsForOrganization(String organization) {
         List<ReallocationRequest> orgReallocs = reallocationRequestRepository.findAllByOrganizationNameOrderByHearingDateDesc(organization);
 
-        return new ListResponse<ReallocationRequestDto>(orgReallocs, reallocationRequestMapper::toReallocDtos);
+        return new ListResponse<>(orgReallocs, reallocationRequestMapper::toReallocDtos);
     }
 
     @Override

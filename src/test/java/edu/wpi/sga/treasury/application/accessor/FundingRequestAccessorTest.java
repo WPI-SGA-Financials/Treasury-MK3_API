@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static edu.wpi.sga.treasury.application.accessor.test_utils.FundingRequestAccessorTestUtils.createSimpleFundingRequest;
-import static edu.wpi.sga.treasury.application.accessor.test_utils.GeneralTestUtils.mockBasicFiltering;
+import static edu.wpi.sga.treasury.application.accessor.test_utils.PagedTestUtils.mockBasicFiltering;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;

@@ -1,6 +1,6 @@
 package edu.wpi.sga.treasury.application.accessor.test_utils;
 
-import edu.wpi.sga.treasury.domain.model.Budget;
+import edu.wpi.sga.treasury.domain.model.budget.Budget;
 
 public class BudgetAccessorTestUtils {
     public static Budget createSimpleBudget() {

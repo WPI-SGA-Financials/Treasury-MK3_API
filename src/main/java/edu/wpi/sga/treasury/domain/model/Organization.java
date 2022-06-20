@@ -1,5 +1,7 @@
 package edu.wpi.sga.treasury.domain.model;
 
+import edu.wpi.sga.treasury.domain.model.budget.Budget;
+import edu.wpi.sga.treasury.domain.model.funding_request.FundingRequest;
 import lombok.Getter;
 import lombok.Setter;
 

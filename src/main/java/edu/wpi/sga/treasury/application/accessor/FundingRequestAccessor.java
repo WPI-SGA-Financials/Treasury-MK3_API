@@ -1,31 +1,28 @@
 package edu.wpi.sga.treasury.application.accessor;
 
-import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
-import edu.wpi.sga.treasury.application.dto.FundingRequestDetailedDto;
-import edu.wpi.sga.treasury.application.dto.FundingRequestDto;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
+import edu.wpi.sga.treasury.application.dto.misc.ListResponse;
+import edu.wpi.sga.treasury.application.dto.misc.Response;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
+import edu.wpi.sga.treasury.application.dto.funding_request.FundingRequestDetailedDto;
+import edu.wpi.sga.treasury.application.dto.funding_request.FundingRequestDto;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedResponse;
 
 public interface FundingRequestAccessor {
     /**
-     *
      * @param organization
      * @return
      */
-    List<FundingRequestDto> getFundingRequestsForOrganization(String organization);
+    ListResponse<FundingRequestDto> getFundingRequestsForOrganization(String organization);
 
     /**
-     *
      * @param request
      * @return
      */
-    Page<FundingRequestDto> getFundingRequests(PagedRequest request);
+    PagedResponse<FundingRequestDto> getFundingRequests(PagedRequest request);
 
     /**
-     *
      * @param id
      * @return
      */
-    FundingRequestDetailedDto getFundingRequestById(Integer id);
+    Response<FundingRequestDetailedDto> getFundingRequestById(Integer id);
 }

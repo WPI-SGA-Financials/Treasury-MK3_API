@@ -1,34 +1,31 @@
 package edu.wpi.sga.treasury.application.accessor;
 
-import edu.wpi.sga.treasury.application.dto.AllMetadata;
+import edu.wpi.sga.treasury.application.dto.misc.AllMetadata;
+import edu.wpi.sga.treasury.application.dto.misc.ListResponse;
+import edu.wpi.sga.treasury.application.dto.misc.Response;
 
-import java.util.List;
 import java.util.Map;
 
 public interface MetadataAccessor {
-    AllMetadata getAllMetadata();
+    Response<AllMetadata> getAllMetadata();
 
     /**
-     *
      * @return
      */
-    Map<Integer, String> getClassifications();
+    Response<Map<Integer, String>> getClassifications();
 
     /**
-     *
      * @return
      */
-    Map<Integer, String> getClubTypes();
+    Response<Map<Integer, String>> getClubTypes();
 
     /**
-     *
      * @return
      */
-    Map<Integer, String> getFiscalYears();
+    Response<Map<Integer, String>> getFiscalYears();
 
     /**
-     *
      * @return
      */
-    List<String> getFiscalClasses();
+    ListResponse<String> getFiscalClasses();
 }

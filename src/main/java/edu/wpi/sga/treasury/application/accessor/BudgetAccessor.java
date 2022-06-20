@@ -1,31 +1,28 @@
 package edu.wpi.sga.treasury.application.accessor;
 
-import edu.wpi.sga.treasury.api.contract.request.PagedRequest;
-import edu.wpi.sga.treasury.application.dto.BudgetDetailedDto;
-import edu.wpi.sga.treasury.application.dto.BudgetDto;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
+import edu.wpi.sga.treasury.application.dto.misc.ListResponse;
+import edu.wpi.sga.treasury.application.dto.misc.Response;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedRequest;
+import edu.wpi.sga.treasury.application.dto.budget.BudgetDetailedDto;
+import edu.wpi.sga.treasury.application.dto.budget.BudgetDto;
+import edu.wpi.sga.treasury.application.dto.pagination.PagedResponse;
 
 public interface BudgetAccessor {
     /**
-     *
      * @param organization
      * @return
      */
-    List<BudgetDto> getBudgetsForOrganization(String organization);
+    ListResponse<BudgetDto> getBudgetsForOrganization(String organization);
 
     /**
-     *
      * @param request
      * @return
      */
-    Page<BudgetDto> getBudgets(PagedRequest request);
+    PagedResponse<BudgetDto> getBudgets(PagedRequest request);
 
     /**
-     *
      * @param id
      * @return
      */
-    BudgetDetailedDto getBudgetById(Integer id);
+    Response<BudgetDetailedDto> getBudgetById(Integer id);
 }

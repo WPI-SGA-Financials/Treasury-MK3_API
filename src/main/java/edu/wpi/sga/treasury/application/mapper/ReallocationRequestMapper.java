@@ -5,6 +5,8 @@ import edu.wpi.sga.treasury.application.dto.ReallocationRequestDto;
 import edu.wpi.sga.treasury.domain.model.ReallocationRequest;
 import org.mapstruct.*;
 
+import java.util.List;
+
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = "spring")
 public interface ReallocationRequestMapper {
     @Mapping(source = "nameOfClub", target = "organization.name")
@@ -12,6 +14,8 @@ public interface ReallocationRequestMapper {
 
     @Mapping(source = "organization.name", target = "nameOfClub")
     ReallocationRequestDto reallocationRequestToReallocationRequestDto(ReallocationRequest reallocationRequest);
+
+    List<ReallocationRequestDto> toReallocDtos(List<ReallocationRequest> requests);
 
     @Mapping(source = "nameOfClub", target = "organization.name")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
